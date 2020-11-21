@@ -1,0 +1,59 @@
+\chapter{Introduction}\label{cha:Introduction}
+%All chapters should begin with an introduction before any sections begin. Further, each sections begins with an introduction before subsections begin. Chapters with just one section or sections with just one sub-section, should be avoided. Think carefully about chapter and section titles as each title stand alone in the table of contents (without associated text) and should convey meaning for the contents of the chapter or section. 
+
+%In all chapters and sections it is important to write clearly and concisely. Avoid repetitions and if needed, refer back to the original discussion or presentation. Each new section, subsection or paragraph should provide the reader with new information and be written in your own words. Avoid direct quotes. If you use direct quotes, unless the quote itself is very significant, you are conveying to the reader that you are unable to express this discussion or fact yourself. Such direct quotes also break the flow of the language (yours to someone else's). 
+
+\textit{Palynology} is the scientific study of palynomorphs, a general term for microscopic organic entities found when studying palynological preparations.
+Because of the resilience of these types of organisms and microfossils, the types of particles studied covers the entire geological timeline, from the earliest organisms of the Proterozoic Era, to the allergy educing grass pollens of today.
+
+Possible applications and use cases are equally as diverse.
+In criminology, soil samples can place a suspect at a specific location, depending on the composition of pollen and spores found.
+Geologists analyse rock layers and use the presence and disappearance of palynomorphs to place formations in time.
+Glacial Ice core samples are analysed for organic remains to estimate temperature and rainfall over the past 10,000 years.
+Finally, and most relevant to this thesis, is counting the amount of airborne pollen to forecast conditions for people suffering from allergies.
+
+Methods used in palynology vary, but most seek to identify the composition of palynomorphs in samples taken from nature, be it from glacial ice cores, peat sections from bogs, rock samples from stratigraphic drilling, or collected airborne pollen grains.
+Common for all these methods is the need for human experts to manually count and classify palynomorphs with a microscope.
+A single slide can take hours to analyse and this directly affects the amount of data that can be collected and analysed.
+
+From a machine learning perspective, the above describes an object detection task, which is the general task of locating certain objects within an image and classifying each object.
+State of the art within this problem space uses Convolutional Neural Networks (CNN), which are a type of neural network especially suited for image analysis of unprocessed image data.
+However, research into the use of this technique to solve the problem of counting pollen is sparse, and as of writing only one partial example exists in literature.
+This thesis will therefore explore the varying methods that have been proposed to automatically count pollen grains and other similar palynomorphs, as well as other domains where modern machine learning methods have been used on similar tasks.
+
+\section{Goals and Research Questions}\label{sec:Goals and Research Questions}
+The fact that many of the major advancements within object detection have happened so recently, means that many possible use cases, pollen counting being one, have yet to be explored.
+The goal of this thesis can therefore broadly be stated as follows:
+
+\begin{description}
+\item[Goal] \textit{To explore the use of Convolutional Neural Networks in automated pollen counting.}
+\end{description}
+
+The primary objective is to build a system that is able to perform the task of counting pollen grains with a accuracy comparable to that of a human expert.
+Moreover than just developing a working system, the project aims to establish whether the modifications that have been successfully made to detection systems in related domains also may improve a pollen detection system.
+This is formalised as the following research question: 
+
+\begin{description}
+\item[RQ1] \textit{Can the computational complexity of a Single Stage MultiBox object detection model be reduced without a loss in accuracy and recall?}
+\end{description}
+
+Computational complexity here refers to the amount of computations needed to produce a prediction.
+The Single Stage MultiBox (SSD) model is presented in Section~\ref{sec:ssd}.
+It is designed as a general object detector which can detect a variety of different type of objects at different scales.
+In \textbf{RQ1} we postulate that the task of pollen detection will require a less generalised model and that this can be realised by simplifying or removing parts of the models architecture.
+ 
+Recent research in pollen classification has indicated that accuracy can be improved by using multifocal data, i.e.\ images from different focus planes, as opposed to single images.
+This project will explore whether this can also be applied to a detection system.
+This is formalised in the second research question:
+
+\begin{description}
+    \item[RQ2] \textit{Can the accuracy and recall of the model be improved by using multifocal data?}
+\end{description}
+
+Ideally, both of these questions can be explored in conjunction to each other using the same basic model, so that we can measure the impact of both changes separately and together.
+
+\section{Thesis Structure}\label{sec:thesisStructure}
+The remainder of this documant is structured as follows: Section~\ref{cha:background} covers background knowlege relating to pollen imaging techniques, the composition and functioning of Convolutional Neural Networks, and metrics for meacuring performance in object detection tasks.
+Section~\ref{cha:related} examins various object detection frameworks, as well as the existing work relating to pollen.
+Section~\ref{cha:method} sketches the proposed system, while Section~\ref{cha:tech} explains its implementation and current results.
+Finally, Section~\ref{cha:plans} layes out the plans for the next stage of the project.

@@ -1,0 +1,80 @@
+\ProvidesPackage{thesis_style}
+
+\usepackage[english]{babel}
+\usepackage{datetime}
+
+\usepackage[backend=biber,style=bwl-FU,bibstyle=authoryear]{biblatex}
+\addbibresource{bibtex/zotero.bib}
+
+\usepackage{parskip}
+\usepackage{tikz}                               % Draw graphics
+\usepackage[colorinlistoftodos,prependcaption,textsize=tiny,textwidth=30mm]{todonotes}
+\usepackage{xcolor}                             % Coloured text etc.
+\usepackage[labelfont=bf,textfont=normalfont]{caption}
+\usepackage{subcaption}
+\usepackage{graphicx}							% To include graphics
+\usepackage{csquotes}
+\usepackage{fancyhdr}						    % Nice header and footer
+\usepackage{amsmath}                            % Mathematical typesetting
+\usepackage{amsfonts}
+\usepackage{geometry}							% Better geometry
+\usepackage{titlesec}							% change section headings
+\usepackage{booktabs}							% Nice tables
+%\usepackage[center]							% For cropping documents
+\usepackage[linktocpage,colorlinks]{hyperref}	% PDF hyperlink
+\usepackage{float}                              % repositioning floats
+\usepackage{array}
+% todonotes related
+\usepackage{xargs}                              % Use more than one optional parameter in a new commands
+\usepackage[bottom]{footmisc}
+
+\geometry{
+a4paper,
+margin=1.5in
+}
+
+%%%
+
+\input{book_style.sty}
+%%%
+
+% B5 (uncomment to convert to B5 format)
+
+
+% Colors
+\definecolor{nicegray}{gray}{.36}
+\definecolor{nicegreen}{HTML}{0F7F12}
+
+% dateformat
+\newdateformat{ddaymonth}{%
+\ordinaldate{\THEDAY} \monthname[\THEMONTH]}
+\newdateformat{daymonth}{%
+\twodigit{\THEDAY}\ \monthname[\THEMONTH]}
+
+%%%
+% Author
+% Fill in here, and use commands in the text. 
+\newcommand{\thesisAuthor}{Fredrik Gyllenhammar}
+\newcommand{\thesisTitle}{Automated Pollen Grain Counting}
+\newcommand{\thesisType}{Thesis project}
+\newcommand{\thesisDate}{fall 2020}
+
+% PDF info
+\hypersetup{
+    pdfauthor={\thesisAuthor},
+    pdftitle={\thesisTitle},
+    pdfsubject={\thesisType},
+    linkcolor={black},
+    citecolor={black},
+    urlcolor={black},
+}
+
+% TODO notes
+\newcommandx{\info}[2][1=]{\todo[linecolor=Green,backgroundcolor=Green!25,bordercolor=Green,#1]{#2}}
+
+% Heading format 
+%\titleformat{\chapter}{\bfseries\LARGE}{\thechapter}{1em}{}
+\titleformat*{\section}{\Large\bfseries}
+\titleformat{\subsection}{\large\bfseries}{}{0em}{}
+
+\titlespacing*{\chapter}{0cm}{2in}{1ex}

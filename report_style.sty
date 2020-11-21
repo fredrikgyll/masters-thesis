@@ -1,0 +1,13 @@
+\ProvidesPackage{report_style}
+
+%Chapter headings
+\fancypagestyle{plain}{%
+ \fancyhf{}
+ \fancyhead[R]{\thepage}
+ \fancyfoot[C]{}
+ \renewcommand{\headrulewidth}{0.5pt}}
+
+ \pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\rightmark ~~~~\thepage}
+\renewcommand{\sectionmark}[1]{\markright{\thesection ~#1}}

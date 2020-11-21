@@ -1,0 +1,232 @@
+\chapter{Background}\label{cha:background}
+In this section we will cover the main theoretical concepts underlying the problem domain and proposed solution.
+We will start by looking at the methodology that is used currently for pollen counting and formalise it as a machine learning problem.
+We will then provide a theoretical overview of the main building blocks of modern convolutional neural networks.
+A basic understanding of the operation and conponents of a standard feed forward fully connected neural network is assumed for this section.
+
+\section{Pollen Imaging}
+There are two main methods of pollen analysis, image-based and non-image based.
+Non-image based techniques employ a host of alternative sensing methods and will not be discussed further in this thesis.
+Within the image-based methods there are two main imaging techniques.
+
+\textit{Light microscopy} (LM) describes the method of observing a prepared sample with an optical microscope using visible light.
+The sample is fixed to a translucent slide and is illuminated with a backlight.
+It can either be observed through an eyepiece or photographed with a CCD\@.
+An example of a pollen grain is shown in Figure~\ref{fig:lm_and_sem}.
+Because the grain is semi-translucent, differences in the surface texture can be observed, but only some areas are in focus.
+A consequence of the high magnification is that the plane of focus is so narrow that only parts of the grain is in focus.
+
+\begin{figure}[htb]
+  \centering
+  \begin{subfigure}[t]{0.4\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figs/pollen_lm.jpg}
+    \caption{Light Microscopy}
+  \end{subfigure}%
+  \hspace*{0.04\textwidth}
+  \begin{subfigure}[t]{0.4\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figs/pollen_sem.jpg}
+    \caption{Scanning Electron Microscopy}
+  \end{subfigure}
+  \caption[Pollen grain using LM and SEM]{\textit{Aetanthus coriaceus}.
+  Imaged with LM (a) and SEM (b).
+  Adapted from \parencite{halbritter_methods_2018}}\label{fig:lm_and_sem}
+\end{figure}
+
+\textit{Scanning electron microscopy} (SEM) is a very different approach where a focused beam of electrons is used to record the surface topology of a sample.
+It captures very detailed features of the surface of the pollen grain, but cannot reveal any of the substructure.
+Because SEM imaging does not depend on focusing light, all parts of the image appear in focus and the resolution is much higher than what LM can achieve.
+SEM imaging is however a more laborious process and requires more preparation of the sample.
+SEM is also not suited for large samples where pollen grains must be observed over the entire slide.
+This is the main reason why LM imaging is the only viable option when the task is to count pollen grains on a slide.
+
+\section{Problem Description}
+
+%Pollen counting
+%The Norwegian Asthma and Allergy Association has, since 1980, tracked the amount of air born pollen in Norway.
+%This data is used to create a forecasting service for those who suffer allergic reactions to pollen, around 20 \% of the population.
+%Pollen is collected with traps where air is continually sucked though a small slit and over an adhesive strip.
+%The strip is moved across the slit, exposing different sections throughout the day.
+%Pollen grains and other air born particulates adhere to the strip, which is then analyzed under a microscope.
+%This produces an estimate for the density of different pollen types, measured in particles per cubic meter, throughout the season. 
+
+
+As mentioned in the introduction one of the primary activities within palynology is counting pollen grains.
+When magnified, only a section of a slide is visible through a microscope.
+A sliding window approach must be used to scan the entire surface area of the sample.
+The data that is collected varies between different applications.
+With airborne pollen, the slide has been prepared such that the location of the pollen represents the time interval at which it was collected.
+In this case, the general location is recorded along with the taxa, such that the changes in density throughout the day are known.
+
+In the context of machine learning this can be solved as a image recognition task.
+Image recognition is the general task of deciding if an image contains an object of interest, where it is located within the image, and what class the object belong to.
+When the main task is to locate one or multiple objects the task is often referred to as object detection, which is a joint regression and classification problem.
+The location and dimensions of a rectangle, referred to an a \textit{bounding box}, which encloses an object of interest is regressed and the object is also classified.
+Figure~\ref{fig:bbox} shows a correct solution to this problem.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.5\textwidth]{figs/0040_068.jpg}
+  \caption[Bounding boxes]{The image shows the a LM image of 2 pollen grains with ground truth bounding boxes.
+The image contains only one class.
+The image is part of the released dataset provided by~\cite{gallardo_caballero_precise_2019}}\label{fig:bbox}
+\end{figure}
+
+\section{Convolutional Neural Networks}
+\textit{Convolutional Neural Networks} have been in active development for three decades and the umbrella of what the term encompasses continues to grow.
+The basic concepts and building blocks have however remained quite unchanged since they were first used to predict handwritten digits in~\cite{1989Hdrw}.
+We will first describe the basic operation of a CNN, before expanding on each building block.
+We will also detail some of the newer concepts that have become commonplace additions to the basic model in later years.
+
+A convolutional neural network consists of stacked, layered, operations.
+There are two types of layers, \textit{convolutional}, and \textit{spacial pooling}.
+The convolutional layers extract \textit{feature maps} by applying several trainable filters to the input, before applying a nonlinear activation function to the result.
+The spacial pooling layers operate in a similar fashion by applying an operation to a receptive field which is moved over the input feature map.
+The operation is designed to downsample the input so the resulting feature map has reduced dimensions.
+The two layers are stacked alternatingly, with the idea being that the complexity of the features extracted increases with the depth of the network.
+
+\subsection{Convolution}
+
+The central concept of the convolutional layer is the \textit{convolution operation}.
+Let the kernel, \(w\), be a \(k\times k\) dimensional matrix.
+This kernel will operate on the output of the preceding layer, \(x\).
+The output from the convolution can be calculated as follows:
+
+\[w\ast x_{ij}=\sum_{m}\sum_{n}  w_{mn}x_{i-m,j-n}\]
+
+Where \((m,n)\) spans the index set of the kernel which is center originated, i.e. \(w_{0,0}\) is the center element of the kernel.
+The patch of \(x\) involved in the sum at each step is refered to as the \textit{receptive field}.
+As the operation is repeated for every index of \(x\), the receptive field slides accross the input.
+The resulting output of the convolution is refered to as a \textit{feature map}.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.4\textwidth]{figs/conv.pdf}
+  \caption[Convolution operation]{Visualization of the convolution operation.
+In red we have a filter containing three \(3\times 3\) kernels.
+The elementwise multiplication between the filter and receptive field and subsequent summation produces a single scaler in the feature map.
+The operation is repeated over the index set of the input, producing the complete feature map.}\label{fig:cnn}
+\end{figure}
+
+Usually, the input to a convolutional layer contains multiple channels, e.g.\ an RGB input image which has three channels representing the seperate  red, green, and blue color channels.
+To handle this we construct as many kernels as there are channels.
+We then convolve each channel with its own kernel and add together the result accros the channels, which produces a single feature map.
+An example of such a convolution operation is shown in Figure~\ref{fig:cnn}.
+This stack of kernels is refered to as a \textit{filter}.
+If we want the output of a convolutional layer to produce \(N\) feature maps, \(N\) filters are needed.  It is common to increase the number of filters as the image is continually downsampled through the layers on the neural network.
+
+At the edges of \(x\) the sum is undefined because the receptive field moves beyond the bounds of \(x\), causing a reduction in the size of the output.
+This can mitigated by \textit{padding} the input.
+When the receptive field moves beyond the bounds of \(x\), a stand-in value is used instead.
+This can be visualized as \textit{padding} the input with said value.
+Zero is often used as the padding-value.
+
+Dimensionality reduction is also possible using the concept of \textit{stride}, which referes to how the receptive field moves accross the input relative to the index of the feature map.
+In the base case, the receptive field moves by one step for every element in the feature map.
+If we increase the stride, the receptive field `jumps over' positions for every step in the feature map, thus shrinking its size. 
+
+One of the more important aspects of convolutions arises from the fact that the kernel is applied in the same way over the whole image.
+This parameter sharing means that features are extracted from the input, regardless of their location~\parencite{lecum1989}.
+It also reduces the computational complexity involved in training the model.
+
+Because convolution is a linear operation, so non-linearity must be added if the network is to be able to approximate a non-linear function.
+As with normal fully connected networks, this is achieved by applying an activation function to the feature map.
+The same activation functions that are commonly used in fully connected networks are also used in CNNs.
+As such, further explenation of their action falls into the category of assumed prior knowledge.
+Because of the depth of the models architectures in use today, the \textit{rectified linear unit} (ReLU), and its variations, are commonly used.
+
+\subsection{Spacial pooling}
+Even though the convolution operation extracts features wherever they exist within an image, this introduces a new problem when we attempt to stack the layers so we can extract higher level features from the combination of features below.
+Local variations in the relative placement of features will have a big impact on later filters' ability to combine them and this would have to be accounted for by dramatically increasing the amount of filters.~\cite{lecun1998gradient} presents a simple solution to this problem with a \textit{sub-sampling} layer, referred to as a \textit{pooling} layer today, which reduces the dimensions of the feature map by applying a local pooling function, similarly to the convolution operation.
+Common pooling functions are maximum and average.
+The pooling operation is applied to each channel separately so only the width and height is downsampled.
+Pooling retains the relative placement of features within the image, but allows the network to ignore smaller variations in the relative configuration of features across all the channels of the feature map.
+
+\subsection{Cross channel pooling}
+
+As mentioned, we increase the depth of the feature maps as they get downsampled throughout the network.
+This is necessary if the model is to learn more complex features that may require many layers to be represented in full.
+Combining information from multiple channels could be helpful in building more rich feature maps.
+This is the proposal in~\cite{lin2014network}.
+To enhance model discriminability they emulate a fully connected layer working across the channels by using a convolutional layer with a \(1\times 1\) kernel.
+This effectively creates connections between local features across the channels of the feature maps, allowing us to project the feature map into a map with a different depth.
+
+The primary motivation for using this technique today is to lower the computational cost of standard convolutions by reducing the depth of the input prior to a larger convolution.
+The technique is now commonplace and featured in all deep CNN architectures.
+
+\subsection{Batch normalisation}
+As we train our network, the parameters in each layer change, this causes the distribution of each layers output to shift.
+As the distribution from previous layers change, this shift is propageated though to the layers downstream, and so each layer must deal with ever changing input distributions.
+To overcome this, lower learning rates and careful parameter initialization is required. 
+
+A much more effective solution has been proposed by~\cite{ioffe2015batch} called \textit{Batch Normalization} (BN).
+The proposed solution for convolutional networks is to normalize the output of each convolutional layer by first standardizing each feature dimension by the sample mean and sample variance across the current mini-batch, then transforming each layer by a linear transformation with trainable parameters.
+The linear transformation allows the network to restore the representative power of the layer after standardization.
+By allowing the filters to only focus on learning features, instead of having to adapt to constantly shifting inputs training is accelerated, allowing us to train with a higher learning rate.
+
+\section{Metrics}
+
+An important step towards building a model is defining how we measure its performance.
+Implicitly, this is done through the construction of a \textit{Loss function}.
+The models we will examine in this thesis do not employ novel Loss functions, so delving into their construction is not warranted.
+The metrics used when measuring the performance of object detectors, specifically, are however of interest.
+
+\subsection{Precision and recall}
+The precision and recall of a model refers to its ability to correctly locate and label the objects within an image.
+Before we can define precision and recall we must first introduce the following quantities:
+
+\begin{center}
+  {\setlength{\fboxsep}{1em}
+  \fbox{%
+  \begin{minipage}{0.9\textwidth}
+  {\bf True Positive (TP):} Number of objects correctly located and labelled.\\[1ex]
+  {\bf False Positive (FP):} Number of incorrect predictions.\\[1ex]
+  {\bf True Negative (TN):} Correct non-prediction, not usually relevant.\\[1ex] 
+  {\bf False Negative (FN):} Number of objects missed by model. 
+  \end{minipage}}}
+\end{center}
+
+Precision measures the accuracy of the model, i.e.~how many of the predictions are correct.
+Recall measures how many of the objects the model correctly labels.
+They are computed from the above quantities as follows:
+
+\begin{align*}
+  \text{\bf precision}=\frac{TP}{TP+FP}\\[1em]
+  \text{\bf recall}=\frac{TP}{TP+FN}
+\end{align*}
+
+These two metrics are the basis for how all object detection models are evaluated, but the definitions are not complete without a definition of what constitutes a \textit{correct} prediction.
+
+\subsection{Intersection over union}
+
+Precision and recall is the basis for how all object detection models are evaluated, but the definitions are not complete without a definition of what constitutes a \textit{correct} prediction.
+For this we use the \textit{intersection over union} (IoU) between our predictions and ground truths.
+
+IoU measures the overlap between two boundaries.
+As the name indicates, it is defined as the ratio between the intersection and union of the boundaries:
+
+\begin{figure}[htb]
+  \centering
+  \begin{gather*}
+    \text{IoU}=\frac{\text{area of intersection}}{\text{area of union}}
+  \end{gather*}
+  \includegraphics[width=0.55\textwidth]{figs/iou.pdf}
+\caption[Intersection over union]{Visualization of the intersection over union of two boxes.
+The named region is shaded.}\label{fig:iou}
+\end{figure}
+
+Using the IoU we can define what is considered as a correct prediction (TP).
+Given prediction \(\hat{X}\) with label \(\hat{X}_l\) and bounding box \(\hat{X}_u\). \(\hat{X}\) is considered a True Povitive if there exists a ground truth \(Y\), where \(Y_{l}=\hat{X}_l\) and \(\text{IoU}(\hat{X}_u, Y_{u})\ge \mu \).
+Where \( \mu \) is some threshold value, often 0.5.
+
+
+In this section we have detailed the current method for automated pollen counting, as well as the foundational building blocks of a CNN\@.
+Most research and application of CNN based methods is in regards to classification, which only solves part of the problem of counting pollen.
+To fully automate the task, a subcategory of CNNs capable of predicting both classes and locations is required.
+In the next section we will detail how the problem of \textit{object detection} can be solved using a CNN by detailing how they have been used to solve tasks similar to pollen counting.
+We will also review the available literature relating to other attempts at solving this problem.
+
+%\section{Training}
+
+%Training a Object detection models follows the familiar scheme of \textit{mini-batch gradient decent} using \textit{backpropagation} to determine the gradient of each parameter.  

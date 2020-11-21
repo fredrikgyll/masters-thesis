@@ -6,5 +6,5 @@ LaTeX source files for my thesis project.
 
 I use `pdflatex` and `biber` with the following recepie:
 ```
-pdflatex -> biber -> pdflatex -> pdflatex
+pdflatex -> biber -> pdflatex -> pdflatex 
 ```
