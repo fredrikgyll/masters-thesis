@@ -54,7 +54,7 @@ This trend continues to its logical conclusion with the development of the singl
 
 This class of model features only a single CNN, responsible for both localizing and classifying objects.
 These models can be trained in one pass, and feature inference speeds orders of magnitude faster than Faster R-CNN\@.
-One of the first methods was the Single Shot Multibox Detector (SSD), proposed by\ \cite{liu_ssd_2016}, which is the model that has been implemented in Section~\ref{cha:tech}.
+One of the first methods was the Single Shot Multibox Detector (SSD), proposed by\ \cite{liu_ssd_2016}, which is the model that has been implemented in Section~\ref{cha:method}.
 It was one of the first models to demonstrate that a single-stage model could vastly improve inference speeds without compromising accuracy. 
 
 The architecture resembles the RPN from Faster R-CNN\@.
@@ -169,7 +169,6 @@ The results are promising, but the dataset is small, and with only one example, 
 The last model we will look at is also the only published work attempting to use a CNN to detect pollen grains in slide images.\ \cite{gallardo_caballero_precise_2019} Uses Faster R-CNN to detect pollen grains of various types within un altered LM images of pollen grains.
 The model does not classify the grains it localizes.
 They report very high values for both precicion and recall, but use a slightly modified definition of IoU when calculating these values.
-They have released the dataset, which was used to train the prototype model, described in Section~\ref{cha:tech}
 
 The dataset they use was created by filming the slide whilst changing the focus accross the pollen grains.
 Based on a keyframe, 10 frames where extracted before and after the keyframe, creating a 21-frame sequence of focal planes.

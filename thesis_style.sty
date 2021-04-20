@@ -17,6 +17,7 @@
 \usepackage{fancyhdr}						    % Nice header and footer
 \usepackage{amsmath}                            % Mathematical typesetting
 \usepackage{amsfonts}
+\usepackage{siunitx}
 \usepackage{geometry}							% Better geometry
 \usepackage{titlesec}							% change section headings
 \usepackage{booktabs}							% Nice tables
@@ -44,6 +45,9 @@ margin=1.5in
 % Colors
 \definecolor{nicegray}{gray}{.36}
 \definecolor{nicegreen}{HTML}{0F7F12}
+\definecolor{poaceae}{HTML}{1f77b4}
+\definecolor{corylus}{HTML}{ff7f0e}
+\definecolor{alnus}{HTML}{2ca02c}
 
 % dateformat
 \newdateformat{ddaymonth}{%
@@ -68,6 +72,9 @@ margin=1.5in
     citecolor={black},
     urlcolor={black},
 }
+
+% SI Units
+\DeclareSIUnit\pixel{pixel}
 
 % TODO notes
 \newcommandx{\info}[2][1=]{\todo[linecolor=Green,backgroundcolor=Green!25,bordercolor=Green,#1]{#2}}

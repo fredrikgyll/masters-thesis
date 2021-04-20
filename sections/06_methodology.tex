@@ -1,13 +1,24 @@
 \chapter{Methodology}\label{cha:method}
 
 \section{Data}\label{sec:dataset}
-The Norwegian Asthma and Allergy Association has, since 1980, tracked the amount of air born pollen in Norway.
-This data is used to create a forecasting service for those who suffer allergic reactions to pollen, around 20 \% of the population.
+The results presented in Chapter~\ref{cha:results} are trained on data sourced from the Norwegian Asthma and Allergy Association, who have, since 1980, tracked the amount of air born pollen in Norway.
 Pollen is collected with traps where air is continually sucked though a small slit and is redirected over an adhesive strip.
 The strip is moved across the slit, exposing different sections throughout the day.
 Pollen grains and other air born particulates adhere to the strip, which is then analyzed under a microscope.
-This produces an estimate for the density of different pollen types, measured in particles per cubic meter, throughout the season. 
+Only pollen grains from a subset of species are activly tracked.
 
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figs/Snap-057.png}
+  \caption[Dataset example]{Example from the dataset with ground truth bounding boxes drawn. The image contains two classes: \textcolor{corylus}{corylus}, and \textcolor{alnus}{alnus}.}\label{fig:dataset-sample}
+\end{figure}
+
+Three microscope slides have been imaged using a digital optical microscope producing a set of 701 raster images with a size of \(1080\times 1920\) pixels and three channels; red, green, and blue.
+The resolution of each image is \(\SI{0.183}{\micro\metre\per\pixel}\).
+Each image has been labled in collaboration with the experts to produce a valid and correct ground truths.
+In total, three different species have been classified namely \textit{Poaceae}, \textit{corylus}, and \textit{alnus}, known in english as Grasses, Hazel, and Alder, respectively. An example is given in Figure~\ref{fig:dataset-sample}.
+
+%\section{Arcitecture}\label{sec:architecture}
 
 \section{Sharpness Measure}\label{sec:method-sharpness}
 Analyzing how the sharpness of pollen grains affects detection performance requires an objective sharpness measure.
