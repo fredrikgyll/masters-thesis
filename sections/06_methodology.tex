@@ -1,39 +1,13 @@
-\chapter{Proposed Methodology}\label{cha:method}
-%\begin{preprompt}
-%Sketches your basic plan for the system that you will build. If the system is partially built by the midterm delivery deadline, then explain what you have so far along with what you plan to add. In general, the reader should get a good impression of the structure of the complete system that you will eventually deliver for your master's thesis.
-%\end{preprompt}
+\chapter{Methodology}\label{cha:method}
 
-The model we have chosen to implement for this project is the Single Shot Multibox Detector.
-The model is relatively small and offers many opportunities to make alterations.
-The model is also fairly old by now so it would be natural to update the architecture, e.g.~by changing the backbone model, adding batch normalization, and testing different activation functions.
-Newer types of data augmentations have also been proposed and would make for a natural addition.
+\section{Data}\label{sec:dataset}
+The Norwegian Asthma and Allergy Association has, since 1980, tracked the amount of air born pollen in Norway.
+This data is used to create a forecasting service for those who suffer allergic reactions to pollen, around 20 \% of the population.
+Pollen is collected with traps where air is continually sucked though a small slit and is redirected over an adhesive strip.
+The strip is moved across the slit, exposing different sections throughout the day.
+Pollen grains and other air born particulates adhere to the strip, which is then analyzed under a microscope.
+This produces an estimate for the density of different pollen types, measured in particles per cubic meter, throughout the season. 
 
-All object detection systems require the same basic units: a model, data loader, evaluator, and data logger.
-Figure~\ref{fig:sys} gives a overview of the system with some of the components broken down further.
-Some parts of the system have been prototyped at this stage, while others only have basic functionality.
-We will go through the components separately in the next sections
-
-\begin{figure}[htb]
-  \centering
-  \includegraphics[width=0.7\textwidth]{figs/system.pdf}
-  \caption[System overview]{Overview of the basic system components and their interactions.}\label{fig:sys}
-\end{figure}
-
-The data loader is responsible for fetching the image files from disk, transforming them to the proper format, and augmenting them.
-This system has been developed and is functional.
-More types of augmentations can and will be added in the next stage of the project.
-The output of the data loader is batches of augmented images and the corresponding labelled bounding boxes.
-
-A prototype of the SSD model has been developed.
-The implementation is based on the source code released by the authors.
-The main improvements that remain relate to the structure of the system to make it suitable for modification.
-It should require no coding to change the backbone model, activation function, batch norm and default box scaling.
-
-The evaluation system has not been developed, only a basic module for visualizing the output of the model.
-A completed model would run the model over the testing data and measure the precision, recall, and other relevant performance measures.
-
-%Given that comparable systems are sparse in literature, comparing the system to existing work will give little value or insight.
-From the research that has been done in related domains we have seen dif
 
 \section{Sharpness Measure}\label{sec:method-sharpness}
 Analyzing how the sharpness of pollen grains affects detection performance requires an objective sharpness measure.
@@ -81,13 +55,12 @@ The weight of any argument made based on analysis using this measure is predicat
 There are many different approches to this, we have chosen to compare the objective measure with subjective measurements of percieved sharpness on a subset of the training data.
 
 \subsection{Evaluating the sharpness measure}
-
-A small subset of the dataset is chosen at random and a human assessment is performed to determine the sharpness of every labeled pollen grain.
-This can then be used to score the different sharpness measures.
-Determining the sharpness of a pollen grain with high fidelity was found to be very subjective and non-reproducible, so a simple classification was instead performed.
-Images are separated into three classes.
-Figure~\ref{fig:fourier} gives examples of the three classes with image (a) being the sharpest (class 3) and (c) being the blurriest (class 1).
-In total 389 grains where evaluated, the distribution of their classes is given in Table~\ref{tab:sharpness}
+The basis of our evaluation is a new dataset created from a small random subset of the training examples.
+Each ground truth is then given sharpness scores based on percieved sharpness and the objective measure.
+Determining percieved sharpness of a pollen grain with high fidelity was found to be highly subjective and non-reproducible whith repeated independent scoring, so a simple classification was instead performed.
+Images where separated into three classes representing percieved sharpness.
+Figure~\ref{fig:fourier} gives examples of the classes with image (a) being the sharpest (class 3) and (c) being the blurriest (class 1).
+A total of 389 pollen grains where evaluated, the distribution of their classes is given in Table~\ref{tab:sharpness}
 
 \begin{table}[htb]
   \caption[Sharpness dataset distribution]{Distribution of classes accross the sharpness validation dataset.}\label{tab:sharpness}
