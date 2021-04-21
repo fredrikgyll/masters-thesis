@@ -16,7 +16,28 @@ Only pollen grains from a subset of species are activly tracked.
 Three microscope slides have been imaged using a digital optical microscope producing a set of 701 raster images with a size of \(1080\times 1920\) pixels and three channels; red, green, and blue.
 The resolution of each image is \(\SI{0.183}{\micro\metre\per\pixel}\).
 Each image has been labled in collaboration with the experts to produce a valid and correct ground truths.
-In total, three different species have been classified namely \textit{Poaceae}, \textit{corylus}, and \textit{alnus}, known in english as Grasses, Hazel, and Alder, respectively. An example is given in Figure~\ref{fig:dataset-sample}.
+In total, three different species have been classified, namely \textit{poaceae}, \textit{corylus}, and \textit{alnus}, known in english as Grasses, Hazel, and Alder, respectively. A labeled example is given in Figure~\ref{fig:dataset-sample}. A summary of the dataset is given in Table~\ref{tab:dataset}.
+
+\begin{table}[htb]
+  \caption[Class distribution accross the dataset]{Distribution of classes accross the pollen dataset}\label{tab:dataset}
+  \centering 
+  \begin{tabular}{lrrr} \toprule
+                      & Poaceae & corylus & alnus \\ \midrule
+    Number of labels  & 5600    & 262     & 522 \\
+    Proportion        & 87.7\%  & 4.1\%   & 8.2\% \\ \bottomrule
+  \end{tabular}
+\end{table}
+
+
+Many of the images are taken from the same view point, but with the focus point set to different grains. The ground truth labeles are drawn for all present pollen grains, regardless of the how blurred they apear. This is done so that the dataset may be modified for the purpose of our analysis of sharpeness and model performance in regards to \textit{RQ2}.
+
+As oposed to more general object detection tasks, where there is a large variance in both the apparent size and shape of objects within an image, this dataset is much more regular. This is demonstrated in Figure~\ref{fig:aspect}, where we can see that the grains are mostly square in shape and between 100 and 150 pixels wide.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figs/aspect_ratio.pdf}
+  \caption[Aspect ratios in the dataset]{The widths and heigths of all ground truth boxes are plotted, longest against shortest. The lines denote the three aspect ratios used in the default boxes of the SSD model. Grains marked `Edge contact' are those in direct contact with the edge of the image and are most likly partialy croped out of frame. We can clearly see that the grains are quite regular in both shape and size}\label{fig:aspect}
+\end{figure}
 
 %\section{Arcitecture}\label{sec:architecture}
 
@@ -52,14 +73,14 @@ The operation is described in Equation (\ref{eq:sharp}).
 
 \begin{equation}\label{eq:sharp}
   \begin{split}
-    \mathbf{X} = \mathcal{F}(a),\quad a\in \mathbb{Z}^{M\times N}\\
-    T_H = \sum_{x\in\mathbf{X}}[x\ge\mu],\quad \mu=\frac{\max \mathbf{X^{\mathrm{abs}}}}{1000}\\
-    S = \dfrac{T_H}{M\times N}
+    \mathbf{X} &= \mathcal{F}(a),\quad a\in \mathbb{Z}^{M\times N}\\
+    T_H &= \sum_{x\in\mathbf{X}}[x\ge\mu],\quad \mu=\frac{\max \mathbf{X^{\mathrm{abs}}}}{1000}\\
+    S &= \dfrac{T_H}{M\times N}
   \end{split}
 \end{equation}
 
 Here \(\mathcal{F}\) is the dicrete the fourier fransform, operationg on a input image \(a\), and \(\mathbf{X}\) only contains the magnitude of the fourier transform.
-The scaling factor of the threshold value, \(\mu \), was found to produce good results on our data, without modification.
+The scaling factor of the threshold value, \(\mu \), was found to produce good results on our data, without modification. \(S\) is the sharpness measure.
 
 Validating the sharpness measure is an important task.
 The weight of any argument made based on analysis using this measure is predicated on its soundness.
@@ -73,21 +94,14 @@ Images where separated into three classes representing percieved sharpness.
 Figure~\ref{fig:fourier} gives examples of the classes with image (a) being the sharpest (class 3) and (c) being the blurriest (class 1).
 A total of 389 pollen grains where evaluated, the distribution of their classes is given in Table~\ref{tab:sharpness}
 
-\begin{table}[htb]
+\begin{table}[htbp]
   \caption[Sharpness dataset distribution]{Distribution of classes accross the sharpness validation dataset.}\label{tab:sharpness}
   \centering 
-  \begin{tabular}{lr} \toprule
-    Sharpness & Frequency \\ \midrule
-    1 --- blurred & 123 \\
-    2 & 105 \\
-    3 --- sharp & 125 \\ \bottomrule
+  \begin{tabular}{lrrr} \toprule
+    & blury [1] & partly [2] & sharp [3]  \\ \midrule
+    Number of labels & 123 & 105 & 125 \\ \bottomrule
   \end{tabular}
 \end{table}
-
-Looking at Figure~\ref{fig:sharpness} we can see a clear correlation between the mean of the distribution, and the percieved sharpness.
-The overlap is to be expected, given the mapping from a continuous predictor onto a categorical label.
-To further evaluate the performance of the sharpness measure, we construct a very simple statistical model, in the form of a decision tree, and test its ability to differentiate between the classes.
-The model achived a test accuracy of 84.1\%.
 
 \begin{figure}[htbp]
   \centering
@@ -102,5 +116,16 @@ The model achived a test accuracy of 84.1\%.
   \includegraphics[width=\textwidth]{figs/qden.pdf}
   \caption{Density plot}\label{fig:sharpness-qden}
 \end{subfigure}
-  \caption[Sharpness measure seperability]{The sharpness measure grouped by class label. Although there is an overlap between ajacent classes, there is a clear seperation between the IQR of measured sharpness in (a). The correlation between percieved and measured sharpness is also clear.}\label{fig:sharpness}
+  \caption[Sharpness measure seperability]{The sharpness measure grouped by class label. There is a large overlap between ajacent classes, but the IQRs in (a) are clearly seperated. The correlation between percieved and measured sharpness is also clear.}\label{fig:sharpness}
+\end{figure}
+
+Looking at Figure~\ref{fig:sharpness} we can see a clear correlation between the mean of the distribution, and the percieved sharpness.
+The overlap is to be expected, given the mapping from a continuous predictor onto a categorical label.
+To further evaluate the performance of the sharpness measure, we construct a very simple statistical model, in the form of a decision tree, and test its ability to differentiate between the classes.
+The model achived a test accuracy of 84.1\%.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figs/sharpness_all.pdf}
+  \caption[Distribution of sharpness accross entire dataset]{Density plot showing the sharpness of all pollen grains in the dataset. The shaded sections indicate the distibution of sharpness classes, if the dataset is classified with the evaluation model. As expected, most grains fall into the sharpest category.}\label{fig:sharpness-all}
 \end{figure}
