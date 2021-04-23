@@ -1,16 +1,25 @@
 \ProvidesPackage{thesis_style}
+\usepackage[utf8]{inputenc}
+
+% Handle multi-glyph characters in the output PDF correctly
+\usepackage[T1]{fontenc}
+
+% Main font with math support
+\usepackage{charter}
+% Sans serif font
+\usepackage[scaled=.88]{berasans}
+
 
 \usepackage[english]{babel}
 \usepackage{datetime}
 
 \usepackage[backend=biber,style=bwl-FU,bibstyle=authoryear]{biblatex}
-\addbibresource{bibtex/zotero.bib}
 
-\usepackage{parskip}
 \usepackage{tikz}                               % Draw graphics
+\usepackage{parskip}
 \usepackage[colorinlistoftodos,prependcaption,textsize=tiny,textwidth=30mm]{todonotes}
-\usepackage{xcolor}                             % Coloured text etc.
-\usepackage[labelfont=bf,textfont=normalfont]{caption}
+\usepackage{xcolor}                             % Colored text etc.
+\usepackage{caption}
 \usepackage{subcaption}
 \usepackage{graphicx}							% To include graphics
 \usepackage{csquotes}
@@ -25,7 +34,7 @@
 \usepackage[linktocpage,colorlinks]{hyperref}	% PDF hyperlink
 \usepackage{float}                              % repositioning floats
 \usepackage{array}
-% todonotes related
+% todo notes related
 \usepackage{xargs}                              % Use more than one optional parameter in a new commands
 \usepackage[bottom]{footmisc}
 
@@ -43,13 +52,16 @@ margin=1.5in
 
 
 % Colors
-\definecolor{nicegray}{gray}{.36}
+\definecolor{nicegray}{gray}{.25}
 \definecolor{nicegreen}{HTML}{0F7F12}
 \definecolor{poaceae}{HTML}{1f77b4}
 \definecolor{corylus}{HTML}{ff7f0e}
 \definecolor{alnus}{HTML}{2ca02c}
 
-% dateformat
+% Captions
+\captionsetup{labelfont=bf,textfont={small,color=nicegray},margin=\parindent}
+
+% date format
 \newdateformat{ddaymonth}{%
 \ordinaldate{\THEDAY} \monthname[\THEMONTH]}
 \newdateformat{daymonth}{%
@@ -73,7 +85,7 @@ margin=1.5in
     urlcolor={black},
 }
 
-% SI Units
+% siunitx
 \DeclareSIUnit\pixel{pixel}
 
 % TODO notes
@@ -85,3 +97,9 @@ margin=1.5in
 \titleformat{\subsection}{\large\bfseries}{}{0em}{}
 
 \titlespacing*{\chapter}{0cm}{2in}{1ex}
+
+% Bibliography
+
+\addbibresource{bibtex/zotero.bib}
+\setcounter{biburllcpenalty}{7000}
+\setcounter{biburlucpenalty}{8000}
