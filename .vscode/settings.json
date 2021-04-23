@@ -80,5 +80,13 @@
         "%LINE%",
         "%PDF%",
         "%TEX%",
+    ],
+    "spellright.language": [
+        "en"
+    ],
+    "spellright.documentTypes": [
+        "markdown",
+        "latex",
+        "plaintext"
     ]
 }

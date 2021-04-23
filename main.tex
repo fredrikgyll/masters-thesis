@@ -1,18 +1,16 @@
-\documentclass[a4paper,11pt]{book}
+\documentclass[a4paper,11pt,openright,twoside]{book}
 
 \usepackage{thesis_style}
 
 
-% sections/00_titlepage,sections/01_abstract,sections/02_preface,
-%\includeonly{sections/03_introduction,sections/04_background,sections/04b_related_work}
+%\includeonly{sections/06_methodology}
 
 \begin{document}
 
-\pagenumbering{roman} 
+%\pagenumbering{roman} 
 
 \include{sections/00_titlepage}
 
-%FRONTMATTER
 \frontmatter
 
 \include{sections/01_abstract}
@@ -21,9 +19,7 @@
 
 \include{sections/tables}
 
-%FRONTMATTER
 \mainmatter
-
 \pagenumbering{arabic} 
 
 
@@ -41,11 +37,8 @@
 
 \include{sections/10_OLD}
 
-%BACKMATTER
 \backmatter
 
-\setcounter{biburllcpenalty}{7000}
-\setcounter{biburlucpenalty}{8000}
 \addcontentsline{toc}{chapter}{Bibliography}
 \printbibliography\markboth{}{}
 

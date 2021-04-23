@@ -1,7 +1,7 @@
 \chapter{Related Work}\label{cha:related}
 Object detection using CNNs is a fairly new area of study, and as such, its application in the domain of pollen counting is lacking in literature.
 Examining related work therefore requires us to widen our field of view and explore the ways in which similar methods have been used to solve similar problems.
-We will do this in to parts; Firstly, we will examin the various object detection frameworks and their use within microscopy.
+We will do this in to parts; Firstly, we will examine the various object detection frameworks and their use within microscopy.
 Secondly, we will detail the various methods that have been employed in relation to our specific domain.
 
 \section{Convolutional Neural Networks}\label{sec:rel-cnn}
@@ -49,7 +49,7 @@ Common to the R-CNN family of methods is the use of two separate stages, one for
 This adds considerable complexity in that both systems require separate training and tuning.
 These methods have been successfully utilized in many domains, including the only published attempt at pollen grain detection.
 The inference speed does however remain prohibitively slow for many tasks that require real-time performance.
-We can ovserve an obvious trend in the evolution of the two stage systems where stages are merged or replaced by CNN\@.
+We can observe an obvious trend in the evolution of the two stage systems where stages are merged or replaced by CNN\@.
 This trend continues to its logical conclusion with the development of the single stage detector.
 
 This class of model features only a single CNN, responsible for both localizing and classifying objects.
@@ -77,7 +77,7 @@ Results show that the simplified model increased both accuracy and speed over th
 You Only Look Once (YOLO) is a very popular framework that has been applied to many different areas.
 As with R-CNN it has been released in many versions with iterative improvements.
 It is similar to SSD in that it also predicts box offsets and class scores for a fixed number of bounding boxes.
-Specifically, YOLO divides an input image into a grid and then predicts box offsets for a fixed number of bounding boxes centred in each grid square (but not regressed from default boxes), and class confidences for each grid square.
+Specifically, YOLO divides an input image into a grid and then predicts box offsets for a fixed number of bounding boxes centered in each grid square (but not regressed from default boxes), and class confidences for each grid square.
 Similarly, YOLO also uses transfer learning to reduce training time and can be configured to use most any model as its feature extractor.
 The later versions of YOLO also feature multiple extraction layers which improves predictions for smaller objects, which was one of the major weaknesses of the initial version.
 
@@ -93,7 +93,7 @@ The current standard process requires human expert analysis and is prone to erro
 The YOLO model has not been modified apart from changing the number of classes to 3 (Red, White, and Platelets).
 They do however change the inference routine to optimize the count for each of the three cell types.
 As with the aforementioned RPN, YOLO predicts an objectness score for each bounding box, and normally considers a box to be a positive match if the score exceeds a threshold.~\citeauthor{islam_machine_2019} show that, rather than using only one threshold value for all classes, a higher overall accuracy can be reached by filtering boxes for each class independently with different thresholds.
-This points towards a larger issue of choosing both the algorithms that are used to filter the predictions made by these models and their hyperparameters.
+This points towards a larger issue of choosing both the algorithms that are used to filter the predictions made by these models and their hyper parameters.
 The difference between how many raw predictions a model makes, and the number of objects an image contains is usually many orders of magnitude.
 The method used to filter the predictions is therefore crucial to the performance of the model, and also highly dependent on the domain.
 
@@ -168,21 +168,21 @@ The results are promising, but the dataset is small, and with only one example, 
 
 The last model we will look at is also the only published work attempting to use a CNN to detect pollen grains in slide images.\ \cite{gallardo_caballero_precise_2019} Uses Faster R-CNN to detect pollen grains of various types within un altered LM images of pollen grains.
 The model does not classify the grains it localizes.
-They report very high values for both precicion and recall, but use a slightly modified definition of IoU when calculating these values.
+They report very high values for both precision and recall, but use a slightly modified definition of IoU when calculating these values.
 
 The dataset they use was created by filming the slide whilst changing the focus accross the pollen grains.
 Based on a keyframe, 10 frames where extracted before and after the keyframe, creating a 21-frame sequence of focal planes.
 From this, two datasets where created.
-In the first one, the pollen grain where labled in the frame there they appered sharpest, and ignored in all other images.
-In the second dataset, the grains where labled in all images throughout the sequence.
-Only the lables from the first dataset where released.
+In the first one, the pollen grain where labeled in the frame there they appeared sharpest, and ignored in all other images.
+In the second dataset, the grains where labeled in all images throughout the sequence.
+Only the labels from the first dataset where released.
 
-The performance of the model was claculated by stacking the individual predictions from all focal planes together, and then performing the filtering step.
-This workes well because the model makes no class predictions and would have to be adapted to be able to handle multi class predictions.
+The performance of the model was calculated by stacking the individual predictions from all focal planes together, and then performing the filtering step.
+This works well because the model makes no class predictions and would have to be adapted to be able to handle multi class predictions.
 The definition of IoU is also changed so that it is capped to 1 if one box encloses the other.
-The effect this has on the values for recall and presicion is not declared.
+The effect this has on the values for recall and precision is not declared.
 
-Two trials where run to compare the performance obtained from the two datasets, and values for recall and precision were high for both (above .98), with the non-blurred trial having slightly higher presicion.
+Two trials where run to compare the performance obtained from the two datasets, and values for recall and precision were high for both (above .98), with the non-blurred trial having slightly higher precision.
 The authors conclude that there does not seem to be any benefit of including blurred examples in the training set.
 The results are hard to interpret, given the changed definition of IoU, but are very promising.
 

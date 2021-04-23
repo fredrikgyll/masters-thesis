@@ -1,8 +1,8 @@
 \chapter{Background}\label{cha:background}
 In this section we will cover the main theoretical concepts underlying the problem domain and proposed solution.
-We will start by looking at the methodology that is used currently for pollen counting and formalise it as a machine learning problem.
+We will start by looking at the methodology that is used currently for pollen counting and formalize it as a machine learning problem.
 We will then provide a theoretical overview of the main building blocks of modern convolutional neural networks.
-A basic understanding of the operation and conponents of a standard feed forward fully connected neural network is assumed for this section.
+A basic understanding of the operation and components of a standard feed forward fully connected neural network is assumed for this section.
 
 \section{Pollen Imaging}
 There are two main methods of pollen analysis, image-based and non-image based.
@@ -96,24 +96,24 @@ The output from the convolution can be calculated as follows:
 \[w\ast x_{ij}=\sum_{m}\sum_{n}  w_{mn}x_{i-m,j-n}\]
 
 Where \((m,n)\) spans the index set of the kernel which is center originated, i.e. \(w_{0,0}\) is the center element of the kernel.
-The patch of \(x\) involved in the sum at each step is refered to as the \textit{receptive field}.
+The patch of \(x\) involved in the sum at each step is referred to as the \textit{receptive field}.
 As the operation is repeated for every index of \(x\), the receptive field slides accross the input.
-The resulting output of the convolution is refered to as a \textit{feature map}.
+The resulting output of the convolution is referred to as a \textit{feature map}.
 
 \begin{figure}[htb]
   \centering
   \includegraphics[width=0.4\textwidth]{figs/conv.pdf}
   \caption[Convolution operation]{Visualization of the convolution operation.
 In red we have a filter containing three \(3\times 3\) kernels.
-The elementwise multiplication between the filter and receptive field and subsequent summation produces a single scaler in the feature map.
+The element wise multiplication between the filter and receptive field and subsequent summation produces a single scaler in the feature map.
 The operation is repeated over the index set of the input, producing the complete feature map.}\label{fig:cnn}
 \end{figure}
 
-Usually, the input to a convolutional layer contains multiple channels, e.g.\ an RGB input image which has three channels representing the seperate  red, green, and blue color channels.
+Usually, the input to a convolutional layer contains multiple channels, e.g.\ an RGB input image which has three channels representing the separate  red, green, and blue color channels.
 To handle this we construct as many kernels as there are channels.
-We then convolve each channel with its own kernel and add together the result accros the channels, which produces a single feature map.
+We then convolve each channel with its own kernel and add together the result across the channels, which produces a single feature map.
 An example of such a convolution operation is shown in Figure~\ref{fig:cnn}.
-This stack of kernels is refered to as a \textit{filter}.
+This stack of kernels is referred to as a \textit{filter}.
 If we want the output of a convolutional layer to produce \(N\) feature maps, \(N\) filters are needed.  It is common to increase the number of filters as the image is continually downsampled through the layers on the neural network.
 
 At the edges of \(x\) the sum is undefined because the receptive field moves beyond the bounds of \(x\), causing a reduction in the size of the output.
@@ -122,7 +122,7 @@ When the receptive field moves beyond the bounds of \(x\), a stand-in value is u
 This can be visualized as \textit{padding} the input with said value.
 Zero is often used as the padding-value.
 
-Dimensionality reduction is also possible using the concept of \textit{stride}, which referes to how the receptive field moves accross the input relative to the index of the feature map.
+Dimensionality reduction is also possible using the concept of \textit{stride}, which refers to how the receptive field moves accross the input relative to the index of the feature map.
 In the base case, the receptive field moves by one step for every element in the feature map.
 If we increase the stride, the receptive field `jumps over' positions for every step in the feature map, thus shrinking its size. 
 
@@ -133,7 +133,7 @@ It also reduces the computational complexity involved in training the model.
 Because convolution is a linear operation, so non-linearity must be added if the network is to be able to approximate a non-linear function.
 As with normal fully connected networks, this is achieved by applying an activation function to the feature map.
 The same activation functions that are commonly used in fully connected networks are also used in CNNs.
-As such, further explenation of their action falls into the category of assumed prior knowledge.
+As such, further explanation of their action falls into the category of assumed prior knowledge.
 Because of the depth of the models architectures in use today, the \textit{rectified linear unit} (ReLU), and its variations, are commonly used.
 
 \subsection{Spacial pooling}
@@ -155,9 +155,9 @@ This effectively creates connections between local features across the channels 
 The primary motivation for using this technique today is to lower the computational cost of standard convolutions by reducing the depth of the input prior to a larger convolution.
 The technique is now commonplace and featured in all deep CNN architectures.
 
-\subsection{Batch normalisation}
+\subsection{Batch normalization}
 As we train our network, the parameters in each layer change, this causes the distribution of each layers output to shift.
-As the distribution from previous layers change, this shift is propageated though to the layers downstream, and so each layer must deal with ever changing input distributions.
+As the distribution from previous layers change, this shift is propagated though to the layers downstream, and so each layer must deal with ever changing input distributions.
 To overcome this, lower learning rates and careful parameter initialization is required. 
 
 A much more effective solution has been proposed by~\cite{ioffe2015batch} called \textit{Batch Normalization} (BN).
@@ -217,7 +217,7 @@ The named region is shaded.}\label{fig:iou}
 \end{figure}
 
 Using the IoU we can define what is considered as a correct prediction (TP).
-Given prediction \(\hat{X}\) with label \(\hat{X}_l\) and bounding box \(\hat{X}_u\). \(\hat{X}\) is considered a True Povitive if there exists a ground truth \(Y\), where \(Y_{l}=\hat{X}_l\) and \(\text{IoU}(\hat{X}_u, Y_{u})\ge \mu \).
+Given prediction \(\hat{X}\) with label \(\hat{X}_l\) and bounding box \(\hat{X}_u\). \(\hat{X}\) is considered a True Positive if there exists a ground truth \(Y\), where \(Y_{l}=\hat{X}_l\) and \(\text{IoU}(\hat{X}_u, Y_{u})\ge \mu \).
 Where \( \mu \) is some threshold value, often 0.5.
 
 

@@ -8,13 +8,13 @@ Because of the resilience of these types of organisms and microfossils, the type
 
 Possible applications and use cases are equally as diverse.
 In criminology, soil samples can place a suspect at a specific location, depending on the composition of pollen and spores found.
-Geologists analyse rock layers and use the presence and disappearance of palynomorphs to place formations in time.
-Glacial Ice core samples are analysed for organic remains to estimate temperature and rainfall over the past 10,000 years.
+Geologists analyze rock layers and use the presence and disappearance of palynomorphs to place formations in time.
+Glacial Ice core samples are analyzed for organic remains to estimate temperature and rainfall over the past 10,000 years.
 Finally, and most relevant to this thesis, is counting the amount of airborne pollen to forecast conditions for people suffering from allergies.
 
 Methods used in palynology vary, but most seek to identify the composition of palynomorphs in samples taken from nature, be it from glacial ice cores, peat sections from bogs, rock samples from stratigraphic drilling, or collected airborne pollen grains.
 Common for all these methods is the need for human experts to manually count and classify palynomorphs with a microscope.
-A single slide can take hours to analyse and this directly affects the amount of data that can be collected and analysed.
+A single slide can take hours to analyze and this directly affects the amount of data that can be collected and analyzed.
 
 From a machine learning perspective, the above describes an object detection task, which is the general task of locating certain objects within an image and classifying each object.
 State of the art within this problem space uses Convolutional Neural Networks (CNN), which are a type of neural network especially suited for image analysis of unprocessed image data.
@@ -31,7 +31,7 @@ The goal of this thesis can therefore broadly be stated as follows:
 
 The primary objective is to build a system that is able to perform the task of counting pollen grains with a accuracy comparable to that of a human expert.
 Moreover than just developing a working system, the project aims to establish whether the modifications that have been successfully made to detection systems in related domains also may improve a pollen detection system.
-This is formalised as the following research question: 
+This is formalized as the following research question: 
 
 \begin{description}
 \item[RQ1] \textit{Can the computational complexity of a Single Stage MultiBox object detection model be reduced without a loss in accuracy and recall?}
@@ -40,11 +40,11 @@ This is formalised as the following research question:
 Computational complexity here refers to the amount of computations needed to produce a prediction.
 The Single Stage MultiBox (SSD) model is presented in Section~\ref{sec:ssd}.
 It is designed as a general object detector which can detect a variety of different type of objects at different scales.
-In \textbf{RQ1} we postulate that the task of pollen detection will require a less generalised model and that this can be realised by simplifying or removing parts of the models architecture.
+In \textbf{RQ1} we postulate that the task of pollen detection will require a less generalized model and that this can be realized by simplifying or removing parts of the models architecture.
  
 Recent research in pollen classification has indicated that accuracy can be improved by using multifocal data, i.e.\ images from different focus planes, as opposed to single images.
 This project will explore whether this can also be applied to a detection system.
-This is formalised in the second research question:
+This is formalized in the second research question:
 
 \begin{description}
     \item[RQ2] \textit{Can the accuracy and recall of the model be improved by using multifocal data?}
@@ -53,5 +53,5 @@ This is formalised in the second research question:
 Ideally, both of these questions can be explored in conjunction to each other using the same basic model, so that we can measure the impact of both changes separately and together.
 
 \section{Thesis Structure}\label{sec:thesisStructure}
-The remainder of this documant is structured as follows:
-Section~\ref{cha:background} covers background knowlege relating to pollen imaging techniques, the composition and functioning of Convolutional Neural Networks, and metrics for meacuring performance in object detection tasks.
+The remainder of this document is structured as follows:
+Section~\ref{cha:background} covers background knowledge relating to pollen imaging techniques, the composition and functioning of Convolutional Neural Networks, and metrics for measuring performance in object detection tasks.
