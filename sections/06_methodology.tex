@@ -47,10 +47,67 @@ In this section we will detail how sharpness will be measured for the purpose of
 The measure is based on fourier analysis and its performance has been tested on the training data.
 
 \subsection{Fourier analysis}
-Fourier analysis describes the general method of utilizing the fourier transform to analyse the component frequensies present is some signal.
-With digital images, we can look at how the brightness changes accross an image following some vector, and use this signal as the basis for our analysis.
-An image contains signals in all directions so the fourier transform of an image also encodes this directionality.
-Interpreting this value as a signal we can then use the fourier transform to analyse the frequency components of an image, being interpreted as a set of signals.
+Fourier analysis describes the general method of utilizing the Fourier transform to analyze the component frequencies present is some signal.
+For the purpose of Fourier analysis we can interpret an image as a collection of signals, each of which describe the change in brightness value when traveling across the image in some direction.
+Taking the Fourier transform of an image then produces a 2-dimensional matrix where the intensity of each element represents a 2-dimensional sinusoid component.
+
+Figure~\ref{fig:fourier-demo} shows the Fourier transform of various inputs.
+The transforms are shifted, such that an element in the transform encodes a sinusoid component with a frequency proportional to its distance from the center and moving in the same direction as the vector it forms with the center. 
+The directionality of the Fourier transform is demonstrated in the first two examples.
+Squares decompose into a set on sinusoids, all moving is the same two directions.
+The coefficient of each component is encoded in the intensity of the pixel.
+In all the examples the lower frequency components dominate, which lights up the center region. The last two examples demonstrate how blurring an image eliminates the higher frequencies from the Fourier domain.
+
+
+
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}[b]{0.2\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figs/fourier/square_original.png}
+    \vspace*{0.02\textwidth}
+  \end{subfigure}%
+  \hspace*{0.02\textwidth}
+  \begin{subfigure}[b]{0.2\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figs/fourier/square_45deg_original.png}
+    \vspace*{0.02\textwidth}
+  \end{subfigure}%
+  \hspace*{0.02\textwidth}
+  \begin{subfigure}[b]{0.2\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figs/fourier/peppers_original.png}
+    \vspace*{0.02\textwidth}
+  \end{subfigure}%
+  \hspace*{0.02\textwidth}
+  \begin{subfigure}[b]{0.2\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figs/fourier/peppers_blur_original.png}
+    \vspace*{0.02\textwidth}
+  \end{subfigure}
+
+  \begin{subfigure}[t]{0.2\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figs/fourier/square_fourier.png}
+  \end{subfigure}%
+  \hspace*{0.02\textwidth}
+  \begin{subfigure}[t]{0.2\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figs/fourier/square_45deg_fourier.png}
+  \end{subfigure}%
+  \hspace*{0.02\textwidth}
+  \begin{subfigure}[t]{0.2\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figs/fourier/peppers_fourier.png}
+  \end{subfigure}%
+  \hspace*{0.02\textwidth}
+  \begin{subfigure}[t]{0.2\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figs/fourier/peppers_blur_fourier.png}
+  \end{subfigure}
+  \caption[Demonstration of the Fourier transform]{
+    Demonstration of the Fourier transform. The bottom row shows the center-shifted discrete Fourier transform of the corresponding image in the top row. The Fourier spectra mapped to grayscale values with a truncated linear amplitude mapping which is scaled to compensate for the otherwise dominating centre component.}\label{fig:fourier-demo}
+\end{figure}
 
 Using the fourier spectrum to measure sharpness follows from the realization that there is a strong relationship between the sharpness of an image in the spacial domain and the distribution of frequency components in the frequency domain.
 Sharp features produce high frequencies while blur smoothes out the changes in brighness, lowering the frequencies.
@@ -122,7 +179,10 @@ A total of 389 pollen grains where evaluated, the distribution of their classes 
 Looking at Figure~\ref{fig:sharpness} we can see a clear correlation between the mean of the distribution, and the percieved sharpness.
 The overlap is to be expected, given the mapping from a continuous predictor onto a categorical label.
 To further evaluate the performance of the sharpness measure, we construct a very simple statistical model, in the form of a decision tree, and test its ability to differentiate between the classes.
-The model achived a test accuracy of 84.1\%.
+The model achieved a test accuracy of 84.1\%. 
+
+In Figure~\ref{fig:sharpness-all} we have computed the sharpness of every ground truth in the dataset in a density plot showing the distribution.
+As expected, most of the ground truths fall into the sharpest category, but there is a spread, allowing us to analyze the relationship between sharpness and model performance.
 
 \begin{figure}[htbp]
   \centering
