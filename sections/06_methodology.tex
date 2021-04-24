@@ -16,7 +16,7 @@ Only pollen grains from a subset of species are actively tracked.
 Three microscope slides have been imaged using a digital optical microscope producing a set of 701 raster images with a size of \(1080\times 1920\) pixels and three channels; red, green, and blue.
 The resolution of each image is \(\SI{0.183}{\micro\metre\per\pixel}\).
 Each image has been labeled in collaboration with the experts to produce a valid and correct ground truths.
-In total, three different species have been classified, namely \textit{poaceae}, \textit{corylus}, and \textit{alnus}, known in english as Grasses, Hazel, and Alder, respectively. A labeled example is given in Figure~\ref{fig:dataset-sample}. A summary of the dataset is given in Table~\ref{tab:dataset}.
+In total, three different species have been classified, namely \textit{poaceae}, \textit{corylus}, and \textit{alnus}, known in English as Grasses, Hazel, and Alder, respectively. A labeled example is given in Figure~\ref{fig:dataset-sample}. A summary of the dataset is given in Table~\ref{tab:dataset}.
 
 \begin{table}[htb]
   \caption[Class distribution across the dataset]{Distribution of classes across the pollen dataset}\label{tab:dataset}
@@ -113,11 +113,11 @@ In all the examples the lower frequency components dominate, which lights up the
     \includegraphics[width=\textwidth]{figs/fourier/peppers_blur_fourier.png}
   \end{subfigure}
   \caption[Demonstration of the Fourier transform]{
-    Demonstration of the Fourier transform. The bottom row shows the center-shifted discrete Fourier transform of the corresponding image in the top row. The Fourier spectra mapped to grayscale values with a truncated linear amplitude mapping which is scaled to compensate for the otherwise dominating centre component.}\label{fig:fourier-demo}
+    Demonstration of the Fourier transform. The bottom row shows the center-shifted discrete Fourier transform of the corresponding image in the top row. The Fourier spectra mapped to grayscale values with a truncated linear amplitude mapping which is scaled to compensate for the otherwise dominating center component.}\label{fig:fourier-demo}
 \end{figure}
 
 Using the Fourier spectrum to measure sharpness follows from the realization that there is a strong relationship between the sharpness of an image in the spacial domain and the distribution of frequency components in the frequency domain.
-Sharp features produce high frequencies while blur smoothes out the changes in brightness, lowering the frequencies.
+Sharp features produce high frequencies while blur smooths out the changes in brightness, lowering the frequencies.
 Figure~\ref{fig:fourier} shows three different pollen grains, captured with progressively more blur.
 If we look at their corresponding Fourier spectra we can see that, as the perceived blur increases, the amount of high frequency components decrease.
 
@@ -158,7 +158,7 @@ Figure~\ref{fig:fourier} gives examples of the classes with image (a) being the 
 A total of 389 pollen grains where evaluated, the distribution of their classes is given in Table~\ref{tab:sharpness}
 
 \begin{table}[htbp]
-  \caption[Sharpness dataset distribution]{Distribution of classes accross the sharpness evaluation dataset.}\label{tab:sharpness}
+  \caption[Sharpness dataset distribution]{Distribution of classes across the sharpness evaluation dataset.}\label{tab:sharpness}
   \centering 
   \begin{tabular}{lrrr} \toprule
     & blurry [1] & partly [2] & sharp [3]  \\ \midrule
@@ -182,7 +182,7 @@ A total of 389 pollen grains where evaluated, the distribution of their classes 
   \caption[Sharpness measure separability]{The sharpness measure grouped by class label. There is a large overlap between adjacent classes, but the IQRs in (a) are clearly separated. The correlation between perceived and measured sharpness is also clear.}\label{fig:sharpness}
 \end{figure}
 
-Looking at Figure~\ref{fig:sharpness} we can see a clear correlation between the mean of the distribution, and the percieved sharpness.
+Looking at Figure~\ref{fig:sharpness} we can see a clear correlation between the mean of the distribution, and the perceived sharpness.
 The overlap is to be expected, given the mapping from a continuous predictor onto a categorical label.
 To further evaluate the performance of the sharpness measure, we construct a very simple statistical model, in the form of a decision tree, and test its ability to differentiate between the classes.
 The model achieved a test accuracy of 84.1\%. 
@@ -193,5 +193,5 @@ As expected, most of the ground truths fall into the sharpest category, but ther
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.9\textwidth]{figs/sharpness_all.pdf}
-  \caption[Distribution of sharpness accross entire dataset]{Density plot showing the sharpness of all pollen grains in the dataset. The shaded sections indicate the distribution of sharpness classes, if the dataset is classified with the evaluation model. As expected, most grains fall into the sharpest category.}\label{fig:sharpness-all}
+  \caption[Distribution of sharpness across entire dataset]{Density plot showing the sharpness of all pollen grains in the dataset. The shaded sections indicate the distribution of sharpness classes, if the dataset is classified with the evaluation model. As expected, most grains fall into the sharpest category.}\label{fig:sharpness-all}
 \end{figure}

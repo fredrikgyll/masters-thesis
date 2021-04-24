@@ -17,7 +17,7 @@ The model is also fairly old by now so it would be natural to update the archite
 Newer types of data augmentations have also been proposed and would make for a natural addition.
 
 All object detection systems require the same basic units: a model, data loader, evaluator, and data logger.
-Figure~\ref{fig:sys} gives a overview of the system with some of the components broken down further.
+Figure~\ref{fig:sys} gives an overview of the system with some of the components broken down further.
 Some parts of the system have been prototyped at this stage, while others only have basic functionality.
 We will go through the components separately in the next sections
 
@@ -48,8 +48,8 @@ A completed model would run the model over the testing data and measure the prec
 
 The software implementation for this project is written in Python using the PyTorch library~\parencite{NEURIPS2019_9015} for all computational tasks.
 PyTorch includes sub packages for handling the entire deep learning pipeline, i.e.~all sections shown in Figure~\ref{fig:sys}.
-PyTorch is a relatively new framework, but has quickly become on of the most popular tools, especially in research.
-The two main reasons for this is the \textit{pythonic} API design and its \textit{dynamic computational graph}.
+PyTorch is a relatively new framework but has quickly become one of the most popular tools, especially in research.
+The two main reasons for this are the \textit{pythonic} API design and its \textit{dynamic computational graph}.
 The API is designed from the bottom up to integrate into the already established python data science ecosystem as well as to follow the common design goals of being clear and consistent.
 One of the most complicated aspects of training neural networks is computing the derivatives for all the parameters.
 All modern frameworks perform automatic differentiation using a \textit{computational graph} which tracks the computations applied to the tensors through the forward pass.
@@ -62,13 +62,13 @@ This property is not something this implementation drawn any obvious benefits, b
 As stated in Section~\ref{cha:method}, a prototype of the model has been implemented.
 This implementation is based on the original model, with slight modifications inspired by an implementation made by NVINIA\footnote{Released under the Apache 2.0 License, available at this \href{https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/Detection/SSD}{URL:} \url{https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/Detection/SSD}}, the basic structure is shown in Figure~\ref{fig:model}.
 For the implementation we divide the model into four parts.
-First we have the feature extraction network, which feeds into an \textit{auxiliary structure} which gradually steps down the dimensions of the feature map.
+First, we have the feature extraction network, which feeds into an \textit{auxiliary structure} which gradually steps down the dimensions of the feature map.
 Finally we have two detection structures, one for class confidences, and one for bounding box regression.
 
 \subsection*{Architecture}
 The feature extractor in the original model is the VGG-16 network~\parencite{simonyan2015deep}, but as is pointed out by the authors, this choice is arbitrary and other networks can also be used.
 In our implementation we use ResNet-50~\parencite{he2015deep}.
-The main reason for this being its superior performance over VGG, and the ease of witch it integrates with the auxiliary structure.
+The main reason for this being its superior performance over VGG, and the ease of which it integrates with the auxiliary structure.
 With VGG, alterations are required to transform the latter layers from FC to CNN, while with ResNet we can just truncate the network at the appropriate layer to produce a feature map with the appropriate dimensions.
 PyTorch offers canonical implementations of the most popular pre-trained models as part of their API\@.
 
@@ -112,8 +112,8 @@ The confidence losses for all negatives are sorted and the top examples are chos
 \begin{figure}[htb]
   \centering
   \includegraphics[width=0.5\textwidth]{figs/priors_matching}
-  \caption[Default box mathching]{Visualisation of the result of the matching procedure.
-In \textcolor{red}{red} are all the default boxes that are mathced to the ground truths, i.e.~those that have an IoU \( \geq 0.5 \) with a ground truth box, in \textcolor{nicegreen}{green}.}\label{fig:priors}
+  \caption[Default box matching]{Visualisation of the result of the matching procedure.
+In \textcolor{red}{red} are all the default boxes that are matched to the ground truths, i.e.~those that have an IoU \( \geq 0.5 \) with a ground truth box, in \textcolor{nicegreen}{green}.}\label{fig:priors}
 \end{figure}
 
 
@@ -154,8 +154,8 @@ The images contain RGB with the same dimensions, \( 640\times 512 \) pixels.
 
 
 \subsection*{Augmentations}
-The augmentations where inspired by the original SSD implementation.
-Augmentations are vitaly important with a data set this small.
+The augmentations were inspired by the original SSD implementation.
+Augmentations are vitally important with a data set this small.
 The following procedure was used for the training procedure:
 \begin{enumerate}
   \item Crop to 300px square containing \( \geq 1 \) ground truth box.
@@ -171,11 +171,11 @@ The following procedure was used for the training procedure:
 With this procedure there are 16 possible combinations of augmentations that could be applied to each image, significantly increasing the apparent size of the dataset.
 
 \section*{Preliminary Results}
-The results of training the prototype model show evidence of learning, but have also revealed issues that make it very hard to measure the performance.
+The results of training the prototype model show evidence of learning but have also revealed issues that make it very hard to measure the performance.
 Examples of the predictions are given in Figure~\ref{fig:pred}.
 Most of the predicted boxes are concentrated around pollen grains, but because they are too small, none of them can be classified as correct.
 This result is consistently found across the test set and indicates an error somewhere in the implementation.
-The cause of the issue has not been found as of writing, but is most likely due to an error in either the loss calculation.
+The cause of the issue has not been found as of writing but is most likely due to an error in either the loss calculation.
 
 \begin{figure}[htbp]
   \centering
@@ -212,7 +212,7 @@ Lastly, we must design the exact specifications of each experiment.
 
 \section*{Model}
 The overview of the development, as described in Section~\textbf{??} provides the outline for what remains to be done in the next stage of the project regarding the system.
-We estimate that the majority of the total time needed to develop the system has been expended, and that the time remaining to finalise is in the order of weeks.
+We estimate that the majority of the total time needed to develop the system has been expended, and that the time remaining to finalize is in the order of weeks.
 
 When completed the system will take in a labelled train/val dataset and run a training session with either early stopping or for a set number of epochs, then it will run evaluation and the validation set, calculating precision, recall.
 
@@ -221,16 +221,16 @@ Establishing the baseline model will therefore also offer a chance to compare di
 
 \section*{Data}
 The process of acquiring a new dataset has already begun, but a thorough discussion on the process is left to the next stage of the project.
-The data has been provided by the The Norwegian Asthma and Allergy Association (NAAF) and consists of slides of pollen acquired from pollen monitoring stations. 
+The data has been provided by The Norwegian Asthma and Allergy Association (NAAF) and consists of slides of pollen acquired from pollen monitoring stations. 
 
 Pollen is collected with traps where air is continually sucked though a small slit and over an adhesive strip.
 The strip is moved across the slit, exposing different sections throughout the day.
-Pollen grains and other air born particulates adhere to the strip, which is then analysed under a microscope.
+Pollen grains and other air born particulates adhere to the strip, which is then analyzed under a microscope.
 This produces an estimate for the density of different pollen types, measured in particles per cubic meter, throughout the season. 
 
 The dataset used three microscope slides which were photographed using LM imaging.
 The total amount of images and labels is unknown as of writing.
-Due to the varying flowering seasons of the various species that are analysed, only 2--3 different classes of pollen are observed on any one slide, the total number of classes in the dataset most likely be in the range 3--5.
+Due to the varying flowering seasons of the various species that are analyzed, only 2--3 different classes of pollen are observed on any one slide, the total number of classes in the dataset most likely be in the range 3--5.
 This dataset is also easily extended, given the fact that historic data from multiple collection stations over multiple seasons exist.
 If the developed system were to produce good results, this process could also be accelerated in future iterations.
 
@@ -258,6 +258,6 @@ Secondly, we can reduce the number of default boxes per feature map.
 The original model uses 6 default boxes per anchor point with different aspect ratios, any number below this could by testes.
 Thirdly, we can use a smaller backbone, meaning one with fewer parameters.
 
-This thesis has attempted to determine how a CNN object detection can be used to further the pogress toward creating a system for automatic pollen counting.
-We have uncovered oppertunities for unique contribitions to the existing knowledgebase that we hope a fully developed system may be able to deliver.
-By the end of the project we hope to demonstrate that a computationally inexpensive model may be capable of performing the task of counting and classifying pollen grains.
+This thesis has attempted to determine how a CNN object detection can be used to further the progress toward creating a system for automatic pollen counting.
+We have uncovered opportunities for unique contributions to the existing knowledgebase that we hope a fully developed system may be able to deliver.
+By the end of the project, we hope to demonstrate that a computationally inexpensive model may be capable of performing the task of counting and classifying pollen grains.
