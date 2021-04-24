@@ -49,7 +49,14 @@ The measure is based on Fourier analysis and its performance has been tested on 
 \subsection{Fourier analysis}
 Fourier analysis describes the general method of utilizing the Fourier transform to analyze the component frequencies present is some signal.
 For the purpose of Fourier analysis we can interpret an image as a collection of signals, each of which describe the change in brightness value when traveling across the image in some direction.
-Taking the Fourier transform of an image then produces a 2-dimensional matrix where the intensity of each element represents a 2-dimensional sinusoid component.
+Taking the Fourier transform of an image then produces a 2-dimensional matrix where the intensity of each element represents a the coefficient of a 2-dimensional sinusoid base component of the image.
+Figure~\ref{fig:fourier-sinusoid} visualizes what the base components look like and demonstrates exactly what is encoded in the Fourier spectrum.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figs/fourier/fourier-sinusoid.pdf}
+  \caption[Fourier transform of sinusoid]{The figure shows two 2D sinusoid wave forms and their Fourier transform. The active components in the transform have been enlarged so as to make them visible in print. Only a single pixel, and its reflection about the origin, is active.}\label{fig:fourier-sinusoid}
+\end{figure}
 
 Figure~\ref{fig:fourier-demo} shows the Fourier transform of various inputs.
 The transforms are shifted, such that an element in the transform encodes a sinusoid component with a frequency proportional to its distance from the center and moving in the same direction as the vector it forms with the center. 
