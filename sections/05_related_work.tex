@@ -98,7 +98,7 @@ The difference between how many raw predictions a model makes, and the number of
 The method used to filter the predictions is therefore crucial to the performance of the model, and also highly dependent on the domain.
 
 \section{Automated Pollen Detection}\label{sec:rel-pollen}
-There have been many attempts at automated pollen \textit{classification} over the last three decades.
+There have been many attempts at automated pollen classification over the last three decades.
 These have been nicely summarized in~\cite{sevillano_improving_2018}.
 Most are statistical classifiers using selected features from pollen images.
 The earlier attempts can be grouped into three categories.
@@ -184,7 +184,7 @@ The effect this has on the values for recall and precision is not declared.
 
 Two trials where run to compare the performance obtained from the two datasets, and values for recall and precision were high for both (above .98), with the non-blurred trial having slightly higher precision.
 The authors conclude that there does not seem to be any benefit of including blurred examples in the training set.
-The results are hard to interpret, given the changed definition of IoU, but are very promising.
+Although the results are very promising, they are hard to interpret given the changed definition of IoU.
 
 In this section we have detailed both how CNNs are used to solve object detection problems, and how the field of automated pollen grain analysis has evolved from using highly specialized hand-crafted feature extractors, to being dominated by generalized CNN based frameworks.
 Of most significance to this research are the modifications that have been successfully made to CNN models used in similar fields to pollen grain counting, as well as the different techniques that have been used to make use of multifocal data.
