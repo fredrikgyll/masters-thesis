@@ -8,7 +8,8 @@
 \usepackage{charter}
 % Sans serif font
 \usepackage[scaled=.88]{berasans}
-
+% Monospace font (for code)
+\usepackage[scaled=.82]{DejaVuSansMono}
 
 \usepackage[english]{babel}
 \usepackage{datetime}
@@ -37,6 +38,23 @@
 % todo notes related
 \usepackage{xargs}                              % Use more than one optional parameter in a new commands
 \usepackage[bottom]{footmisc}
+
+\usepackage{framed} % leftbar
+\usepackage{textpos}
+% Custom list formatting, such as noitemsep and label
+\usepackage{enumitem}
+% Itemize and enumerate: tighter and with other symbols
+\setlist[enumerate]{itemsep=0mm, topsep=5pt, partopsep=0mm, parsep=0mm}
+\setlist[enumerate,1]{label=\arabic*., ref=\arabic*}
+\setlist[enumerate,2]{label=\alph*., ref=\alph*}
+\setlist[enumerate,3]{label=\roman*., ref=\roman*}
+\setlist[itemize]{itemsep=0mm, topsep=5pt, partopsep=0mm, parsep=0mm}
+\setlist[itemize,1]{label=$\bullet$}
+\setlist[itemize,2]{label=$\circ$}
+\setlist[itemize,3]{label=$-$}
+
+\usepackage{wrapfig}
+
 
 \geometry{
 a4paper,
@@ -103,3 +121,40 @@ margin=1.5in
 \addbibresource{bibtex/zotero.bib}
 \setcounter{biburllcpenalty}{7000}
 \setcounter{biburlucpenalty}{8000}
+
+% Environments
+% Quick and dirty pseudocode which does not deserve the algorithm environment
+\newenvironment{pseudocode}[0]
+{%
+  \begin{leftbar}
+  \noindent
+  \hspace{-0.6em}
+}
+{%
+  \end{leftbar}
+  \noindent
+  \hspace{-0.8em}
+}
+\newenvironment{pseudoloop}[0]
+{%
+  \begin{itemize}[nosep,label=,leftmargin=1em]
+}
+{%
+  \end{itemize}
+}
+\newenvironment{pseudofunc}[2]
+{%
+  \begin{pseudocode}
+  procedure \textbf{\texttt{#1}}(#2):
+  \begin{pseudoloop}
+}
+{%
+  \end{pseudoloop}
+  \end{pseudocode}
+}
+\newcommand{\pmethod}[2]{\texttt{#1(#2)}}
+\newcommand{\parg}[2]{\(\texttt{#1}=#2\)}
+\newcommand{\pif}{\textbf{if}}
+\newcommand{\pwhile}{\textbf{while}}
+\newcommand{\pfor}{\textbf{for}}
+\newcommand{\pret}{\textbf{return}}

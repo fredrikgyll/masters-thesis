@@ -55,7 +55,7 @@ Figure~\ref{fig:fourier-sinusoid} visualizes what the base components look like 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{figs/fourier/fourier-sinusoid.pdf}
-  \caption[Fourier transform of sinusoid]{The figure shows two 2D sinusoid wave forms and their Fourier transform. The active components in the transform have been enlarged so as to make them visible in print. Only a single pixel, and its reflection about the origin, is active.}\label{fig:fourier-sinusoid}
+  \caption[Fourier transform of sinusoid]{The figure shows two 2D sinusoid wave forms and their Fourier transform. The active components in the transform have been enlarged so as to make them visible in print. When unmodified, only a single pixel and its reflection about the origin is active.}\label{fig:fourier-sinusoid}
 \end{figure}
 
 Figure~\ref{fig:fourier-demo} shows the Fourier transform of various inputs.
@@ -137,12 +137,12 @@ The operation is described in Equation (\ref{eq:sharp}).
 \begin{equation}\label{eq:sharp}
   \begin{split}
     \mathbf{X} &= \mathcal{F}(a),\quad a\in \mathbb{Z}^{M\times N}\\
-    T_H &= \sum_{x\in\mathbf{X}}[x\ge\mu],\quad \mu=\frac{\max \mathbf{X^{\mathrm{abs}}}}{1000}\\
+    T_H &= \sum_{x\in\mathbf{X}}[x\ge\mu],\quad \mu=\frac{\max \mathbf{X}}{1000}\\
     S &= \dfrac{T_H}{M\times N}
   \end{split}
 \end{equation}
 
-Here \(\mathcal{F}\) is the discrete the Fourier transform, operating on a input image \(a\), and \(\mathbf{X}\) only contains the magnitude of the Fourier transform.
+Here \(\mathcal{F}\) is the discrete the Fourier transform operating on a input image \(a\). We ignore the phase component of the complex valued output, leaving \(\mathbf{X}\) to contain only the magnitude of the frequency components.
 The scaling factor of the threshold value, \(\mu \), was found to produce good results on our data, without modification. \(S\) is the sharpness measure.
 
 Validating the sharpness measure is an important task.
@@ -155,26 +155,26 @@ Each ground truth is then given sharpness scores based on perceived sharpness an
 Determining perceived sharpness of a pollen grain with high fidelity was found to be highly subjective and non-reproducible with repeated independent scoring, so a simple classification was instead performed.
 Images where separated into three classes representing perceived sharpness.
 Figure~\ref{fig:fourier} gives examples of the classes with image (a) being the sharpest (class 3) and (c) being the blurriest (class 1).
-A total of 389 pollen grains where evaluated, the distribution of their classes is given in Table~\ref{tab:sharpness}
+A total of 316 pollen grains where evaluated, the distribution of their classes is given in Table~\ref{tab:sharpness}
 
 \begin{table}[htbp]
   \caption[Sharpness dataset distribution]{Distribution of classes across the sharpness evaluation dataset.}\label{tab:sharpness}
   \centering 
   \begin{tabular}{lrrr} \toprule
     & blurry [1] & partly [2] & sharp [3]  \\ \midrule
-    Number of labels & 123 & 105 & 125 \\ \bottomrule
+    Number of labels & 108 & 93 & 115 \\ \bottomrule
   \end{tabular}
 \end{table}
 
 \begin{figure}[htbp]
   \centering
-  \begin{subfigure}[t]{0.49\textwidth}
+  \begin{subfigure}[t]{0.48\textwidth}
     \centering
     \includegraphics[width=\textwidth]{figs/box.pdf}
     \caption{Box plot}\label{fig:sharpness-box}
 \end{subfigure}%
 \hfill
-\begin{subfigure}[t]{0.48\textwidth}
+\begin{subfigure}[t]{0.49\textwidth}
   \centering
   \includegraphics[width=\textwidth]{figs/qden.pdf}
   \caption{Density plot}\label{fig:sharpness-qden}
@@ -185,7 +185,7 @@ A total of 389 pollen grains where evaluated, the distribution of their classes 
 Looking at Figure~\ref{fig:sharpness} we can see a clear correlation between the mean of the distribution, and the perceived sharpness.
 The overlap is to be expected, given the mapping from a continuous predictor onto a categorical label.
 To further evaluate the performance of the sharpness measure, we construct a very simple statistical model, in the form of a decision tree, and test its ability to differentiate between the classes.
-The model achieved a test accuracy of 84.1\%. 
+The model achieved a test accuracy of 83.5\%. 
 
 In Figure~\ref{fig:sharpness-all} we have computed the sharpness of every ground truth in the dataset in a density plot showing the distribution.
 As expected, most of the ground truths fall into the sharpest category, but there is a spread, allowing us to analyze the relationship between sharpness and model performance.
@@ -193,27 +193,30 @@ As expected, most of the ground truths fall into the sharpest category, but ther
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.9\textwidth]{figs/sharpness_all.pdf}
-  \caption[Distribution of sharpness across entire dataset]{Density plot showing the sharpness of all pollen grains in the dataset. The shaded sections indicate the distribution of sharpness classes, if the dataset is classified with the evaluation model. As expected, most grains fall into the sharpest category.}\label{fig:sharpness-all}
+  \caption[Distribution of sharpness across entire dataset]{Density plot showing the sharpness of all pollen grains in the dataset \((N=6384)\). The shaded sections indicate the distribution of sharpness classes, if the dataset is classified with the evaluation model. As expected, most grains fall into the sharpest category.}\label{fig:sharpness-all}
 \end{figure}
 
 \section{Architecture}
 
 The model we have chosen to implement is the Single Shot Multibox Detector, a brief explanation of which was given in Section~\ref{sec:ssd}.
-This section gives a more thorough explanation of the model and its implementation with a focus on the changes that have been made from the original.
-Most of these changes are motivated by more recent research featured in younger models.
+This section gives a more thorough explanation of the model and its implementation, with a focus on the changes that have been made from the original.
+Most of these changes are motivated by more recent research featured in newer models.
 The reasoning behind choosing a now relatively old model framework is mostly based on its architecture, which lends itself to alteration and simplification.
 
 
-Our implementation is based on an implementation by NVINIA\footnote{Released under the Apache 2.0 License, \href{https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/Detection/SSD}{URL:\\ } \url{https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/Detection/SSD}}, the basic structure is shown in Figure~\ref{fig:model}.
+Our implementation is based on an implementation by NVIDIA\footnote{Released under the Apache 2.0 License, \href{https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/Detection/SSD}{URL:\\ } \url{https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/Detection/SSD}}, the basic structure is shown in Figure~\ref{fig:model}.
 For the implementation we divide the model into four parts.
 First, we have the feature extraction network, which feeds into an \textit{auxiliary structure} which gradually steps down the dimensions of the feature map.
 Finally we have two detection structures, one for class confidences, and one for bounding box regression.
 
 \subsection{Model}
-The feature extractor in the original model is the VGG-16 network~\parencite{simonyan2015deep}, but as is pointed out by the authors, this choice is arbitrary and other networks can also be used.
-In our implementation we use ResNet-34~\parencite{he2015deep}.
-The main reason for this being its superior performance over VGG, and the ease of which it integrates with the auxiliary structure.
-With VGG, alterations are required to transform the latter layers from FC to CNN, while with ResNet we can just truncate the network at the appropriate layer to produce a feature map with the appropriate dimensions.
+The model comprises three distinct parts, a feature extraction network transferred from a pre-trained model, an auxiliary structure which creates a set of feature maps, and a detection structure which creates the bounding box regressions and class predictions.
+The model is purely convolutional with no fully connected layers.
+
+The feature extractor can be any classification network that can produce a feature map of the correct dimensions.
+In the original paper the VGG-16 network is used~\parencite{simonyan2015deep} without any particular justification as to why.
+We have chosen ResNet-34~\parencite{he2015deep} for our baseline configuration.
+The main reason for this being its superior performance over VGG, and the ease with which it integrates with the auxiliary structure. ResNet-34 is the largest of the ResNet family which fits on the GPU used for most of the experimentation.
 PyTorch offers canonical implementations of the most popular pre-trained models as part of their API\@.
 
 \begin{figure}[htb]
@@ -225,25 +228,27 @@ Here \textsf{C} is the number of classes including one for background}\label{fig
 \end{figure}
 
 The auxiliary structure is implemented as a sequence of blocks where the output of each block is a feature map which is consumed by the detection structure.
-Each block contains multiple convolutional layers, as specified in Figure~\ref{fig:model}.
-PyTorch offers different ways to group multiple layers together so that they act as a single unit.
-This makes the forward pass simple to define.
+Each block contains two convolutional layers, as specified in Figure~\ref{fig:model}.
+Batch normalization is used after each convolution and ReLU is used as the activation function.
 
 The detection structure is implemented as a sequence of distinct layers, each of which runs over one of the intermediate feature maps from the auxiliary structure.
 Each localizing layer has four filters per default box, one for each of the regression parameters.
 Similarly, the class prediction layers have \(C\) filters per box, one for each class with an additional layer for the background.
 
-Because of the dynamic graph, the actual structure of the network is defined at runtime by defining a function for the forward pass.
-The input is first passed through the feature extractor, it is then passed through each block of the auxiliary structure, saving each feature map.
-The final output is then generated by running each feature map through the corresponding detection layer.
+When executing the forward pass through the model the input is first passed through the feature extractor, it is then passed through each block of the auxiliary structure, saving each feature map.
+The final output is then generated by running each feature map through the corresponding localization and classification block.
 All the outputs from the localization and classification layers are concatenated, producing two output tensors.
 The dimensions are \(\left(B,4,D\right) \) and \(\left(B,C,D\right) \) for the localization and classification outputs, respectively.
 Here \(B\) is the batch size and \(D\) is the number of default boxes.
 
-
 \subsection{Training objective}
 Because of the default boxes, each ground truth box needs to be matched to one or more default boxes so that we have a target for the loss calculation.
-SSD has a generous matching strategy where ground truths and default boxes are matched if their IoU is above a certain threshold. Figure~\ref{fig:priors} shows the result of the matching strategy. Every red box in the image is a default box that has been matched with a ground truth, shown in green. For the purposes of training, these are the default boxes that the loss function expects the model to has correctly labeled and regressed.
+For each training example, we first apply a matching strategy that finds default boxes that overlap with each ground truth.
+Calculating the regression from the matched default boxes to their respective ground truth creates the truth vector that the model must approximate.
+
+SSD has a generous matching strategy where ground truths and default boxes are matched if their IoU is above a certain threshold. Figure~\ref{fig:priors} shows the result of the matching strategy being applied to a training example.
+Every red box in the image is a default box that has been matched with a ground truth, shown in green. For the purposes of training, these are the default boxes that the loss function expects the model to have correctly labeled and regressed. 
+This ensures that there are multiple positive examples for each ground truth.
 
 \begin{figure}[htb]
   \centering
@@ -252,16 +257,93 @@ SSD has a generous matching strategy where ground truths and default boxes are m
 In \textcolor{red}{red} are all the default boxes that are matched to the ground truths, i.e.~those that have an IoU \( \geq 0.4 \) with a ground truth box, in \textcolor{nicegreen}{green}.}\label{fig:priors}
 \end{figure}
 
-This ensures that there are many positive examples for each ground truth.
-The loss function is calculated as follows:
 
-\[L(x,c,l,g)=\frac{1}{N}\left( L_{conf}(x,c) + \alpha L_{loc}(x,l,g)\right) \]
+The loss function is calculated as follows,
 
-where \( x=\{1,0\} \) is a binary mask denoting a match between a default box and ground truth, \( N \) is the number of positive examples, \( c \) is class confidences, \( l \) is predicted boxes, and \( g \) is regressed ground truth boxes.  \( L_{loc} \) is the summed Smooth L1 loss over all positive matched bounding boxes, while \( L_{conf} \) is the SoftMax loss over multiple class confidences, both are standard loss functions provided by PyTorch.
+\begin{equation}\label{eq:loss}
+  L(x,c,l,g)=\frac{1}{N}\left( L_{conf}(x,c) + \alpha L_{loc}(x,l,g)\right)
+\end{equation}
+
+where \( x=\{1,0\} \) is a binary mask denoting a match between a default box and ground truth, \( N \) is the number of positive examples, \( c \) is class confidences, \( l \) is predicted boxes, and \( g \) is the regressed ground truth boxes.  \( L_{loc} \) is the summed Smooth L1 loss over all positive matched bounding boxes, while \( L_{conf} \) is the SoftMax loss over multiple class confidences, both are standard loss functions provided by PyTorch.
 
 A problem that this and many similar models face is the gross imbalance between positive and negative training examples.
 Out of the 8732 default boxes only a small subset can be matched to to a ground truth.
-For the localization loss this has no impact as only the matched boxes are counted, but for the confidence, the overwhelming majority of predictions are negative matches.
+For the localization loss this has no impact as only the matched boxes are counted towards the loss, but for the confidence the overwhelming majority of predictions are negative matches.
 To counteract this imbalance SSD uses \textit{hard negative mining} to balance out the negative and positive examples.
-The confidence losses for all negatives are sorted and only the negative examples with the highest loss are chosen such that the ratio between positives and negatives is 1:3.
+As the name suggests, this technique aims to focus training of particularly `hard' examples and ignore the others.
+All negative training examples are sorted by the confidence loss which ranks them in the order of how badly the model miss-classified them.
+Negative examples are counted towards the confidence loss by descending loss until the ratio between the number of positive and negative examples included in the total loss is 1:3.
 
+\subsection{Inference}
+
+When the model is working, the raw output it produces is regression values for many thousands of bounding boxes with class confidence predictions. 
+In the locations where an object is present, the model will most likely produce multiple overlapping bounding boxes.
+Ideally, the output would be a one-to-one mapping between the predicted boxes and objects in the image.
+
+A common filtering technique is called \emph{Non-maximum Suppression} (NMS).
+Let \( \mathcal{B}=\{b_1,\ldots,b_N \} \) be a list of bounding boxes and \( \mathcal{S}=\{s_1,\ldots,s_N \} \) be their corresponding scores.
+NMS is then a simple iterative filtering algorithm where, for each iteration, the bounding box with the highest score is selected from \(\mathcal{B}\), any bounding boxes that overlaps with the selected box is then pruned from \(\mathcal{B}\) and \(\mathcal{S}\) and the loop is continued until \(\mathcal{B}\) is exhausted. Boxes are considered overlapping if their IoU is larger than some threshold \(N_t\).
+
+NMS performs well in most settings, but has a particular weakness in cases where the target boxes of objects overlap.
+In these situations, NMS will often only return a single bounding box for one of the objects, ignoring the rest.
+Given that the data in this project exhibits this characteristic we have replaced the standard NMS algorithm with a more modern version, Soft-NMS, introduced in~\cite{bodla2017softnms}. The pseudocode for both algorithms follows,
+\linebreak
+\begin{pseudofunc}{NMS}{\(\mathcal{B},~\mathcal{S},~N_t\)}
+  \item \(\mathcal{D} \leftarrow \{ \} \)
+  \item \pwhile~\(\mathcal{B} \neq \emptyset \):
+  \begin{pseudoloop}
+    \item \(m \leftarrow \text{argmax}~\mathcal{S}\) 
+    \item \(\mathcal{M} \leftarrow b_m\)
+    \item \(\mathcal{D} \leftarrow \mathcal{D} \cup \mathcal{M};~ \mathcal{B} \leftarrow \mathcal{B} - \mathcal{M}\)
+    \item \pfor~\(b_i \in \mathcal{B}\):
+    \vspace{10pt}
+    \begin{pseudoloop}
+      \fcolorbox{red}{white}{\color{red} %
+      \minipage[t]{\dimexpr0.48\linewidth-2\fboxsep-\fboxrule\relax}
+        \item \pif~\pmethod{IoU}{\(\mathcal{M},~b_i\)}\(~\geq N_t\):
+        \begin{pseudoloop}
+        \item \(\mathcal{B} \leftarrow \mathcal{B} - b_i;~ \mathcal{S} \leftarrow \mathcal{S} - s_i\)
+        \end{pseudoloop}
+        \vspace{3pt}
+        \begin{textblock}{1} (3.7,-0.15)
+          \textcolor{black}{\texttt{NMS}}
+        \end{textblock}
+      \endminipage}\vspace{5pt}\\
+      \fcolorbox{nicegreen}{white}{\color{nicegreen}%
+      \minipage[t]{\dimexpr0.48\linewidth-2\fboxsep-\fboxrule\relax}
+        \item \(s_i \leftarrow s_i\)\pmethod{f}{\pmethod{IoU}{\(\mathcal{M},~b_i\)}}  
+        \vspace{13pt}
+        \begin{textblock}{2} (3,-0.15)
+          \textcolor{black}{\texttt{Soft-NMS}}
+        \end{textblock}
+      \endminipage}
+    \end{pseudoloop}
+  \end{pseudoloop}\vspace{5pt}
+  \item \pret~\(\mathcal{D},~\mathcal{S}\)
+\end{pseudofunc}\vspace{-3em}
+\begin{wrapfigure}{r}{0.4\textwidth}
+  \centering
+  \includegraphics[width=0.35\textwidth]{figs/gausian_penelty.pdf}
+  \caption{Gaussian decay as a function of IoU for various \( \sigma \)}\label{fig:gauss}
+\end{wrapfigure}
+
+Soft-NMS changes only the colored sections, where it introduces a rescoring function, \texttt{f(IoU)}, which only decays the scores of remaining boxes instead of discarding them altogether. % chktex 36
+This allows boxes which overlap with the selected box to remain in the pool.
+Rescoring is applied using a Gaussian decay function as follows,
+
+\[s_i\leftarrow s_i e^{-\frac{\text{iou}{(\mathcal{M}, b_i)}^2}{\sigma}},\forall b_i \notin \mathcal{D}\]
+
+where \( \sigma \) controls the rate of decay, as demonstrated in Figure~\ref{fig:gauss}.
+
+\subsection{Implementation}
+\begin{enumerate}
+  \item start with language and framework choice, short
+  \item justify default-boxes, i.e.~keeping aspect unchanged, and adjusting sizes and removing the last tree layers because no boxes are matched to them
+\end{enumerate}
+
+\subsection{Experimental Setup}
+\begin{enumerate}
+  \item Hardware stack rundown, short
+  \item pretend to care about hyper-parameters, we need not justify too much. We let it be implied.
+  \item itemize the experiments
+\end{enumerate}
