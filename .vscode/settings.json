@@ -1,4 +1,13 @@
 {
+    "files.exclude": {
+        ".texpadtmp/": true,
+        "build/": true,
+        "*.bst": true,
+        "tags": true,
+        "main.tex": false,
+        "main.{lof,log,lot,run.xml,toc}": true,
+        
+    },
     "latex-workshop.latex.search.rootFiles.include": ["**/main.tex"],
     "latex-workshop.latex.tools": [
         {
