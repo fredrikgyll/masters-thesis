@@ -1,46 +1,60 @@
+% Bump PDF version 1.5 -> 1.7
+\pdfminorversion=7
+% Specify UTF-8 encoding
 \usepackage[utf8]{inputenc}
-
 % Handle multi-glyph characters in the output PDF correctly
 \usepackage[T1]{fontenc}
-
 % Main font with math support
 \usepackage{charter}
 % Sans serif font
 \usepackage[scaled=.88]{berasans}
 % Monospace font (for code)
 \usepackage[scaled=.82]{DejaVuSansMono}
-
-\usepackage{microtype}
-
+% Mathematical typesetting
+\usepackage{amsmath}
+% Extra maths fonts
+\usepackage{amsfonts}
+% improved typography
+\usepackage[babel]{microtype}
+% Bibliography
 \usepackage[english]{babel}
-\usepackage{datetime}
-
+\usepackage{csquotes}
 \usepackage[backend=biber,style=bwl-FU,bibstyle=authoryear]{biblatex}
-
-\usepackage{tikz}                               % Draw graphics
+% No indent on new paragraphs
 \usepackage{parskip}
-\usepackage[colorinlistoftodos,prependcaption,textsize=tiny,textwidth=30mm]{todonotes}
-\usepackage{xcolor}                             % Colored text etc.
+% Colored text etc.
+\usepackage{xcolor}
+% To include graphics
+\usepackage{graphicx}
+% Draw graphics
+\usepackage{tikz}
+% Repositioning floats
+\usepackage{float}
+% wrap text around figure
+\usepackage{wrapfig}
+% Fine-tuning float captions
 \usepackage{caption}
 \usepackage{subcaption}
-\usepackage{graphicx}							% To include graphics
-\usepackage{csquotes}
-\usepackage{fancyhdr}						    % Nice header and footer
-\usepackage{amsmath}                            % Mathematical typesetting
-\usepackage{amsfonts}
+% More date formats
+\usepackage{datetime}
+% Nice header and footer
+\usepackage{fancyhdr}
+% change section headings
+\usepackage{titlesec}
+% SI unit support
 \usepackage{siunitx}
-\usepackage{geometry}							% Better geometry
-\usepackage{titlesec}							% change section headings
-\usepackage{booktabs}							% Nice tables
-%\usepackage[center]							% For cropping documents
-\usepackage[linktocpage,colorlinks]{hyperref}	% PDF hyperlink
-\usepackage{float}                              % repositioning floats
+% Controlling margins and paper size
+\usepackage[a4paper,margin=1.5in]{geometry}
+% Nice tables
+\usepackage{booktabs}
 \usepackage{array}
-% todo notes related
-\usepackage{xargs}                              % Use more than one optional parameter in a new commands
+% PDF hyperlink
+\usepackage{hyperref}
+% footnotes
 \usepackage[bottom]{footmisc}
-
-\usepackage{framed} % leftbar
+% \leftbar in pseudocode
+\usepackage{framed}
+% absolute positioning of text
 \usepackage{textpos}
 % Custom list formatting, such as noitemsep and label
 \usepackage{enumitem}
@@ -50,60 +64,53 @@
 \setlist[enumerate,2]{label=\alph*., ref=\alph*}
 \setlist[enumerate,3]{label=\roman*., ref=\roman*}
 \setlist[itemize]{itemsep=0mm, topsep=5pt, partopsep=0mm, parsep=0mm}
-\setlist[itemize,1]{label=$\bullet$}
-\setlist[itemize,2]{label=$\circ$}
-\setlist[itemize,3]{label=$-$}
+\setlist[itemize,1]{label=\(\bullet \)}
+\setlist[itemize,2]{label=\(\circ \)}
+\setlist[itemize,3]{label=\(-\)}
 
-\usepackage{wrapfig}
-
-
-\geometry{
-a4paper,
-margin=1.5in
-}
-
-% B5 (uncomment to convert to B5 format)
-
+% Graphics path
+\graphicspath{{./figs/}}
 
 % Colors
 \definecolor{nicegray}{gray}{.25}
+\definecolor{nicegraylink}{gray}{.20}
 \definecolor{nicegreen}{HTML}{0F7F12}
 \definecolor{poaceae}{HTML}{1f77b4}
 \definecolor{corylus}{HTML}{ff7f0e}
 \definecolor{alnus}{HTML}{2ca02c}
-
-% Captions
-\captionsetup{labelfont=bf,textfont={small,color=nicegray},margin=\parindent}
-
-% date format
-\newdateformat{ddaymonth}{%
-\ordinaldate{\THEDAY} \monthname[\THEMONTH]}
-\newdateformat{daymonth}{%
-\twodigit{\THEDAY}\ \monthname[\THEMONTH]}
 
 %%%
 % Author
 % Fill in here, and use commands in the text. 
 \newcommand{\thesisAuthor}{Fredrik Gyllenhammar}
 \newcommand{\thesisTitle}{Automated Pollen Grain Counting}
-\newcommand{\thesisType}{Thesis project}
-\newcommand{\thesisDate}{fall 2020}
+\newcommand{\thesisType}{Master's thesis}
+\newcommand{\thesisDate}{Spring 2021}
 
-% PDF info
+% % Declare caption font "hyper color" which sets the color of the hyper links
+\DeclareCaptionFont{hypercolor}{%
+\hypersetup{%
+  citecolor={#1},%
+  linkcolor={#1},%
+  urlcolor={#1}%
+}%
+}
+\captionsetup{labelfont=bf,textfont={color=nicegray,hypercolor=nicegraylink},margin=\parindent}
+
+% Hyperlink setup
 \hypersetup{
-    pdfauthor={\thesisAuthor},
-    pdftitle={\thesisTitle},
-    pdfsubject={\thesisType},
-    linkcolor={black},
-    citecolor={black},
-    urlcolor={black},
+    pdfauthor=\thesisAuthor,
+    pdftitle=\thesisTitle,
+    pdfsubject=\thesisType,
+    linkcolor=black,
+    citecolor=black,
+    urlcolor=black,
+    linktocpage=true,
+    colorlinks=true,
 }
 
-% siunitx
+% Siunitx
 \DeclareSIUnit\pixel{pixel}
-
-% TODO notes
-\newcommandx{\info}[2][1=]{\todo[linecolor=Green,backgroundcolor=Green!25,bordercolor=Green,#1]{#2}}
 
 % Heading format 
 %\titleformat{\chapter}{\bfseries\LARGE}{\thechapter}{1em}{}
@@ -119,6 +126,7 @@ margin=1.5in
 \setcounter{biburlucpenalty}{8000}
 
 % Environments
+
 % Quick and dirty pseudocode which does not deserve the algorithm environment
 \newenvironment{pseudocode}[0]
 {%
@@ -141,7 +149,7 @@ margin=1.5in
 \newenvironment{pseudofunc}[2]
 {%
   \begin{pseudocode}
-  procedure \textbf{\texttt{#1}}(#2):
+  procedure \textbf{\texttt{#1}}(#2): % chktex 36
   \begin{pseudoloop}
 }
 {%

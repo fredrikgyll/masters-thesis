@@ -4,6 +4,7 @@ Silent
     \rmfamily \sffamily \ttfamily \mdseries \bfseries
     \slshape \scshape \relax
     \vskip \pagebreak \nopagebreak
+    \parindent
     
     \printbibliography
     
