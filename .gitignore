@@ -1,6 +1,7 @@
 
 # Created by https://www.toptal.com/developers/gitignore/api/tex,latex,macos,vscode
 # Edit at https://www.toptal.com/developers/gitignore?templates=tex,latex,macos,vscode
+structure/
 
 ### LaTeX ###
 ## Core latex/pdflatex auxiliary files:
