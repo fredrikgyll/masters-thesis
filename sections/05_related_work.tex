@@ -28,7 +28,7 @@ This new second stage also predicts offsets for the proposed boxes, allowing it 
 
 Faster R-CNN replaces the first stage with a Region Proposal Network (RPN), a fully convolutional deep neural network which produces a fixed number of bounding boxes together with an `objectness' score for each box.
 The RPN introduces the concept of anchors, which are points in the image used to regress bounding boxes.
-After a set of convolutional layers, we are left with a \(n\times n\) feature map.
+After a set of convolutional layers, we are left with a \(n\by n\) feature map.
 If we slide a window over this feature map, we can predict the dimensions of one or more bounding boxes anchored at the center of the window.
 Given that a convolution \textit{is} a sliding window operation we only need to choose an appropriately sized window and how many boxes we want to predict and set the kernel size and output channels thereafter.
 Using a RPN allows of training of both stages of the detector, significantly increasing the performance.

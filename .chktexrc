@@ -22,6 +22,8 @@ Silent
     \maketitle \makeindex
 
     \hline \hrule \vrule
+
+    \times
     
     \mainmatter \frontmatter \backmatter
 

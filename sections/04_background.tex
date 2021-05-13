@@ -87,7 +87,7 @@ The two layers are stacked alternatingly, with the idea being that the complexit
 \subsection{Convolution}
 
 The central concept of the convolutional layer is the \textit{convolution operation}.
-Let the kernel, \(w\), be a \(k\times k\) dimensional matrix.
+Let the kernel, \(w\), be a \(k\by k\) dimensional matrix.
 This kernel will operate on the output of the preceding layer, \(x\).
 The output from the convolution can be calculated as follows:
 
@@ -102,7 +102,7 @@ The resulting output of the convolution is referred to as a \textit{feature map}
   \centering
   \includegraphics[width=0.4\textwidth]{figs/conv.pdf}
   \caption[Convolution operation]{Visualization of the convolution operation.
-In red we have a filter containing three \(3\times 3\) kernels.
+In red we have a filter containing three \(3\by 3\) kernels.
 The element wise multiplication between the filter and receptive field and subsequent summation produces a single scaler in the feature map.
 The operation is repeated over the index set of the input, producing the complete feature map.}\label{fig:cnn}
 \end{figure}
@@ -147,7 +147,7 @@ As mentioned, we increase the depth of the feature maps as they get downsampled 
 This is necessary if the model is to learn more complex features that may require many layers to be represented in full.
 Combining information from multiple channels could be helpful in building more rich feature maps.
 This is the proposal in~\cite{lin2014network}.
-To enhance model discriminability, they emulate a fully connected layer working across the channels by using a convolutional layer with a \(1\times 1\) kernel.
+To enhance model discriminability, they emulate a fully connected layer working across the channels by using a convolutional layer with a \(1\by 1\) kernel.
 This effectively creates connections between local features across the channels of the feature maps, allowing us to project the feature map into a map with a different depth.
 
 The primary motivation for using this technique today is to lower the computational cost of standard convolutions by reducing the depth of the input prior to a larger convolution.
@@ -194,10 +194,18 @@ They are computed from the above quantities as follows:
   \text{\bf recall}=\frac{TP}{TP+FN}
 \end{align*}
 
-These two metrics are the basis for how all object detection models are evaluated, but the definitions are not complete without a definition of what constitutes a \textit{correct} prediction.
+These two metrics are the basis for how all object detection models are evaluated and there is usually a tradeoff between the two, e.g.~a model can have very high recall, meaning if correctly identifies most of the potential objects, but if it also identifies many other non-objects the precision is reduced.
+Inversely a model could be very certain that it returns correctly identified objects, at the cost of ignoring objects it is not to sure about.
+
+A popular accuracy measure which derives from the precision and recall values if the \(F_1\) score, defined as,
+
+\begin{align*}
+  F_1=2\frac{\text{precision}\cdot\text{recall}}{\text{precision}+\text{recall}}
+\end{align*}
+
+This measures the balance between the two values and is useful in cases where precision and recall are equally important important performance measures.
 
 \subsection{Intersection over union}
-
 Precision and recall form the basis for how all object detection models are evaluated, but the definitions are not complete without a definition of what constitutes a \textit{correct} prediction.
 For this we use the \textit{intersection over union} (IoU) between our predictions and ground truths.
 
@@ -210,7 +218,7 @@ As the name indicates, it is defined as the ratio between the intersection and u
     \text{IoU}=\frac{\text{area of intersection}}{\text{area of union}}
   \end{gather*}
   \includegraphics[width=0.55\textwidth]{figs/iou.pdf}
-\caption[Intersection over union]{Visualization of the intersection over union of two boxes.
+\caption[Intersection over union]{Visualization of the intersection over union of two boundaries.
 The named region is shaded.}\label{fig:iou}
 \end{figure}
 
@@ -225,6 +233,9 @@ To fully automate the task, a subcategory of CNNs capable of predicting both cla
 In the next section we will detail how the problem of \textit{object detection} can be solved using a CNN by detailing how they have been used to solve tasks similar to pollen counting.
 We will also review the available literature relating to other attempts at solving this problem.
 
-%\section{Training}
+\subsection{Mean average precision}
+Mean average precision (mAP) is a popular metric for measuring the performance of object detection models.
 
-%Training an Object detection models follows the familiar scheme of \textit{mini-batch gradient decent} using \textit{backpropagation} to determine the gradient of each parameter.  
+\textit{Average Precision} is a single measure which quantifies this tradeoff by averaging the precision of a model at over all recall values.
+
+\textcolor{red}{NOT DONE}

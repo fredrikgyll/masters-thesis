@@ -13,7 +13,7 @@ Only pollen grains from a subset of species are actively tracked.
   \caption[Dataset example]{Example from the dataset with ground truth bounding boxes drawn. The image contains two classes: \textcolor{corylus}{corylus}, and \textcolor{alnus}{alnus}.}\label{fig:dataset-sample}
 \end{figure}
 
-Three microscope slides have been imaged using a digital optical microscope producing a set of 701 raster images with a size of \(1080\times 1920\) pixels and three channels; red, green, and blue.
+Three microscope slides have been imaged using a digital optical microscope producing a set of 701 raster images with a size of \(1080\by 1920\) pixels and three channels; red, green, and blue.
 The resolution of each image is \(\SI{0.183}{\micro\metre\per\pixel}\).
 Each image has been labeled in collaboration with the experts to produce a valid and correct ground truths.
 In total, three different species have been classified, namely \textit{poaceae}, \textit{corylus}, and \textit{alnus}, known in English as Grasses, Hazel, and Alder, respectively. A labeled example is given in Figure~\ref{fig:dataset-sample}. A summary of the dataset is given in Table~\ref{tab:dataset}.
@@ -22,7 +22,7 @@ In total, three different species have been classified, namely \textit{poaceae},
   \caption[Class distribution across the dataset]{Distribution of classes across the pollen dataset}\label{tab:dataset}
   \centering 
   \begin{tabular}{lrrr} \toprule
-                      & Poaceae & corylus & alnus \\ \midrule
+                      & Poaceae & Corylus & Alnus \\ \midrule
     Number of labels  & 5600    & 262     & 522 \\
     Proportion        & 87.7\%  & 4.1\%   & 8.2\% \\ \bottomrule
   \end{tabular}
@@ -136,9 +136,9 @@ The operation is described in Equation (\ref{eq:sharp}).
 
 \begin{equation}\label{eq:sharp}
   \begin{split}
-    \mathbf{X} &= \mathcal{F}(a),\quad a\in \mathbb{Z}^{M\times N}\\
+    \mathbf{X} &= \mathcal{F}(a),\quad a\in \mathbb{Z}^{M\by N}\\
     T_H &= \sum_{x\in\mathbf{X}}[x\ge\mu],\quad \mu=\frac{\max \mathbf{X}}{1000}\\
-    S &= \dfrac{T_H}{M\times N}
+    S &= \dfrac{T_H}{M\cdot N}
   \end{split}
 \end{equation}
 
@@ -223,7 +223,7 @@ PyTorch offers canonical implementations of the most popular pre-trained models 
   \centering
   \includegraphics[width=0.9\textwidth]{figs/model.pdf}
   \caption[Model architecture overview]{Overview of the general structure of the model. The figure is inspired by the one given in the original paper, but has been modified to reflect our alterations.
-The horizontal lines denote the detection structure comprised of \(3\times 3\) convolutions for class confidences and bounding box regressions.
+The horizontal lines denote the detection structure comprised of \(3\by 3\) convolutions for class confidences and bounding box regressions.
 Here \textsf{C} is the number of classes including one for background}\label{fig:model}
 \end{figure}
 
@@ -241,6 +241,24 @@ All the outputs from the localization and classification layers are concatenated
 The dimensions are \(\left(B,4,D\right) \) and \(\left(B,C,D\right) \) for the localization and classification outputs, respectively.
 Here \(B\) is the batch size and \(D\) is the number of default boxes.
 
+\subsection{Default boxes}
+
+\begin{wrapfigure}[16]{r}{0.4\textwidth}
+  \centering
+  \includegraphics[width=0.4\textwidth]{figs/default_boxes}
+  \caption[Visualizing default boxes]{Visualization of default boxes on a \(5\by 5 \) feature map.}\label{fig:defaults}
+\end{wrapfigure}
+
+The fundamental objective of the model is evaluating a predefined set of default boxes.
+Each location of a feature map forms the basis for a small amount of default boxes of fixes size and aspect ratio.
+In Figure~\ref{fig:defaults} the center element of the \(5\by 5\) feature map is responsible for evaluating the 4 drawn default boxes; 2 scaled squares in orange, and 2 boxes with a 1:2 aspect ratio, in blue.
+The default boxes are scaled independently from the size of the elements of the feature map, but there is a correlation.
+Because of the depth of the feature extraction network leading into the feature layers, the receptive field of all elements in every feature map is the entire input.
+
+As designed, the SSD model is made to handle a wider distribution of sizes than is present in our dataset.
+We have adjusted the sizes of the default boxes in our implementation so that they cover the distribution of sizes present.
+Even with adjustments, the range of sizes is so large that it is questionable if all 6 feature maps are necessary.
+
 \subsection{Training objective}
 Because of the default boxes, each ground truth box needs to be matched to one or more default boxes so that we have a target for the loss calculation.
 For each training example, we first apply a matching strategy that finds default boxes that overlap with each ground truth.
@@ -250,9 +268,9 @@ SSD has a generous matching strategy where ground truths and default boxes are m
 Every red box in the image is a default box that has been matched with a ground truth, shown in green. For the purposes of training, these are the default boxes that the loss function expects the model to have correctly labeled and regressed. 
 This ensures that there are multiple positive examples for each ground truth.
 
-\begin{figure}[htb]
+\begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.5\textwidth]{figs/priors_matching}
+  \includegraphics[width=0.7\textwidth]{figs/priors_matching}
   \caption[Default box matching]{Visualization of the result of the matching procedure.
 In \textcolor{red}{red} are all the default boxes that are matched to the ground truths, i.e.~those that have an IoU \( \geq 0.4 \) with a ground truth box, in \textcolor{nicegreen}{green}.}\label{fig:priors}
 \end{figure}
@@ -276,19 +294,26 @@ Negative examples are counted towards the confidence loss by descending loss unt
 
 \subsection{Inference}
 
+\begin{wrapfigure}[13]{r}{0.35\textwidth}
+  \centering
+  \includegraphics[width=0.35\textwidth]{figs/gausian_penelty.pdf}
+  \caption{Gaussian decay as a function of IoU for various \( \sigma \)}\label{fig:gauss}
+\end{wrapfigure}
 When the model is working, the raw output it produces is regression values for many thousands of bounding boxes with class confidence predictions. 
 In the locations where an object is present, the model will most likely produce multiple overlapping bounding boxes.
 Ideally, the output would be a one-to-one mapping between the predicted boxes and objects in the image.
 
-A common filtering technique is called \emph{Non-maximum Suppression} (NMS).
-Let \( \mathcal{B}=\{b_1,\ldots,b_N \} \) be a list of bounding boxes and \( \mathcal{S}=\{s_1,\ldots,s_N \} \) be their corresponding scores.
-NMS is then a simple iterative filtering algorithm where, for each iteration, the bounding box with the highest score is selected from \(\mathcal{B}\), any bounding boxes that overlaps with the selected box is then pruned from \(\mathcal{B}\) and \(\mathcal{S}\) and the loop is continued until \(\mathcal{B}\) is exhausted. Boxes are considered overlapping if their IoU is larger than some threshold \(N_t\).
+A common filtering technique is called \textit{Non-maximum Suppression} (NMS).
+Let \( \mathcal{B} \) be a list of bounding boxes and \( \mathcal{S} \) be their corresponding scores.
+NMS is then a simple iterative filtering algorithm where, for each iteration, the bounding box with the highest score is selected from \(\mathcal{B}\).
+Any bounding boxes that overlaps with the selected box is then pruned from \(\mathcal{B}\) and \(\mathcal{S}\) and the loop is continued until \(\mathcal{B}\) is exhausted. Boxes are considered overlapping if their IoU is larger than some threshold \(N_t\).
 
 NMS performs well in most settings, but has a particular weakness in cases where the target boxes of objects overlap.
 In these situations, NMS will often only return a single bounding box for one of the objects, ignoring the rest.
-Given that the data in this project exhibits this characteristic we have replaced the standard NMS algorithm with a more modern version, Soft-NMS, introduced in~\cite{bodla2017softnms}. The pseudocode for both algorithms follows,
-\linebreak
-\begin{pseudofunc}{NMS}{\(\mathcal{B},~\mathcal{S},~N_t\)}
+Given that the data in this project exhibits this characteristic we have replaced the standard NMS algorithm with a more modern version, Soft-NMS, introduced in~\cite{bodla2017softnms}.
+The pseudocode for both algorithms is as follows:
+%
+\begin{pseudofunc}{NMS}{\(\mathcal{B}=\{b_1,\ldots,b_N \},~\mathcal{S}=\{s_1,\ldots,s_N \},~N_t\)}
   \item \(\mathcal{D} \leftarrow \{ \} \)
   \item \pwhile~\(\mathcal{B} \neq \emptyset \):
   \begin{pseudoloop}
@@ -299,7 +324,7 @@ Given that the data in this project exhibits this characteristic we have replace
     \vspace{10pt}
     \begin{pseudoloop}
       \fcolorbox{red}{white}{\color{red} %
-      \minipage[t]{\dimexpr0.48\linewidth-2\fboxsep-\fboxrule\relax}
+      \minipage[t]{\dimexpr0.50\linewidth-2\fboxsep-\fboxrule\relax}
         \item \pif~\pmethod{IoU}{\(\mathcal{M},~b_i\)}\(~\geq N_t\):
         \begin{pseudoloop}
         \item \(\mathcal{B} \leftarrow \mathcal{B} - b_i;~ \mathcal{S} \leftarrow \mathcal{S} - s_i\)
@@ -310,7 +335,7 @@ Given that the data in this project exhibits this characteristic we have replace
         \end{textblock}
       \endminipage}\vspace{5pt}\\
       \fcolorbox{nicegreen}{white}{\color{nicegreen}%
-      \minipage[t]{\dimexpr0.48\linewidth-2\fboxsep-\fboxrule\relax}
+      \minipage[t]{\dimexpr0.50\linewidth-2\fboxsep-\fboxrule\relax}
         \item \(s_i \leftarrow s_i\)\pmethod{f}{\pmethod{IoU}{\(\mathcal{M},~b_i\)}}  
         \vspace{13pt}
         \begin{textblock}{2} (3,-0.15)
@@ -320,13 +345,8 @@ Given that the data in this project exhibits this characteristic we have replace
     \end{pseudoloop}
   \end{pseudoloop}\vspace{5pt}
   \item \pret~\(\mathcal{D},~\mathcal{S}\)
-\end{pseudofunc}\vspace{-3em}
-\begin{wrapfigure}{r}{0.4\textwidth}
-  \centering
-  \includegraphics[width=0.35\textwidth]{figs/gausian_penelty.pdf}
-  \caption{Gaussian decay as a function of IoU for various \( \sigma \)}\label{fig:gauss}
-\end{wrapfigure}
-
+\end{pseudofunc}
+%
 Soft-NMS changes only the colored sections, where it introduces a rescoring function, \texttt{f(IoU)}, which only decays the scores of remaining boxes instead of discarding them altogether. % chktex 36
 This allows boxes which overlap with the selected box to remain in the pool.
 Rescoring is applied using a Gaussian decay function as follows,
@@ -335,15 +355,62 @@ Rescoring is applied using a Gaussian decay function as follows,
 
 where \( \sigma \) controls the rate of decay, as demonstrated in Figure~\ref{fig:gauss}.
 
-\subsection{Implementation}
-\begin{enumerate}
-  \item start with language and framework choice, short
-  \item justify default-boxes, i.e.~keeping aspect unchanged, and adjusting sizes and removing the last tree layers because no boxes are matched to them
-\end{enumerate}
+\section{Experimental setup}
+This section will present the experiments we have chosen to implement in order to examine the research questions.
+We will first briefly cover the software and hardware stack used in the implementation the model, as well as the training procedure used for the experiments.
+A run down of the experiments that have been performed will then be given.
 
-\subsection{Experimental Setup}
+\subsection{Software}
+All of the software for this project has been written in Python which is among the most established languages for the purposes of deep learning.
+This project relies entirely on the extensive use of the high quality open source data science ecosystem that has been created within Python.
+The model implementation, training, and evaluation procedures are written using the 1.7 release of the PyTorch library~\parencite{NEURIPS2019_9015}. PyTorch is an extensive machine learning framework and provides APIs covering the entire model pipeline.
+
+\subsection{Hardware}
+All experiments have been run on a desktop computer using consumer grade components.
+The relevant specifications are as follows,
+\begin{itemize}
+  \item \textbf{CPU:} \textit{AMD Ryzen 5 3600X}, 6 cores @ 3.8 GHz.
+  \item \textbf{GPU:} \textit{Nvidia GTX 1070}, 8 GB GDDR5 VRAM,\\1920 CUDA cores @ 1506 MHz, 6.463 TFLOPS (32 bit).
+  \item \textbf{Memory:} \textit{Corsair Vengeance}, 32 GB DDR4 @ 2166 MHz.
+\end{itemize}
+
+\textcolor{red}{Write about performace both FPS and training time}
+
+\subsection{Training}
+All the experiments where run using the same training setup.
+The model is trained using Stochastic Gradient Decent (SGD) with a mini batch size of 32, learning rate of \num{e-3}, \num{0.9} momentum, and \num{5e-4} weight decay.
+In testing, test mAP converged after 2000 iterations in the baseline configuration
+
+The dataset contains tree classes, but these are not equally distributed between the 701 images. Corylus and Alnus both release together and are found together in samples.
+Poaceae appears as the only class in the samples where it is present, it is also much more prevalent than the other species meaning the density of pollen grains is much higher on average in these samples.
+This also causes the very uneven distribution of classes in the dataset.
+We have therefore under-sampled the Poaceae class when creating the final dataset.
+467 samples are included in the final dataset, the class distribution is given in Table~\ref{tab:training-dataset}.
+The final dataset is then divided into a training and test set with a 85\% / 15\% ratio. 
+ 
+\begin{table}[htb]
+  \caption[Class distribution across the final training dataset containing 467 sample images.]{Distribution of classes across the training dataset}\label{tab:training-dataset}
+  \centering 
+  \begin{tabular}{lrrr} \toprule
+                      & Poaceae & Corylus & Alnus \\ \midrule
+    Number of labels  & 518    & 262     & 522 \\
+    Proportion        & 39.8\%  & 20.1\%   & 40.1\% \\ \bottomrule
+  \end{tabular}
+\end{table}
+
+Augmentations are necessary to allow the model to train for many enough iterations without overfitting on the training set.
+Augmentations artificially increase the size of the dataset, by producing thousands of variations of each example.
+We have employed the following augmentations,
+%
 \begin{enumerate}
-  \item Hardware stack rundown, short
-  \item pretend to care about hyper-parameters, we need not justify too much. We let it be implied.
-  \item itemize the experiments
+  \item Horizontal flip.
+  \item Vertical flip.
+  \item Color adjustment (brightness, hue, saturation, contrast).
+  \item Shuffle RBG channels.
+  \item Random crop.
 \end{enumerate}
+%
+All the augmentations except cropping, independently, has a 50\% chance of being applied to each sample. Random crop also resizes the the sample input into a \(300\by 300\) square so it is needed for every image. The cropping algorithm also ensures that each sample contains at least one pollen grain.
+
+
+\subsection{Experiments}
