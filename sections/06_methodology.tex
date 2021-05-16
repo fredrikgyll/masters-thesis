@@ -196,7 +196,7 @@ As expected, most of the ground truths fall into the sharpest category, but ther
   \caption[Distribution of sharpness across entire dataset]{Density plot showing the sharpness of all pollen grains in the dataset \((N=6384)\). The shaded sections indicate the distribution of sharpness classes, if the dataset is classified with the evaluation model. As expected, most grains fall into the sharpest category.}\label{fig:sharpness-all}
 \end{figure}
 
-\section{Architecture}
+\section{Architecture}\label{sec:method-arch}
 
 The model we have chosen to implement is the Single Shot Multibox Detector, a brief explanation of which was given in Section~\ref{sec:ssd}.
 This section gives a more thorough explanation of the model and its implementation, with a focus on the changes that have been made from the original.
@@ -355,10 +355,10 @@ Rescoring is applied using a Gaussian decay function as follows,
 
 where \( \sigma \) controls the rate of decay, as demonstrated in Figure~\ref{fig:gauss}.
 
-\section{Experimental setup}
+\section{Experimental setup}\label{sec:method-exp-setup}
 This section will present the experiments we have chosen to implement in order to examine the research questions.
 We will first briefly cover the software and hardware stack used in the implementation the model, as well as the training procedure used for the experiments.
-A run down of the experiments that have been performed will then be given.
+A run-down of the experiments that have been performed will then be given.
 
 \subsection{Software}
 All of the software for this project has been written in Python which is among the most established languages for the purposes of deep learning.
@@ -374,7 +374,7 @@ The relevant specifications are as follows,
   \item \textbf{Memory:} \textit{Corsair Vengeance}, 32 GB DDR4 @ 2166 MHz.
 \end{itemize}
 
-\textcolor{red}{Write about performace both FPS and training time}
+\textcolor{red}{Write about performance, both FPS and training time}
 
 \subsection{Training}
 All the experiments where run using the same training setup.
@@ -386,7 +386,7 @@ Poaceae appears as the only class in the samples where it is present, it is also
 This also causes the very uneven distribution of classes in the dataset.
 We have therefore under-sampled the Poaceae class when creating the final dataset.
 467 samples are included in the final dataset, the class distribution is given in Table~\ref{tab:training-dataset}.
-The final dataset is then divided into a training and test set with a 85\% / 15\% ratio. 
+The final dataset is then divided into a training and test split with a 85\% / 15\% ratio. 
  
 \begin{table}[htb]
   \caption[Class distribution across the final training dataset containing 467 sample images.]{Distribution of classes across the training dataset}\label{tab:training-dataset}
@@ -410,7 +410,7 @@ We have employed the following augmentations,
   \item Random crop.
 \end{enumerate}
 %
-All the augmentations except cropping, independently, has a 50\% chance of being applied to each sample. Random crop also resizes the the sample input into a \(300\by 300\) square so it is needed for every image. The cropping algorithm also ensures that each sample contains at least one pollen grain.
+All the augmentations except cropping, independently, has a 50\% chance of being applied to each sample. Random crop also resizes the sample input into a \(300\by 300\) square so it is needed for every image. The cropping algorithm also ensures that each sample contains at least one pollen grain.
 
 
 \subsection{Experiments}

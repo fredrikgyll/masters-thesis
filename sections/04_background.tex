@@ -197,13 +197,14 @@ They are computed from the above quantities as follows:
 These two metrics are the basis for how all object detection models are evaluated and there is usually a tradeoff between the two, e.g.~a model can have very high recall, meaning if correctly identifies most of the potential objects, but if it also identifies many other non-objects the precision is reduced.
 Inversely a model could be very certain that it returns correctly identified objects, at the cost of ignoring objects it is not to sure about.
 
-A popular accuracy measure which derives from the precision and recall values if the \(F_1\) score, defined as,
-
+A popular accuracy measure which derives from the precision and recall values if the \(F_1\) score, it may also be referred to as the dice score.
+It is defined as follows,
+%
 \begin{align*}
   F_1=2\frac{\text{precision}\cdot\text{recall}}{\text{precision}+\text{recall}}
 \end{align*}
 
-This measures the balance between the two values and is useful in cases where precision and recall are equally important important performance measures.
+The \(F_1\) score measures the balance between precision and recall values and is useful in cases where both measures are \textit{equally} important performance indicators.
 
 \subsection{Intersection over union}
 Precision and recall form the basis for how all object detection models are evaluated, but the definitions are not complete without a definition of what constitutes a \textit{correct} prediction.
