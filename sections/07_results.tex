@@ -4,7 +4,7 @@ This section will present and discuss the results from our experiments.
 The modified SSD model presented in Section~\ref{sec:method-arch} is trained according to the training procedure given in Section~\ref{sec:method-exp-setup}.
 Section~\ref{sec:results-baseline} presents the performance of the baseline model. 
 The results from experiments pertaining to RQ1 and RQ2 are presented in Section~\ref{sec:results-simplification} and Section~\ref{sec:results-sharpness} respectively.
-Unless specified otherwise, all performance metrics given in this section are measured on the test split of the dataset.
+Unless specified otherwise, all performance metrics given in this section are measured on the test split of the dataset. For measuring mAP we use an IoU of 0.5 as the acceptance threshold, and follow the interpolation method specified in Equation~\ref{eq:average-precision}
 
 \section{Baseline model}\label{sec:results-baseline}
 \begin{figure}[htb]
@@ -20,7 +20,12 @@ The mini-batch with the lowest total loss is annotated with a green circle and o
     }\label{fig:method-baseline-loss}
   \end{figure}
 
-We start by presenting the results from training the model in its baseline configuration. The training procedure is given in Figure~\ref{fig:method-baseline-loss}. The scattered loss is characteristic for mini-batch training. We can also see that the confidence loss accounts for most of the total loss throughout the training process. The components of the loss function (Equation~\ref{eq:loss}) are independent, meaning that their ratio does not indicate a difference in performance in the two different tasks. We do however observe that the model performs better at localization than classification.
+We start by presenting the results from training the model in its baseline configuration. 
+The training procedure is given in Figure~\ref{fig:method-baseline-loss}. The stochastic variation in the loss curve is characteristic for mini-batch training. 
+We can also see that the confidence loss accounts for most of the total loss throughout the training process.
+The components of the loss function (Equation~\ref{eq:loss}) are independent, meaning that their ratio does not indicate a difference in performance at the two different tasks.
+We do however observe that the model performs better at localization than classification. Logically this follows from the realization that the pollen grains are all distinct from the background, but are all quite similar.
+The model is therefore able to discriminate between background and pollen with relative ease, but has a harder time classifying species.
 
 \begin{figure}[htb]
     \centering
@@ -33,11 +38,25 @@ The difference between ground truths and true positives in the number of false n
   \end{figure}
 
 The baseline model achieves a mAP of \textbf{95.3\%} and an \(F_1\) score of 87.8\%.
-Every ground truth is correctly localized (i.e.~it is identified by at least one bounding box of arbitrary class with an IoU above 0.5), meaning misclassification is the only source of error.
-Figure~\ref{fig:method-baseline-detections} gives a breakdown of all the detections made
+Every ground truth is correctly localized (i.e.~it is identified by at least one bounding box of arbitrary class), meaning misclassification is the primary source of error.
+A very small (\textcolor{red}{exact number panding}) number of false positives are returned for background items.
+Figure~\ref{fig:method-baseline-detections} gives a breakdown of all the detections made, where we again observe that the prediction error arises from redundant and miss-classified boxes.
+
+\begin{figure}[htb]
+  \centering
+  \begin{subfigure}[t]{0.4\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figs/method/baseline/Snap-408.pdf}
+  \end{subfigure}%
+  \hspace*{0.04\textwidth}
+  \begin{subfigure}[t]{0.4\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{figs/method/baseline/Snap-028.pdf}
+  \end{subfigure}
+  \caption[Predictions showing TP overlapped by FP from different class]{Two predictions with GT in \textcolor{nicegreen}{green}, TP in \textcolor{red}{red}, and FP in \textcolor{nicepink}{pink}. The labels give the first letter of the class and the prediction confidence in the range [0,100]. All TP labels are placed at the NW corner of the bounding box. The FP labels are placed at the other three corners according to class. In the left image, a FP box is predicted with a lower confidence than the TP\@. In the right image, the FP corylus prediction has a higher confidence than the TP alnus prediction.}\label{fig:overlapping-predictions}
+\end{figure}
 
 
+%\section{Model simplification}\label{sec:results-simplification}
 
-\section{Model simplification}\label{sec:results-simplification}
-
-\section{Sharpness}\label{sec:results-sharpness}
+%\section{Sharpness}\label{sec:results-sharpness}

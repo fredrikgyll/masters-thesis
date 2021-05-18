@@ -19,7 +19,7 @@ Each image has been labeled in collaboration with the experts to produce a valid
 In total, three different species have been classified, namely \textit{poaceae}, \textit{corylus}, and \textit{alnus}, known in English as Grasses, Hazel, and Alder, respectively. A labeled example is given in Figure~\ref{fig:dataset-sample}. A summary of the dataset is given in Table~\ref{tab:dataset}.
 
 \begin{table}[htb]
-  \caption[Class distribution across the dataset]{Distribution of classes across the pollen dataset}\label{tab:dataset}
+  \caption[Class distribution across the dataset]{Distribution of class labels across the 701 sample images of the pollen dataset.}\label{tab:dataset}
   \centering 
   \begin{tabular}{lrrr} \toprule
                       & Poaceae & Corylus & Alnus \\ \midrule
@@ -243,17 +243,16 @@ Here \(B\) is the batch size and \(D\) is the number of default boxes.
 
 \subsection{Default boxes}
 
-\begin{wrapfigure}[16]{r}{0.4\textwidth}
-  \centering
-  \includegraphics[width=0.4\textwidth]{figs/default_boxes}
-  \caption[Visualizing default boxes]{Visualization of default boxes on a \(5\by 5 \) feature map.}\label{fig:defaults}
-\end{wrapfigure}
-
 The fundamental objective of the model is evaluating a predefined set of default boxes.
 Each location of a feature map forms the basis for a small amount of default boxes of fixes size and aspect ratio.
 In Figure~\ref{fig:defaults} the center element of the \(5\by 5\) feature map is responsible for evaluating the 4 drawn default boxes; 2 scaled squares in orange, and 2 boxes with a 1:2 aspect ratio, in blue.
 The default boxes are scaled independently from the size of the elements of the feature map, but there is a correlation.
-Because of the depth of the feature extraction network leading into the feature layers, the receptive field of all elements in every feature map is the entire input.
+Because of the depth of the feature extraction network leading into the feature layers, the receptive field of all elements in every feature map is the entire input.%
+\begin{wrapfigure}[14]{R}{0.4\textwidth}
+  \centering
+  \includegraphics[width=0.4\textwidth]{figs/default_boxes}
+  \caption[Visualizing default boxes]{Visualization of default boxes on a \(5\by 5 \) feature map.}\label{fig:defaults}
+\end{wrapfigure}
 
 As designed, the SSD model is made to handle a wider distribution of sizes than is present in our dataset.
 We have adjusted the sizes of the default boxes in our implementation so that they cover the distribution of sizes present.

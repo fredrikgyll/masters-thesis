@@ -236,7 +236,26 @@ We will also review the available literature relating to other attempts at solvi
 
 \subsection{Mean average precision}
 Mean average precision (mAP) is a popular metric for measuring the performance of object detection models.
+It is computed by taking the mean of the \textit{average precision} values for each class.
 
-\textit{Average Precision} is a single measure which quantifies this tradeoff by averaging the precision of a model at over all recall values.
+From a list of all detections made for a class, ranked in ascending order of confidence, we can plot a precision-recall curve.
+This shows how precision changes as recall rises in the range [0,1] as we include more and more detection from the ranked list. 
+The AP describes the shape of the precision-recall, and can be calculated e few different ways.
+We will use the definition of AP specified in evaluation procedure in the VOC2007 image detection challenge. 
+For convenience, we will restate the definition of AP, as given in~\cite{everingham2010pascal}.
 
-\textcolor{red}{NOT DONE}
+AP is measured by taking the mean of precision values taken at 11 evenly spaced recall values as follows,
+
+\begin{equation}\label{eq:average-precision}
+  AP=\frac{1}{11} \sum_{r\in \{0,0.1,\dots,1\}}p_{interp}(r)
+\end{equation}
+
+Because the precision-recall curve often times is quite erratic, the precision value at a given recall level, \(r\), is interpolated by finding the maximum precision value at any recall level exceeding \(r\),
+
+\begin{equation*}
+  p_{interp}(r)=\max_{\tilde{r}:\tilde{r}\geq r}p(\tilde{r})
+\end{equation*}
+
+This definition of AP and mAP is widely used in the related works and will also be used to 
+
+\textcolor{red}{MAYBE DONE}
