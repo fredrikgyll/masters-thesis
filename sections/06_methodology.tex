@@ -178,7 +178,8 @@ A total of 316 pollen grains where evaluated, the distribution of their classes 
   \centering 
   \begin{tabular}{lrrr} \toprule
     & blurry [1] & partly [2] & sharp [3]  \\ \midrule
-    Number of labels & 108 & 93 & 115 \\ \bottomrule
+    Number of labels & 108 & 93  & 115 \\ 
+    Share            & .34 & .30 & .36 \\ \bottomrule
   \end{tabular}
 \end{table}
 
@@ -317,7 +318,7 @@ Negative examples are counted towards the confidence loss by descending loss unt
 
 \subsection{Inference}
 
-\begin{wrapfigure}[13]{r}{0.35\textwidth}
+\begin{wrapfigure}[9]{r}{0.35\textwidth}
   \centering
   \includegraphics[width=0.35\textwidth]{figs/gausian_penelty.pdf}
   \caption{Gaussian decay as a function of IoU for various \( \sigma \)}\label{fig:gauss}
@@ -420,7 +421,7 @@ The final dataset is then divided into a training and test split with a 85\% / 1
   \begin{tabular}{lrrr} \toprule
                       & Poaceae & Corylus & Alnus \\ \midrule
     Number of labels  & 518    & 262     & 522 \\
-    Proportion        & 39.8\%  & 20.1\%   & 40.1\% \\ \bottomrule
+    Share             & .40  & .20  & .40 \\ \bottomrule
   \end{tabular}
 \end{table}
 
