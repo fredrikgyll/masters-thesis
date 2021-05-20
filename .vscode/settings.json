@@ -10,6 +10,8 @@
     "latex-workshop.latex.search.rootFiles.include": [
         "main.tex"
     ],
+    "latex-workshop.message.latexlog.exclude": ["Font shape*"],
+    "latex-workshop.message.badbox.show": false,
     "latex-workshop.latex.tools": [
         {
             "name": "biber",
