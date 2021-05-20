@@ -67,7 +67,68 @@ In the left image, a FP box is predicted with a lower confidence than the TP\@.
 In the right image, the FP corylus prediction has a higher confidence than the TP alnus prediction.}\label{fig:method-overlapping-predictions}
 \end{figure}
 
+Figure~\ref{fig:method-overlapping-predictions} shows two test samples containing overlapping true and false positive predictions.
+This is due to the NMS filtering algorithm being run for each class independently, which causes double predictions in cases where predictions for multiple classes are produced for the same pollen grain.
 
-%\section{Model simplification}\label{sec:results-simplification}
+A remedy for this was implemented and tested where NMS was applied to all detections after the initial per-class NMS\@.
+The results from this were ambiguous; The precision did improve due to the decreased number of FP predictions, but the decrease in TP predictions caused a similar decrease in recall.
+In Figure~\ref{fig:method-overlapping-predictions} (right) for example, the correct prediction would get filtered out.
+In a model with improved classification confidence, this technique would be of benefit as it would improve overall precision without sacrificing recall.
+
+\section{Model simplification}\label{sec:results-simplification}
+The first two experiments aim to explore ways in which we can reduce the computational complexity of the model without sacrificing performance.
+In the first experiment we have changed the feature extraction network with light weight alternatives.
+In the second we have reduced the amount of default boxes by deactivating source feature maps.
+
+\subsection{Feature extractor}
+Table~\ref{tab:result-base-network} gives the results from training the network with different base networks.
+Larger network could not be tested due to the memory limitations of the GPU used.
+We see a clear decrease in performance when using smaller networks with all performance metrics monotonically decreasing with the size of the feature extractor.
+
+Interestingly, the recall remains almost unchanged, meaning that the model's ability to localize pollen grains is largely maintained.
+The performance degradation is therefore mostly due to weaker classification confidence.
+A possible explanation for this is that localization as a task only requires the model to learn simple features relating to the general shape and color of a pollen grain, while classification involves more complex features that the smaller networks are not able to capture.
+
+
+
+
+\begin{table}\centering
+  \ra{1.3}
+\caption[Performance by feature extraction network]{Summary of experimental results from testing various small feature extraction networks.
+The localization score refers to the share of detection that correctly localize a GT, regardless of class.
+For each network, the number of trainable parameters for both the feature extractor and whole model is given.}%
+\label{tab:result-base-network}
+\begin{tabular}{@{}lcrrrrcrr@{}}\toprule
+  Network & \phantom{a} & \multicolumn{4}{c}{Performance} & \phantom{ab}&  \multicolumn{2}{c}{Parameters} \\
+  \cmidrule{3-6} \cmidrule{8-9}
+        &&  maP &  Precision &  Recall &  Loc. &&  Extractor   & Total \\
+  \midrule                                                                     
+     ResNet 34 && 95.2 &      82.7  &   99.1  & 95.0  &&  \num{8.2e6} & \num{1.2e7} \\
+     ResNet 18 && 92.6 &      81.9  &   97.4  & 92.8  &&  \num{2.8e6} & \num{6.7e6} \\
+  MobileNet V2 && 90.4 &      67.9  &   98.3  & 86.3  &&  \num{1.3e5} & \num{9.6e5} \\  
+  \bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}\centering
+  \ra{1.1}
+  \caption[Performance when deactivating source layers]{Summary of experimental results when deactivating various source layers.
+  The source layers are ordered 1--6 with layer 1 being the most granular \(38\by38\) feature map.}%
+  \label{tab:result-layer-deactivated}
+\begin{tabular}{@{}llllllr@{}}\toprule
+  \multicolumn{6}{c}{Source layer activation} & \\
+  \cmidrule{1-6}
+  1 & 2 & 3 & 4 & 5 & 6 &   mAP\\
+  \midrule
+  \ckm & \ckm & \ckm & \ckm & \ckm & \ckm & 95.2 \\
+  \ckm & \ckm & \ckm & \ckm & \ckm &      & 95.8 \\
+  \ckm & \ckm & \ckm & \ckm &      &      & 94.3 \\
+  \ckm & \ckm & \ckm &      &      &      & \textbf{96.7} \\
+  \ckm & \ckm &      &      &      &      & 95.0 \\
+  \ckm &      &      &      &      &      & 96.1 \\
+       & \ckm &      &      &      &      & 95.4 \\
+  \bottomrule
+\end{tabular}
+\end{table}
 
 %\section{Sharpness}\label{sec:results-sharpness}

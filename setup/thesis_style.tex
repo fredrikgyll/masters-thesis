@@ -81,15 +81,16 @@
 \definecolor{corylus}{HTML}{ff7f0e}
 \definecolor{alnus}{HTML}{2ca02c}
 
-%%%
 % Author
-% Fill in here, and use commands in the text. 
 \newcommand{\thesisAuthor}{Fredrik Gyllenhammar}
 \newcommand{\thesisTitle}{Automated Pollen Grain Counting}
 \newcommand{\thesisType}{Master's thesis}
 \newcommand{\thesisDate}{Spring 2021}
 
-% % Declare caption font "hyper color" which sets the color of the hyper links
+% Table command for row spacing
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
+
+% Declare caption font "hyper color" which sets the color of the hyper links
 \DeclareCaptionFont{hypercolor}{%
 \hypersetup{%
   citecolor={#1},%
@@ -131,6 +132,8 @@
 
 % Environments
 \newcommand{\by}{\!\times \!}
+\newcommand{\ckm}{\checkmark}
+
 % Quick and dirty pseudocode which does not deserve the algorithm environment
 \newenvironment{pseudocode}[0]
 {%

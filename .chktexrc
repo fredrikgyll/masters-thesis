@@ -24,11 +24,11 @@ Silent
     \hline \hrule \vrule
 
     \times
-    
+    \ckm \checkmark
     \mainmatter \frontmatter \backmatter
 
     \centering
-
+    
     \bigskip \medskip \smallskip
 
     \noindent \expandafter
