@@ -74,5 +74,8 @@
         "markdown",
         "latex",
         "plaintext"
-    ]
+    ],
+    "spellright.notificationClass": "warning",
+    "spellright.ignoreFiles": [ ".chktexrc" ],
+    "spellright.recheckOnSave": true
 }
