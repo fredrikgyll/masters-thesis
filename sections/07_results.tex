@@ -4,7 +4,8 @@ This section will present and discuss the results from our experiments.
 The modified SSD model presented in Section~\ref{sec:method-arch} is trained according to the training procedure given in Section~\ref{sec:method-exp-setup}.
 Section~\ref{sec:results-baseline} presents the performance of the baseline model. 
 The results from experiments pertaining to RQ1 and RQ2 are presented in Section~\ref{sec:results-simplification} and Section~\ref{sec:results-sharpness} respectively.
-Unless specified otherwise, all performance metrics given in this section are measured on the test split of the dataset. For measuring mAP we use an IoU of 0.5 as the acceptance threshold, and follow the interpolation method specified in Equation~\ref{eq:average-precision}
+Unless specified otherwise, all performance metrics given in this section are measured on the test split of the dataset.
+For measuring mAP we use an IoU of 0.5 as the acceptance threshold, and follow the interpolation method specified in Equation~\ref{eq:average-precision}
 
 \section{Baseline model}\label{sec:results-baseline}
 \begin{figure}[htb]
@@ -21,17 +22,20 @@ The mini-batch with the lowest total loss is annotated with a green circle and o
   \end{figure}
 
 We start by presenting the results from training the model in its baseline configuration. 
-The training procedure is given in Figure~\ref{fig:method-baseline-loss}. The stochastic variation in the loss curve is characteristic for mini-batch training. 
+The training procedure is given in Figure~\ref{fig:method-baseline-loss}.
+The stochastic variation in the loss curve is characteristic for mini-batch training. 
 We can also see that the confidence loss accounts for most of the total loss throughout the training process.
 The components of the loss function (Equation~\ref{eq:loss}) are independent, meaning that their ratio does not indicate a difference in performance at the two different tasks.
-We do however observe that the model performs better at localization than classification. Logically this follows from the realization that the pollen grains are all distinct from the background, but are all quite similar.
+We do however observe that the model performs better at localization than classification.
+Logically this follows from the realization that the pollen grains are all distinct from the background, but are all quite similar.
 The model is therefore able to discriminate between background and pollen with relative ease, but has a harder time classifying species.
 
 \begin{figure}[htb]
     \centering
     \includegraphics[width=0.7\textwidth]{figs/method/baseline/detections_test.pdf}
     \caption[Detections by type by class for the baseline on the test split]{%
-Breakdown of predictions by class. For each label, the first column gives the number of ground truth labels in the test split.
+Breakdown of predictions by class.
+For each label, the first column gives the number of ground truth labels in the test split.
 The second column gives the number or predicted boxes for that class, broken down into true positive matches in green, and false negatives in red.
 The difference between ground truths and true positives in the number of false negatives. 
     }\label{fig:method-baseline-detections}
@@ -53,7 +57,12 @@ Figure~\ref{fig:method-baseline-detections} gives a breakdown of all the detecti
     \centering
     \includegraphics[width=\textwidth]{figs/method/baseline/Snap-028.pdf}
   \end{subfigure}
-  \caption[Predictions showing TP overlapped by FP from different class]{Two predictions with GT in \textcolor{nicegreen}{green}, TP in \textcolor{red}{red}, and FP in \textcolor{nicepink}{pink}. The labels give the first letter of the class and the prediction confidence in the range [0,100]. All TP labels are placed at the NW corner of the bounding box. The FP labels are placed at the other three corners according to class. In the left image, a FP box is predicted with a lower confidence than the TP\@. In the right image, the FP corylus prediction has a higher confidence than the TP alnus prediction.}\label{fig:overlapping-predictions}
+  \caption[Predictions showing TP overlapped by FP from different class]{Two predictions with GT in \textcolor{nicegreen}{green}, TP in \textcolor{red}{red}, and FP in \textcolor{nicepink}{pink}.
+The labels give the first letter of the class and the prediction confidence in the range [0,100].
+All TP labels are placed at the NW corner of the bounding box.
+The FP labels are placed at the other three corners according to class.
+In the left image, a FP box is predicted with a lower confidence than the TP\@.
+In the right image, the FP corylus prediction has a higher confidence than the TP alnus prediction.}\label{fig:method-overlapping-predictions}
 \end{figure}
 
 

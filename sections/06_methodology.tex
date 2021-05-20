@@ -10,13 +10,16 @@ Only pollen grains from a subset of species are actively tracked.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{figs/Snap-057.png}
-  \caption[Dataset example]{Example from the dataset with ground truth bounding boxes drawn. The image contains two classes: \textcolor{corylus}{corylus}, and \textcolor{alnus}{alnus}.}\label{fig:dataset-sample}
+  \caption[Dataset example]{Example from the dataset with ground truth bounding boxes drawn.
+The image contains two classes: \textcolor{corylus}{corylus}, and \textcolor{alnus}{alnus}.}\label{fig:dataset-sample}
 \end{figure}
 
 Three microscope slides have been imaged using a digital optical microscope producing a set of 701 raster images with a size of \(1080\by 1920\) pixels and three channels; red, green, and blue.
 The resolution of each image is \(\SI{0.183}{\micro\metre\per\pixel}\).
 Each image has been labeled in collaboration with the experts to produce a valid and correct ground truths.
-In total, three different species have been classified, namely \textit{poaceae}, \textit{corylus}, and \textit{alnus}, known in English as Grasses, Hazel, and Alder, respectively. A labeled example is given in Figure~\ref{fig:dataset-sample}. A summary of the dataset is given in Table~\ref{tab:dataset}.
+In total, three different species have been classified, namely \textit{poaceae}, \textit{corylus}, and \textit{alnus}, known in English as Grasses, Hazel, and Alder, respectively.
+A labeled example is given in Figure~\ref{fig:dataset-sample}.
+A summary of the dataset is given in Table~\ref{tab:dataset}.
 
 \begin{table}[htb]
   \caption[Class distribution across the dataset]{Distribution of class labels across the 701 sample images of the pollen dataset.}\label{tab:dataset}
@@ -29,14 +32,20 @@ In total, three different species have been classified, namely \textit{poaceae},
 \end{table}
 
 
-Many of the images are taken from the same view point, but with the focus point set to different grains. The ground truth labeled are drawn for all present pollen grains, regardless of the how blurred they appear. This is done so that the dataset may be modified for the purpose of our analysis of sharpness and model performance in regards to \textit{RQ2}.
+Many of the images are taken from the same view point, but with the focus point set to different grains.
+The ground truth labeled are drawn for all present pollen grains, regardless of the how blurred they appear.
+This is done so that the dataset may be modified for the purpose of our analysis of sharpness and model performance in regards to \textit{RQ2}.
 
-As opposed to more general object detection tasks, where there is a large variance in both the apparent size and shape of objects within an image, this dataset is much more regular. This is demonstrated in Figure~\ref{fig:aspect}, where we can see that the grains are mostly square in shape and between 100 and 150 pixels wide.
+As opposed to more general object detection tasks, where there is a large variance in both the apparent size and shape of objects within an image, this dataset is much more regular.
+This is demonstrated in Figure~\ref{fig:aspect}, where we can see that the grains are mostly square in shape and between 100 and 150 pixels wide.
 
 \begin{figure}[htb]
   \centering
   \includegraphics[width=0.9\textwidth]{figs/aspect_ratio.pdf}
-  \caption[Aspect ratios in the dataset]{The widths and heights of all ground truth boxes are plotted, longest against shortest. The lines denote the three aspect ratios used in the default boxes of the SSD model. Grains marked `Edge contact' are those in direct contact with the edge of the image and are most likely partially cropped out of frame. We can clearly see that the grains are quite regular in both shape and size}\label{fig:aspect}
+  \caption[Aspect ratios in the dataset]{The widths and heights of all ground truth boxes are plotted, longest against shortest.
+The lines denote the three aspect ratios used in the default boxes of the SSD model.
+Grains marked `Edge contact' are those in direct contact with the edge of the image and are most likely partially cropped out of frame.
+We can clearly see that the grains are quite regular in both shape and size}\label{fig:aspect}
 \end{figure}
 
 %\section{Architecture}\label{sec:architecture}
@@ -55,7 +64,9 @@ Figure~\ref{fig:fourier-sinusoid} visualizes what the base components look like 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{figs/fourier/fourier-sinusoid.pdf}
-  \caption[Fourier transform of sinusoid]{The figure shows two 2D sinusoid wave forms and their Fourier transform. The active components in the transform have been enlarged so as to make them visible in print. When unmodified, only a single pixel and its reflection about the origin is active.}\label{fig:fourier-sinusoid}
+  \caption[Fourier transform of sinusoid]{The figure shows two 2D sinusoid wave forms and their Fourier transform.
+The active components in the transform have been enlarged so as to make them visible in print.
+When unmodified, only a single pixel and its reflection about the origin is active.}\label{fig:fourier-sinusoid}
 \end{figure}
 
 Figure~\ref{fig:fourier-demo} shows the Fourier transform of various inputs.
@@ -63,7 +74,8 @@ The transforms are shifted, such that an element in the transform encodes a sinu
 The directionality of the Fourier transform is demonstrated in the first two examples.
 Squares decompose into a set on sinusoids, all moving is the same two directions.
 The coefficient of each component is encoded in the intensity of the pixel.
-In all the examples the lower frequency components dominate, which lights up the center region. The last two examples demonstrate how blurring an image eliminates the higher frequencies from the Fourier domain.
+In all the examples the lower frequency components dominate, which lights up the center region.
+The last two examples demonstrate how blurring an image eliminates the higher frequencies from the Fourier domain.
 
 
 
@@ -113,7 +125,9 @@ In all the examples the lower frequency components dominate, which lights up the
     \includegraphics[width=\textwidth]{figs/fourier/peppers_blur_fourier.png}
   \end{subfigure}
   \caption[Demonstration of the Fourier transform]{
-    Demonstration of the Fourier transform. The bottom row shows the center-shifted discrete Fourier transform of the corresponding image in the top row. The Fourier spectra mapped to grayscale values with a truncated linear amplitude mapping which is scaled to compensate for the otherwise dominating center component.}\label{fig:fourier-demo}
+    Demonstration of the Fourier transform.
+The bottom row shows the center-shifted discrete Fourier transform of the corresponding image in the top row.
+The Fourier spectra mapped to grayscale values with a truncated linear amplitude mapping which is scaled to compensate for the otherwise dominating center component.}\label{fig:fourier-demo}
 \end{figure}
 
 Using the Fourier spectrum to measure sharpness follows from the realization that there is a strong relationship between the sharpness of an image in the spacial domain and the distribution of frequency components in the frequency domain.
@@ -125,7 +139,8 @@ If we look at their corresponding Fourier spectra we can see that, as the percei
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{figs/fourier.png}
-  \caption[Fourier spectrum]{Pollen grains and their corresponding centered Fourier spectrum. The Fourier spectra are log scaled so that the higher frequencies become visible.}\label{fig:fourier}
+  \caption[Fourier spectrum]{Pollen grains and their corresponding centered Fourier spectrum.
+The Fourier spectra are log scaled so that the higher frequencies become visible.}\label{fig:fourier}
 \end{figure}
 
 \subsection{Measuring sharpness}
@@ -142,7 +157,8 @@ The operation is described in Equation (\ref{eq:sharp}).
   \end{split}
 \end{equation}
 
-Here \(\mathcal{F}\) is the discrete the Fourier transform operating on a input image \(a\). We ignore the phase component of the complex valued output, leaving \(\mathbf{X}\) to contain only the magnitude of the frequency components.
+Here \(\mathcal{F}\) is the discrete the Fourier transform operating on a input image \(a\).
+We ignore the phase component of the complex valued output, leaving \(\mathbf{X}\) to contain only the magnitude of the frequency components.
 The scaling factor of the threshold value, \(\mu \), was found to produce good results on our data, without modification. \(S\) is the sharpness measure.
 
 Validating the sharpness measure is an important task.
@@ -179,7 +195,9 @@ A total of 316 pollen grains where evaluated, the distribution of their classes 
   \includegraphics[width=\textwidth]{figs/qden.pdf}
   \caption{Density plot}\label{fig:sharpness-qden}
 \end{subfigure}
-  \caption[Sharpness measure separability]{The sharpness measure grouped by class label. There is a large overlap between adjacent classes, but the IQRs in (a) are clearly separated. The correlation between perceived and measured sharpness is also clear.}\label{fig:sharpness}
+  \caption[Sharpness measure separability]{The sharpness measure grouped by class label.
+There is a large overlap between adjacent classes, but the IQRs in (a) are clearly separated.
+The correlation between perceived and measured sharpness is also clear.}\label{fig:sharpness}
 \end{figure}
 
 Looking at Figure~\ref{fig:sharpness} we can see a clear correlation between the mean of the distribution, and the perceived sharpness.
@@ -193,7 +211,9 @@ As expected, most of the ground truths fall into the sharpest category, but ther
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.9\textwidth]{figs/sharpness_all.pdf}
-  \caption[Distribution of sharpness across entire dataset]{Density plot showing the sharpness of all pollen grains in the dataset \((N=6384)\). The shaded sections indicate the distribution of sharpness classes, if the dataset is classified with the evaluation model. As expected, most grains fall into the sharpest category.}\label{fig:sharpness-all}
+  \caption[Distribution of sharpness across entire dataset]{Density plot showing the sharpness of all pollen grains in the dataset \((N=6384)\).
+The shaded sections indicate the distribution of sharpness classes, if the dataset is classified with the evaluation model.
+As expected, most grains fall into the sharpest category.}\label{fig:sharpness-all}
 \end{figure}
 
 \section{Architecture}\label{sec:method-arch}
@@ -216,13 +236,15 @@ The model is purely convolutional with no fully connected layers.
 The feature extractor can be any classification network that can produce a feature map of the correct dimensions.
 In the original paper the VGG-16 network is used~\parencite{simonyan2015deep} without any particular justification as to why.
 We have chosen ResNet-34~\parencite{he2015deep} for our baseline configuration.
-The main reason for this being its superior performance over VGG, and the ease with which it integrates with the auxiliary structure. ResNet-34 is the largest of the ResNet family which fits on the GPU used for most of the experimentation.
+The main reason for this being its superior performance over VGG, and the ease with which it integrates with the auxiliary structure.
+ResNet-34 is the largest of the ResNet family which fits on the GPU used for most of the experimentation.
 PyTorch offers canonical implementations of the most popular pre-trained models as part of their API\@.
 
 \begin{figure}[htb]
   \centering
   \includegraphics[width=0.9\textwidth]{figs/model.pdf}
-  \caption[Model architecture overview]{Overview of the general structure of the model. The figure is inspired by the one given in the original paper, but has been modified to reflect our alterations.
+  \caption[Model architecture overview]{Overview of the general structure of the model.
+The figure is inspired by the one given in the original paper, but has been modified to reflect our alterations.
 The horizontal lines denote the detection structure comprised of \(3\by 3\) convolutions for class confidences and bounding box regressions.
 Here \textsf{C} is the number of classes including one for background}\label{fig:model}
 \end{figure}
@@ -263,8 +285,10 @@ Because of the default boxes, each ground truth box needs to be matched to one o
 For each training example, we first apply a matching strategy that finds default boxes that overlap with each ground truth.
 Calculating the regression from the matched default boxes to their respective ground truth creates the truth vector that the model must approximate.
 
-SSD has a generous matching strategy where ground truths and default boxes are matched if their IoU is above a certain threshold. Figure~\ref{fig:priors} shows the result of the matching strategy being applied to a training example.
-Every red box in the image is a default box that has been matched with a ground truth, shown in green. For the purposes of training, these are the default boxes that the loss function expects the model to have correctly labeled and regressed. 
+SSD has a generous matching strategy where ground truths and default boxes are matched if their IoU is above a certain threshold.
+Figure~\ref{fig:priors} shows the result of the matching strategy being applied to a training example.
+Every red box in the image is a default box that has been matched with a ground truth, shown in green.
+For the purposes of training, these are the default boxes that the loss function expects the model to have correctly labeled and regressed. 
 This ensures that there are multiple positive examples for each ground truth.
 
 \begin{figure}[htbp]
@@ -305,7 +329,8 @@ Ideally, the output would be a one-to-one mapping between the predicted boxes an
 A common filtering technique is called \textit{Non-maximum Suppression} (NMS).
 Let \( \mathcal{B} \) be a list of bounding boxes and \( \mathcal{S} \) be their corresponding scores.
 NMS is then a simple iterative filtering algorithm where, for each iteration, the bounding box with the highest score is selected from \(\mathcal{B}\).
-Any bounding boxes that overlaps with the selected box is then pruned from \(\mathcal{B}\) and \(\mathcal{S}\) and the loop is continued until \(\mathcal{B}\) is exhausted. Boxes are considered overlapping if their IoU is larger than some threshold \(N_t\).
+Any bounding boxes that overlaps with the selected box is then pruned from \(\mathcal{B}\) and \(\mathcal{S}\) and the loop is continued until \(\mathcal{B}\) is exhausted.
+Boxes are considered overlapping if their IoU is larger than some threshold \(N_t\).
 
 NMS performs well in most settings, but has a particular weakness in cases where the target boxes of objects overlap.
 In these situations, NMS will often only return a single bounding box for one of the objects, ignoring the rest.
@@ -362,7 +387,8 @@ A run-down of the experiments that have been performed will then be given.
 \subsection{Software}
 All of the software for this project has been written in Python which is among the most established languages for the purposes of deep learning.
 This project relies entirely on the extensive use of the high quality open source data science ecosystem that has been created within Python.
-The model implementation, training, and evaluation procedures are written using the 1.7 release of the PyTorch library~\parencite{NEURIPS2019_9015}. PyTorch is an extensive machine learning framework and provides APIs covering the entire model pipeline.
+The model implementation, training, and evaluation procedures are written using the 1.7 release of the PyTorch library~\parencite{NEURIPS2019_9015}.
+PyTorch is an extensive machine learning framework and provides APIs covering the entire model pipeline.
 
 \subsection{Hardware}
 All experiments have been run on a desktop computer using consumer grade components.
@@ -380,7 +406,8 @@ All the experiments where run using the same training setup.
 The model is trained using Stochastic Gradient Decent (SGD) with a mini batch size of 32, learning rate of \num{e-3}, \num{0.9} momentum, and \num{5e-4} weight decay.
 In testing, test mAP converged after 2000 iterations in the baseline configuration
 
-The dataset contains tree classes, but these are not equally distributed between the 701 images. Corylus and Alnus both release together and are found together in samples.
+The dataset contains tree classes, but these are not equally distributed between the 701 images.
+Corylus and Alnus both release together and are found together in samples.
 Poaceae appears as the only class in the samples where it is present, it is also much more prevalent than the other species meaning the density of pollen grains is much higher on average in these samples.
 This also causes the very uneven distribution of classes in the dataset.
 We have therefore under-sampled the Poaceae class when creating the final dataset.
@@ -409,7 +436,9 @@ We have employed the following augmentations,
   \item Random crop.
 \end{enumerate}
 %
-All the augmentations except cropping, independently, has a 50\% chance of being applied to each sample. Random crop also resizes the sample input into a \(300\by 300\) square so it is needed for every image. The cropping algorithm also ensures that each sample contains at least one pollen grain.
+All the augmentations except cropping, independently, has a 50\% chance of being applied to each sample.
+Random crop also resizes the sample input into a \(300\by 300\) square so it is needed for every image.
+The cropping algorithm also ensures that each sample contains at least one pollen grain.
 
 
 \subsection{Experiments}
