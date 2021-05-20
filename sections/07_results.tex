@@ -17,7 +17,7 @@ The iterations are given on the horizontal axis are represent one forward-backpr
 The raw total loss values are shown with semi-transparent green points.
 The solid lines show the moving means for the two individual loss components.
 The green line shows the confidence loss component, while the blue line shows the localization loss component.
-The mini-batch with the lowest total loss is annotated with a green circle and occurs after the 1600th iteration with a loss of 0.514.
+The mini-batch with the lowest total loss is annotated with a green circle and occurs after the 1800th iteration with a loss of 0.496.
     }\label{fig:method-baseline-loss}
   \end{figure}
 
@@ -41,10 +41,12 @@ The difference between ground truths and true positives in the number of false n
     }\label{fig:method-baseline-detections}
   \end{figure}
 
-The baseline model achieves a mAP of \textbf{95.3\%} and an \(F_1\) score of 87.8\%.
-Every ground truth is correctly localized (i.e.~it is identified by at least one bounding box of arbitrary class), meaning misclassification is the primary source of error.
-A very small (\textcolor{red}{exact number panding}) number of false positives are returned for background items.
-Figure~\ref{fig:method-baseline-detections} gives a breakdown of all the detections made, where we again observe that the prediction error arises from redundant and miss-classified boxes.
+The baseline model achieves a mAP of \textbf{95.2\%} and an \(F_1\) score of \textbf{86.8\%}.
+Looking at predictions overall the recall is very high at 99.1\%, while precision is quite a bit lower at 77.2\%.
+Figure~\ref{fig:method-baseline-detections} breaks down all the detections made, the main observation is that false positive predictions are the almost singular source of error.
+37\% of false positives are miss-localizations, i.e.~an unlabeled entity is identified as a pollen grain.
+These entities are either non-pollen particles or pollen grains from unlabeled species.
+The remaining 63\% of false positives are miss-classifications, i.e.~the bounding box does correspond to a ground truth, but the class is incorrect.
 
 \begin{figure}[htb]
   \centering
