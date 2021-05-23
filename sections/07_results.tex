@@ -8,7 +8,7 @@ Unless specified otherwise, all performance metrics given in this section are me
 For measuring mAP we use an IoU of 0.5 as the acceptance threshold, and follow the interpolation method specified in Equation~\ref{eq:average-precision}
 
 \section{Baseline model}\label{sec:results-baseline}
-\begin{figure}[htb]
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=0.7\textwidth]{figs/method/baseline/loss2.pdf}
     \caption[Baseline training procedure]{%
@@ -30,7 +30,7 @@ We do however observe that the model performs better at localization than classi
 Logically this follows from the realization that the pollen grains are all distinct from the background, but are all quite similar.
 The model is therefore able to discriminate between background and pollen with relative ease, but has a harder time classifying species.
 
-\begin{figure}[htb]
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=0.7\textwidth]{figs/method/baseline/detections_test.pdf}
     \caption[Detections by type by class for the baseline on the test split]{%
@@ -48,7 +48,7 @@ Figure~\ref{fig:method-baseline-detections} breaks down all the detections made,
 These entities are either non-pollen particles or pollen grains from unlabeled species.
 The remaining 63\% of false positives are miss-classifications, i.e.~the bounding box does correspond to a ground truth, but the class is incorrect.
 
-\begin{figure}[htb]
+\begin{figure}[htbp]
   \centering
   \begin{subfigure}[t]{0.4\textwidth}
     \centering
@@ -73,7 +73,7 @@ This is due to the NMS filtering algorithm being run for each class independentl
 A remedy for this was implemented and tested where NMS was applied to all detections after the initial per-class NMS\@.
 The results from this were ambiguous; The precision did improve due to the decreased number of FP predictions, but the decrease in TP predictions caused a similar decrease in recall.
 In Figure~\ref{fig:method-overlapping-predictions} (right) for example, the correct prediction would get filtered out.
-In a model with improved classification confidence, this technique would be of benefit as it would improve overall precision without sacrificing recall.
+We maintain that with an improved classification error, this technique would be of benefit, as it would improve overall precision without sacrificing recall.
 
 \section{Model simplification}\label{sec:results-simplification}
 The first two experiments aim to explore ways in which we can reduce the computational complexity of the model without sacrificing performance.
@@ -81,16 +81,15 @@ In the first experiment we have changed the feature extraction network with ligh
 In the second we have reduced the amount of default boxes by deactivating source feature maps.
 
 \subsection{Feature extractor}
-Table~\ref{tab:result-base-network} gives the results from training the network with different base networks.
-Larger network could not be tested due to the memory limitations of the GPU used.
-We see a clear decrease in performance when using smaller networks with all performance metrics monotonically decreasing with the size of the feature extractor.
+Table~\ref{tab:result-base-network} gives the results from training the network with different feature extraction networks.
+As with the baseline, all the networks are pertained on image classification datasets.
+Larger networks, such as the deeper ResNet versions, could not be tested due to the memory limitations of the GPU\@.
+We see a clear decrease in performance when using smaller networks, and observe monotonically decreasing values for all performance metrics.
 
 Interestingly, the recall remains almost unchanged, meaning that the model's ability to localize pollen grains is largely maintained.
-The performance degradation is therefore mostly due to weaker classification confidence.
-A possible explanation for this is that localization as a task only requires the model to learn simple features relating to the general shape and color of a pollen grain, while classification involves more complex features that the smaller networks are not able to capture.
-
-
-
+The error is in the form of noise being added on top of the correct predictions.
+The performance degradation is therefore mostly due to increased classification error, creating redundant, poor predictions.
+A possible explanation for this is that localization, in terms of feature engineering requirements, only requires the model to learn simple features relating to the general shape and color of a pollen grain, while classification involves more complex features that the smaller networks are not able to capture.
 
 \begin{table}\centering
   \ra{1.3}
@@ -101,7 +100,7 @@ For each network, the number of trainable parameters for both the feature extrac
 \begin{tabular}{@{}lcrrrrcrr@{}}\toprule
   Network & \phantom{a} & \multicolumn{4}{c}{Performance} & \phantom{ab}&  \multicolumn{2}{c}{Parameters} \\
   \cmidrule{3-6} \cmidrule{8-9}
-        &&  maP &  Precision &  Recall &  Loc. &&  Extractor   & Total \\
+        &&  mAP &  Precision &  Recall &  Loc. &&  Extractor   & Total \\
   \midrule                                                                     
      ResNet 34 && 95.2 &      82.7  &   99.1  & 95.0  &&  \num{8.2e6} & \num{1.2e7} \\
      ResNet 18 && 92.6 &      81.9  &   97.4  & 92.8  &&  \num{2.8e6} & \num{6.7e6} \\
@@ -110,25 +109,64 @@ For each network, the number of trainable parameters for both the feature extrac
 \end{tabular}
 \end{table}
 
+\subsection{Layer activation}
+In the next experiment we deactivate layers of the extra structure responsible for generating the various source feature maps.
+The results are given in Table~\ref{tab:result-layer-deactivated} and do not point towards any strong trend.
+The last 3 layers of the model are larger than almost all grains in the dataset, and even with cropping, it is likely that their predictions do not contribute to the loss because the default boxes they encode rarely, if ever, get matched with a ground truth.
+Their inclusion then might result in parameters that do not get trained properly leading to those layers only producing noise instead of actual predictions.
+
+For the first three layers we do observe improved mAP, but the statistical significance is questionable.
+This does however call into question the importance of the larger feature maps, and strengthens our initial belief that the SSD model can be simplified without compromises to performance.
+
+
 \begin{table}\centering
   \ra{1.1}
   \caption[Performance when deactivating source layers]{Summary of experimental results when deactivating various source layers.
   The source layers are ordered 1--6 with layer 1 being the most granular \(38\by38\) feature map.}%
   \label{tab:result-layer-deactivated}
-\begin{tabular}{@{}llllllr@{}}\toprule
-  \multicolumn{6}{c}{Source layer activation} & \\
-  \cmidrule{1-6}
-  1 & 2 & 3 & 4 & 5 & 6 &   mAP\\
+\begin{tabular}{@{}llllllcrrr@{}}\toprule
+  \multicolumn{6}{c}{Source layer activation} & \phantom{a} & \multicolumn{3}{c}{Performance}\\
+  \cmidrule{1-6} \cmidrule{8-10}
+  1 & 2 & 3 & 4 & 5 & 6 &&   mAP & Precision & Recall \\
   \midrule
-  \ckm & \ckm & \ckm & \ckm & \ckm & \ckm & 95.2 \\
-  \ckm & \ckm & \ckm & \ckm & \ckm &      & 95.8 \\
-  \ckm & \ckm & \ckm & \ckm &      &      & 94.3 \\
-  \ckm & \ckm & \ckm &      &      &      & \textbf{96.7} \\
-  \ckm & \ckm &      &      &      &      & 95.0 \\
-  \ckm &      &      &      &      &      & 96.1 \\
-       & \ckm &      &      &      &      & 95.4 \\
+  \ckm & \ckm & \ckm & \ckm & \ckm & \ckm && 95.3  & 84.6 & 99.1 \\
+  \ckm & \ckm & \ckm & \ckm & \ckm &      && 95.5  & 77.4 & 99.1 \\
+  \ckm & \ckm & \ckm & \ckm &      &      && 95.3  & 81.2 & 98.7 \\
+  \ckm & \ckm & \ckm &      &      &      && \textbf{96.4}  & 79.3 & 99.1 \\
+  \ckm & \ckm &      &      &      &      && 95.6  & 80.4 & 98.7 \\
+  \ckm &      &      &      &      &      && 96.3  & 83.6 & 99.1 \\
+       & \ckm &      &      &      &      && 95.7  & 85.5 & 99.1 \\
   \bottomrule
 \end{tabular}
 \end{table}
 
-%\section{Sharpness}\label{sec:results-sharpness}
+\section{Sharpness}\label{sec:results-sharpness}
+Next we look at how sharpness of the ground truth data impacts model performance. In the first experiment we filter out the blurry images to see the effect this has on the inferences made by the model. In the second experiment we split the dataset based on sharpness and measure the models ability to make inferences across this sharpness boundary.
+
+Our first experiment aims to explore how the sharpness of the training data effects the predictions that the model is able to make.
+The results indicate that the model struggles with making inferences on grains with lower sharpness when such grains are filtered out of the training data.
+Figure~\ref{fig:method-sharpness-mean} breaks down the ground truth labels into true positives and false negatives and we see that the model is failing to predict pollen grains which have a sharpness below the minimum sharpness of the training data.
+It is important to note that the number of false negatives in each run is quite low, so the strength of any argument is weak.
+It could also be that the data is showing that the model is overfitting and is therefore not generalizing to the more blurry examples.
+
+Looking at the sharpness of the predictions made by the model shows a similar trend.
+In Figure~\ref{fig:method-sharpness-detections} we observe that restricting the training data creates what seems to be a threshold, bellow which the model does not make predictions.
+This shows that the model is loosing the ability to even localize blurry pollen grains, becoming blind to their existence.
+It seems clear that the features being learned from sharp images do not transfer to less sharp samples.
+
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{figs/method/sharpness/sharpness_TP_vs_FN.pdf}
+  \caption[Sharpness distribution of ground truths in test split by minimum training sharpness]{%
+Five experimental runs are shown, ground truth labels are filtered out of the training set by the sharpness requirement given in the plot header. Each plot gives the sharpness value for each GT in the test split divided into TP and FN\@.
+  }\label{fig:method-sharpness-mean}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{figs/method/sharpness/detection_sharpness_TP_vs_FP.pdf}
+  \caption[Sharpness distribution of model predictions in test split by minimum training sharpness]{%
+Explanation given in Figure~\ref{fig:method-sharpness-mean}, however sharpness is measured on predicted bounding boxes and is conversely divided into true positives and false positives.
+  }\label{fig:method-sharpness-detections}
+\end{figure}
