@@ -172,15 +172,27 @@ What we are seeing could be described as a type of `overfitting' where the model
 
 \subsection{Cross-sharpness inference}
 For the final experiment we aim to explore how well the model is able to generalize to sharpnesses out of its training data.
-The results are given as a confession matrix matching training data to testing data with the dataset being split between sharp and blurry based on the median sharpness over the entire training/testing split.
-Figure~\ref{fig:results-sharpness-inference}
+Figure~\ref{fig:results-sharpness-inference} gives a summary of the of the experimental procedure.
+As we might expect, the model performs 
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.9\textwidth]{figs/results/sharpness/confustion_balanced_test.pdf}
-  \caption[Performance across sharpness boundary]{%
-
+  \includegraphics[width=0.9\textwidth]{figs/results/sharpness/confustion_balanced_test_map.pdf}
+  \caption[mAP across sharpness boundary]{%
+The confusion matrix shows the result from training and testing the model on tree versions of the dataset. 
+The median sharpness value, \(\tilde{\mu}\), is used as a boundary and the dataset is divided into a sharp (\(>\tilde{\mu}\)) and a blurry (\(<\tilde{\mu}\)) data set.
+The same training/testing split is still used. 
+The horizontal axis denotes the version of the dataset used when computing mAP, while the vertical axis denotes the dataset used when testing.
+Two quadrants stand out with significantly lowers scores,  these represent the scenarios where the model is trained on either only the sharp or only the blurry data, and tested on the opposite.
   }\label{fig:results-sharpness-inference}
 \end{figure}
 
-Our results from~\ref{sec:results-minimum} indicate poor performance at generalizing from sharp training data to blurry test data.
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{figs/results/sharpness/confustion_balanced_test_dual.pdf}
+  \caption[Precision \& Recall across sharpness boundary]{%
+Breakdown of precision and recall values for cross-sharpness training. See Figure~\ref{fig:results-sharpness-inference} for detailed explanation.
+  }\label{fig:results-sharpness-pr-rec}
+\end{figure}
+
+Our results from Section~\ref{sec:results-minimum} indicate poor performance at generalizing from sharp training data to blurry test data.
