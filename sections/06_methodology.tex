@@ -9,7 +9,7 @@ Only pollen grains from a subset of species are actively tracked.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.8\textwidth]{figs/Snap-057.png}
+  \includegraphics[width=0.8\textwidth]{figs/method/Snap-057.png}
   \caption[Dataset example]{Example from the dataset with ground truth bounding boxes drawn.
 The image contains two classes: \textcolor{corylus}{corylus}, and \textcolor{alnus}{alnus}.}\label{fig:dataset-sample}
 \end{figure}
@@ -41,7 +41,7 @@ This is demonstrated in Figure~\ref{fig:aspect}, where we can see that the grain
 
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=0.9\textwidth]{figs/aspect_ratio.pdf}
+  \includegraphics[width=0.9\textwidth]{figs/method/aspect_ratio.pdf}
   \caption[Aspect ratios in the dataset]{The widths and heights of all ground truth boxes are plotted, longest against shortest.
 The lines denote the three aspect ratios used in the default boxes of the SSD model.
 Grains marked `Edge contact' are those in direct contact with the edge of the image and are most likely partially cropped out of frame.
@@ -63,7 +63,7 @@ Figure~\ref{fig:fourier-sinusoid} visualizes what the base components look like 
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.8\textwidth]{figs/fourier/fourier-sinusoid.pdf}
+  \includegraphics[width=0.8\textwidth]{figs/method/fourier/fourier-sinusoid.pdf}
   \caption[Fourier transform of sinusoid]{The figure shows two 2D sinusoid wave forms and their Fourier transform.
 The active components in the transform have been enlarged so as to make them visible in print.
 When unmodified, only a single pixel and its reflection about the origin is active.}\label{fig:fourier-sinusoid}
@@ -77,52 +77,50 @@ The coefficient of each component is encoded in the intensity of the pixel.
 In all the examples the lower frequency components dominate, which lights up the center region.
 The last two examples demonstrate how blurring an image eliminates the higher frequencies from the Fourier domain.
 
-
-
 \begin{figure}[htbp]
   \centering
   \begin{subfigure}[b]{0.2\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{figs/fourier/square_original.png}
+    \includegraphics[width=\textwidth]{figs/method/fourier/square_original.png}
     \vspace*{0.02\textwidth}
   \end{subfigure}%
   \hspace*{0.02\textwidth}
   \begin{subfigure}[b]{0.2\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{figs/fourier/square_45deg_original.png}
+    \includegraphics[width=\textwidth]{figs/method/fourier/square_45deg_original.png}
     \vspace*{0.02\textwidth}
   \end{subfigure}%
   \hspace*{0.02\textwidth}
   \begin{subfigure}[b]{0.2\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{figs/fourier/peppers_original.png}
+    \includegraphics[width=\textwidth]{figs/method/fourier/peppers_original.png}
     \vspace*{0.02\textwidth}
   \end{subfigure}%
   \hspace*{0.02\textwidth}
   \begin{subfigure}[b]{0.2\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{figs/fourier/peppers_blur_original.png}
+    \includegraphics[width=\textwidth]{figs/method/fourier/peppers_blur_original.png}
     \vspace*{0.02\textwidth}
   \end{subfigure}
 
   \begin{subfigure}[t]{0.2\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{figs/fourier/square_fourier.png}
+    \includegraphics[width=\textwidth]{figs/method/fourier/square_fourier.png}
   \end{subfigure}%
   \hspace*{0.02\textwidth}
   \begin{subfigure}[t]{0.2\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{figs/fourier/square_45deg_fourier.png}
+    \includegraphics[width=\textwidth]{figs/method/fourier/square_45deg_fourier.png}
   \end{subfigure}%
   \hspace*{0.02\textwidth}
   \begin{subfigure}[t]{0.2\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{figs/fourier/peppers_fourier.png}
+    \includegraphics[width=\textwidth]{figs/method/fourier/peppers_fourier.png}
   \end{subfigure}%
   \hspace*{0.02\textwidth}
   \begin{subfigure}[t]{0.2\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{figs/fourier/peppers_blur_fourier.png}
+    \includegraphics[width=\textwidth]{figs/method/fourier/peppers_blur_fourier.png}
   \end{subfigure}
   \caption[Demonstration of the Fourier transform]{
     Demonstration of the Fourier transform.
@@ -138,7 +136,7 @@ If we look at their corresponding Fourier spectra we can see that, as the percei
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.8\textwidth]{figs/fourier.png}
+  \includegraphics[width=0.8\textwidth]{figs/method/fourier/fourier.png}
   \caption[Fourier spectrum]{Pollen grains and their corresponding centered Fourier spectrum.
 The Fourier spectra are log scaled so that the higher frequencies become visible.}\label{fig:fourier}
 \end{figure}
@@ -187,13 +185,13 @@ A total of 316 pollen grains where evaluated, the distribution of their classes 
   \centering
   \begin{subfigure}[t]{0.48\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{figs/box.pdf}
+    \includegraphics[width=\textwidth]{figs/method/box.pdf}
     \caption{Box plot}\label{fig:sharpness-box}
 \end{subfigure}%
 \hfill
 \begin{subfigure}[t]{0.49\textwidth}
   \centering
-  \includegraphics[width=\textwidth]{figs/qden.pdf}
+  \includegraphics[width=\textwidth]{figs/method/qden.pdf}
   \caption{Density plot}\label{fig:sharpness-qden}
 \end{subfigure}
   \caption[Sharpness measure separability]{The sharpness measure grouped by class label.
@@ -211,7 +209,7 @@ As expected, most of the ground truths fall into the sharpest category, but ther
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.9\textwidth]{figs/sharpness_all.pdf}
+  \includegraphics[width=0.9\textwidth]{figs/method/sharpness_all.pdf}
   \caption[Distribution of sharpness across entire dataset]{Density plot showing the sharpness of all pollen grains in the dataset \((N=6384)\).
 The shaded sections indicate the distribution of sharpness classes, if the dataset is classified with the evaluation model.
 As expected, most grains fall into the sharpest category.}\label{fig:sharpness-all}
@@ -243,7 +241,7 @@ PyTorch offers canonical implementations of the most popular pre-trained models 
 
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=0.9\textwidth]{figs/model.pdf}
+  \includegraphics[width=0.9\textwidth]{figs/method/model.pdf}
   \caption[Model architecture overview]{Overview of the general structure of the model.
 The figure is inspired by the one given in the original paper, but has been modified to reflect our alterations.
 The horizontal lines denote the detection structure comprised of \(3\by 3\) convolutions for class confidences and bounding box regressions.
@@ -273,7 +271,7 @@ The default boxes are scaled independently from the size of the elements of the 
 Because of the depth of the feature extraction network leading into the feature layers, the receptive field of all elements in every feature map is the entire input.%
 \begin{wrapfigure}[14]{R}{0.4\textwidth}
   \centering
-  \includegraphics[width=0.4\textwidth]{figs/default_boxes}
+  \includegraphics[width=0.4\textwidth]{figs/method/default_boxes.png}
   \caption[Visualizing default boxes]{Visualization of default boxes on a \(5\by 5 \) feature map.}\label{fig:defaults}
 \end{wrapfigure}
 
@@ -294,7 +292,7 @@ This ensures that there are multiple positive examples for each ground truth.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.7\textwidth]{figs/priors_matching}
+  \includegraphics[width=0.7\textwidth]{figs/method/priors_matching.png}
   \caption[Default box matching]{Visualization of the result of the matching procedure.
 In \textcolor{red}{red} are all the default boxes that are matched to the ground truths, i.e.~those that have an IoU \( \geq 0.4 \) with a ground truth box, in \textcolor{nicegreen}{green}.}\label{fig:priors}
 \end{figure}
@@ -320,7 +318,7 @@ Negative examples are counted towards the confidence loss by descending loss unt
 
 \begin{wrapfigure}[9]{r}{0.35\textwidth}
   \centering
-  \includegraphics[width=0.35\textwidth]{figs/gausian_penelty.pdf}
+  \includegraphics[width=0.35\textwidth]{figs/method/gausian_penelty.pdf}
   \caption{Gaussian decay as a function of IoU for various \( \sigma \)}\label{fig:gauss}
 \end{wrapfigure}
 When the model is working, the raw output it produces is regression values for many thousands of bounding boxes with class confidence predictions. 

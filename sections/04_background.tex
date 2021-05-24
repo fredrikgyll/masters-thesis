@@ -20,13 +20,13 @@ A consequence of the high magnification is that the plane of focus is so narrow 
   \centering
   \begin{subfigure}[t]{0.4\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{figs/pollen_lm.jpg}
+    \includegraphics[width=\textwidth]{figs/background/pollen_lm.jpg}
     \caption{Light Microscopy}
   \end{subfigure}%
   \hspace*{0.04\textwidth}
   \begin{subfigure}[t]{0.4\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{figs/pollen_sem.jpg}
+    \includegraphics[width=\textwidth]{figs/background/pollen_sem.jpg}
     \caption{Scanning Electron Microscopy}
   \end{subfigure}
   \caption[Pollen grain imaging examples using LM and SEM]{\textit{Aetanthus coriaceus}.
@@ -66,7 +66,7 @@ Figure~\ref{fig:bbox} shows a correct solution to this problem.
 
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=0.7\textwidth]{figs/GT-Snap-080.png}
+  \includegraphics[width=0.7\textwidth]{figs/background/GT-Snap-080.png}
   \caption[Bounding boxes]{The image shows an LM image of 2 pollen grains with ground truth bounding boxes.
 The image contains to species, \textcolor{corylus}{corylus} and \textcolor{alnus}{alnus}.}\label{fig:bbox}
 \end{figure}
@@ -100,7 +100,7 @@ The resulting output of the convolution is referred to as a \textit{feature map}
 
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=0.4\textwidth]{figs/conv.pdf}
+  \includegraphics[width=0.4\textwidth]{figs/background/conv.pdf}
   \caption[Convolution operation]{Visualization of the convolution operation.
 In red we have a filter containing three \(3\by 3\) kernels.
 The element wise multiplication between the filter and receptive field and subsequent summation produces a single scaler in the feature map.
@@ -164,7 +164,6 @@ The linear transformation allows the network to restore the representative power
 By allowing the filters to only focus on learning features, instead of having to adapt to constantly shifting inputs training is accelerated, allowing us to train with a higher learning rate.
 
 \section{Metrics}
-
 An important step towards building a model is defining how we measure its performance.
 Implicitly, this is done through the construction of a \textit{Loss function}.
 The models we will examine in this thesis do not employ novel Loss functions, so delving into their construction is not warranted.
@@ -218,7 +217,7 @@ As the name indicates, it is defined as the ratio between the intersection and u
   \begin{gather*}
     \text{IoU}=\frac{\text{area of intersection}}{\text{area of union}}
   \end{gather*}
-  \includegraphics[width=0.55\textwidth]{figs/iou.pdf}
+  \includegraphics[width=0.55\textwidth]{figs/background/iou.pdf}
 \caption[Intersection over union]{Visualization of the intersection over union of two boundaries.
 The named region is shaded.}\label{fig:iou}
 \end{figure}

@@ -10,7 +10,7 @@ For measuring mAP we use an IoU of 0.5 as the acceptance threshold, and follow t
 \section{Baseline model}\label{sec:results-baseline}
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.7\textwidth]{figs/method/baseline/loss2.pdf}
+    \includegraphics[width=0.7\textwidth]{figs/results/baseline/loss2.pdf}
     \caption[Baseline training procedure]{%
 Training procedure for the baseline model over 2000 iterations.
 The iterations are given on the horizontal axis are represent one forward-backpropagation run with one mini-batch, while the mini-batch averaged loss is given in the vertical axis.
@@ -32,18 +32,18 @@ The model is therefore able to discriminate between background and pollen with r
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.7\textwidth]{figs/method/baseline/detections_test.pdf}
+    \includegraphics[width=0.7\textwidth]{figs/results/baseline/detections_test.pdf}
     \caption[Detections by type by class for the baseline on the test split]{%
 Breakdown of predictions by class.
 For each label, the first column gives the number of ground truth labels in the test split.
 The second column gives the number or predicted boxes for that class, broken down into true positive matches in green, and false negatives in red.
 The difference between ground truths and true positives in the number of false negatives. 
-    }\label{fig:method-baseline-detections}
+    }\label{fig:results-baseline-detections}
   \end{figure}
 
 The baseline model achieves a mAP of \textbf{95.2\%} and an \(F_1\) score of \textbf{86.8\%}.
 Looking at predictions overall the recall is very high at 99.1\%, while precision is quite a bit lower at 77.2\%.
-Figure~\ref{fig:method-baseline-detections} breaks down all the detections made, the main observation is that false positive predictions are the almost singular source of error.
+Figure~\ref{fig:results-baseline-detections} breaks down all the detections made, the main observation is that false positive predictions are the almost singular source of error.
 37\% of false positives are miss-localizations, i.e.~an unlabeled entity is identified as a pollen grain.
 These entities are either non-pollen particles or pollen grains from unlabeled species.
 The remaining 63\% of false positives are miss-classifications, i.e.~the bounding box does correspond to a ground truth, but the class is incorrect.
@@ -52,27 +52,27 @@ The remaining 63\% of false positives are miss-classifications, i.e.~the boundin
   \centering
   \begin{subfigure}[t]{0.4\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{figs/method/baseline/Snap-408.pdf}
+    \includegraphics[width=\textwidth]{figs/results/baseline/Snap-408.pdf}
   \end{subfigure}%
   \hspace*{0.04\textwidth}
   \begin{subfigure}[t]{0.4\textwidth}
     \centering
-    \includegraphics[width=\textwidth]{figs/method/baseline/Snap-028.pdf}
+    \includegraphics[width=\textwidth]{figs/results/baseline/Snap-028.pdf}
   \end{subfigure}
   \caption[Predictions showing TP overlapped by FP from different class]{Two predictions with GT in \textcolor{nicegreen}{green}, TP in \textcolor{red}{red}, and FP in \textcolor{nicepink}{pink}.
 The labels give the first letter of the class and the prediction confidence in the range [0,100].
 All TP labels are placed at the NW corner of the bounding box.
 The FP labels are placed at the other three corners according to class.
 In the left image, a FP box is predicted with a lower confidence than the TP\@.
-In the right image, the FP corylus prediction has a higher confidence than the TP alnus prediction.}\label{fig:method-overlapping-predictions}
+In the right image, the FP corylus prediction has a higher confidence than the TP alnus prediction.}\label{fig:results-overlapping-predictions}
 \end{figure}
 
-Figure~\ref{fig:method-overlapping-predictions} shows two test samples containing overlapping true and false positive predictions.
+Figure~\ref{fig:results-overlapping-predictions} shows two test samples containing overlapping true and false positive predictions.
 This is due to the NMS filtering algorithm being run for each class independently, which causes double predictions in cases where predictions for multiple classes are produced for the same pollen grain.
 
 A remedy for this was implemented and tested where NMS was applied to all detections after the initial per-class NMS\@.
 The results from this were ambiguous; The precision did improve due to the decreased number of FP predictions, but the decrease in TP predictions caused a similar decrease in recall.
-In Figure~\ref{fig:method-overlapping-predictions} (right) for example, the correct prediction would get filtered out.
+In Figure~\ref{fig:results-overlapping-predictions} (right) for example, the correct prediction would get filtered out.
 We maintain that with an improved classification error, this technique would be of benefit, as it would improve overall precision without sacrificing recall.
 
 \section{Model simplification}\label{sec:results-simplification}
@@ -143,30 +143,41 @@ This does however call into question the importance of the larger feature maps, 
 \section{Sharpness}\label{sec:results-sharpness}
 Next we look at how sharpness of the ground truth data impacts model performance. In the first experiment we filter out the blurry images to see the effect this has on the inferences made by the model. In the second experiment we split the dataset based on sharpness and measure the models ability to make inferences across this sharpness boundary.
 
+\subsection{Minimum training sharpness}\label{sec:results-minimum}
 Our first experiment aims to explore how the sharpness of the training data effects the predictions that the model is able to make.
 The results indicate that the model struggles with making inferences on grains with lower sharpness when such grains are filtered out of the training data.
-Figure~\ref{fig:method-sharpness-mean} breaks down the ground truth labels into true positives and false negatives and we see that the model is failing to predict pollen grains which have a sharpness below the minimum sharpness of the training data.
-It is important to note that the number of false negatives in each run is quite low, so the strength of any argument is weak.
-It could also be that the data is showing that the model is overfitting and is therefore not generalizing to the more blurry examples.
+Figure~\ref{fig:results-sharpness-gt} breaks down the ground truth labels into true positives and false negatives and we see that the model is failing to predict pollen grains which have a sharpness below the minimum sharpness of the training data.
 
-Looking at the sharpness of the predictions made by the model shows a similar trend.
-In Figure~\ref{fig:method-sharpness-detections} we observe that restricting the training data creates what seems to be a threshold, bellow which the model does not make predictions.
+In Figure~\ref{fig:results-sharpness-detections} we observe that restricting the training data creates what seems to be a threshold, bellow which the model does not make predictions.
 This shows that the model is loosing the ability to even localize blurry pollen grains, becoming blind to their existence.
 It seems clear that the features being learned from sharp images do not transfer to less sharp samples.
 
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=\textwidth]{figs/method/sharpness/sharpness_TP_vs_FN.pdf}
-  \caption[Sharpness distribution of ground truths in test split by minimum training sharpness]{%
-Five experimental runs are shown, ground truth labels are filtered out of the training set by the sharpness requirement given in the plot header. Each plot gives the sharpness value for each GT in the test split divided into TP and FN\@.
-  }\label{fig:method-sharpness-mean}
+  \begin{subfigure}[t]{\textwidth}
+    \includegraphics[width=\textwidth]{figs/results/sharpness/sharpness_TP_vs_FN.pdf}
+    \subcaption{Sharpness distribution of \textit{ground truths} by prediction result in test split by minimum training sharpness}\label{fig:results-sharpness-gt}
+  \end{subfigure}
+  \begin{subfigure}[t]{\textwidth}
+    \includegraphics[width=\textwidth]{figs/results/sharpness/detection_sharpness_TP_vs_FP.pdf}
+    \subcaption{Sharpness distribution of \textit{model predictions} by prediction result in test split by minimum training sharpness}\label{fig:results-sharpness-detections}
+  \end{subfigure}
+  \caption[Sharpness distribution of model predictions in test split by minimum training sharpness]{%
+  Five experimental runs are shown, ground truth labels are filtered out of the training set by the sharpness requirement given in the plot header. In~\subref{fig:results-sharpness-gt}, sharpness is measured on original images using ground truth bounding boxes. In~\subref{fig:results-sharpness-detections}, sharpness is measured on the resampled \(300\by300\) pixel patches. This effects the scaling of the sharpness measure, and sharpness values from the two figures are therefore not directly comparable.}
 \end{figure}
+
+\subsection{Cross-sharpness inference}
+For the final experiment we aim to explore how well the model is able to generalize to sharpnesses out of its training data.
+The results are given as a confession matrix matching training data to testing data with the dataset being split between sharp and blurry based on the median sharpness over the entire training/testing split.
+Figure~\ref{fig:results-sharpness-inference}
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=\textwidth]{figs/method/sharpness/detection_sharpness_TP_vs_FP.pdf}
-  \caption[Sharpness distribution of model predictions in test split by minimum training sharpness]{%
-Explanation given in Figure~\ref{fig:method-sharpness-mean}, however sharpness is measured on predicted bounding boxes and is conversely divided into true positives and false positives.
-  }\label{fig:method-sharpness-detections}
+  \includegraphics[width=0.9\textwidth]{figs/results/sharpness/confustion_balanced_test.pdf}
+  \caption[Performance across sharpness boundary]{%
+
+  }\label{fig:results-sharpness-inference}
 \end{figure}
+
+Our results from~\ref{sec:results-minimum} indicate poor performance at generalizing from sharp training data to blurry test data.
