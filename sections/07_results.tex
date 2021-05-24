@@ -148,10 +148,13 @@ Our first experiment aims to explore how the sharpness of the training data effe
 The results indicate that the model struggles with making inferences on grains with lower sharpness when such grains are filtered out of the training data.
 Figure~\ref{fig:results-sharpness-gt} breaks down the ground truth labels into true positives and false negatives and we see that the model is failing to predict pollen grains which have a sharpness below the minimum sharpness of the training data.
 
+Looking at the sharpness of the predictions made by the model we see a corollary trend in the false positive predictions.
 In Figure~\ref{fig:results-sharpness-detections} we observe that restricting the training data creates what seems to be a threshold, bellow which the model does not make predictions.
 This shows that the model is loosing the ability to even localize blurry pollen grains, becoming blind to their existence.
 It seems clear that the features being learned from sharp images do not transfer to less sharp samples.
 
+It is important to note that the sample size, especially in the case of false negatives, is quite low, which weakens arguments made based on their distributions.
+What we are seeing could be described as a type of `overfitting' where the model will not generalize outside of the sharpness bound of the training data, and the implications this has for a hypothetical production system is unclear.
 
 \begin{figure}[htbp]
   \centering
