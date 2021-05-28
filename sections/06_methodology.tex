@@ -334,7 +334,7 @@ Boxes are considered overlapping if their IoU is larger than some threshold \(N_
 NMS performs well in most settings, but has a particular weakness in cases where the target boxes of objects overlap.
 In these situations, NMS will often only return a single bounding box for one of the objects, ignoring the rest.
 Given that the data in this project exhibits this characteristic we have replaced the standard NMS algorithm with a more modern version, Soft-NMS, introduced in~\cite{bodla2017softnms}.
-The pseudocode for both algorithms is as follows:
+The pseudocode for both algorithms is as follows,
 %
 \begin{pseudofunc}{NMS}{\(\mathcal{B}=\{b_1,\ldots,b_N \},~\mathcal{S}=\{s_1,\ldots,s_N \},~N_t\)}
   \item \(\mathcal{D} \leftarrow \{ \} \)

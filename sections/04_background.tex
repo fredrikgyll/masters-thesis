@@ -89,7 +89,7 @@ The two layers are stacked alternatingly, with the idea being that the complexit
 The central concept of the convolutional layer is the \textit{convolution operation}.
 Let the kernel, \(w\), be a \(k\by k\) dimensional matrix.
 This kernel will operate on the output of the preceding layer, \(x\).
-The output from the convolution can be calculated as follows:
+The output from the convolution can be calculated as follows,
 
 \[w\ast x_{ij}=\sum_{m}\sum_{n}  w_{mn}x_{i-m,j-n}\]
 
@@ -171,7 +171,7 @@ The metrics used when measuring the performance of object detectors, specificall
 
 \subsection{Precision and recall}
 The precision and recall of a model refer to its ability to correctly locate and label the objects within an image.
-Before we can define precision and recall we must first introduce the following quantities:
+Before we can define precision and recall we must first introduce the following quantities,
 
 \begin{center}
   {\setlength{\fboxsep}{1em}
@@ -186,7 +186,7 @@ Before we can define precision and recall we must first introduce the following 
 
 Precision measures the accuracy of the model, i.e.,~how many of the predictions are correct.
 Recall measures how many of the objects the model correctly labels.
-They are computed from the above quantities as follows:
+They are computed from the above quantities as follows,
 
 \begin{align*}
   \text{\bf precision}=\frac{TP}{TP+FP}\\[1em]
@@ -210,7 +210,7 @@ Precision and recall form the basis for how all object detection models are eval
 For this we use the \textit{intersection over union} (IoU) between our predictions and ground truths.
 
 IoU measures the overlap between two boundaries.
-As the name indicates, it is defined as the ratio between the intersection and union of the boundaries:
+As the name indicates, it is defined as the ratio between the intersection and union of the boundaries,
 
 \begin{figure}[htb]
   \centering
