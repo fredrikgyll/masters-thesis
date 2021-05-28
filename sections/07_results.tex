@@ -25,9 +25,9 @@ We start by presenting the results from training the model in its baseline confi
 The training procedure is given in Figure~\ref{fig:method-baseline-loss}.
 The stochastic variation in the loss curve is characteristic for mini-batch training. 
 We can also see that the confidence loss accounts for most of the total loss throughout the training process.
-The components of the loss function (Equation~\ref{eq:loss}) are independent, meaning that their ratio does not indicate a difference in performance at the two different tasks.
+The components of the loss function (Equation~\ref{eq:loss}) are independent, meaning their ratio does not indicate a difference in performance at the two different tasks.
 We do however observe that the model performs better at localization than classification.
-Logically this follows from the realization that the pollen grains are all distinct from the background but are all quite similar.
+Logically this follows from the realization that the pollen grains are all more easily distinguished from the background, than they are to classify.
 The model is therefore able to discriminate between background and pollen with relative ease, but has a harder time classifying species.
 
 \begin{figure}[htbp]
@@ -73,7 +73,10 @@ This is due to the NMS filtering algorithm being run for each class independentl
 A remedy for this was implemented and tested where NMS was applied to all detections after the initial per-class NMS\@.
 The results from this were ambiguous; The precision did improve due to the decreased number of FP predictions, but the decrease in TP predictions caused a similar decrease in recall.
 In Figure~\ref{fig:results-overlapping-predictions} (right) for example, the correct prediction would get filtered out.
-We maintain that with an improved classification error, this technique would be of benefit, as it would improve overall precision without sacrificing recall.
+
+With the small number of classes in the dataset, the problem of double predictions is quite small.
+A larger dataset could however suffer more from this issue when there are more classes which all share characteristics.
+For the purposes of counting, it might not be preferable to prune these overlapping predictions but rather include and quantify the resulting overestimation as a part of the overall counting system.
 
 \section{Model simplification}\label{sec:results-simplification}
 The first two experiments aim to explore ways in which we can reduce the computational complexity of the model without sacrificing performance.
@@ -89,7 +92,10 @@ We see a clear decrease in performance when using smaller networks and observe m
 Interestingly, the recall remains almost unchanged, meaning that the model's ability to localize pollen grains is largely maintained.
 The error is in the form of noise being added on top of the correct predictions.
 The performance degradation is therefore mostly due to increased classification error, creating redundant, poor predictions.
-A possible explanation for this is that localization, in terms of feature engineering requirements, only requires the model to learn simple features relating to the general shape and color of a pollen grain, while classification involves more complex features that the smaller networks are not able to capture.
+A possible explanation for this is that localization, in terms of feature requirements, only requires the model to learn simple features relating to the general shape and color of a pollen grain, while classification involves more complex features that the smaller networks are not able to capture.
+
+This experiment helps reveal the apparent inequality between the two tasks that the model is learning, namely localization and classification.
+Localization seems to be a much easier task to learn, given how invariant the the model is to the changing extractor, while seeing a markedly higher degradation in classification.
 
 \begin{table}\centering
   \ra{1.3}
@@ -118,6 +124,10 @@ Their inclusion then might result in parameters that do not get trained properly
 For the first three layers we do observe improved mAP, but the statistical significance is questionable.
 This does however call into question the importance of the larger feature maps and strengthens our initial belief that the SSD model can be simplified without compromises to performance.
 
+Other object detection tasks may also have certain differences in the distribution of size and shape of objects between classes.
+The multiple layers then allow for specialization where some layers become better at detection certain objects than others.
+With pollen we again have a much more uniform dataset where size differences between classes is negligible, which in turn might also explain why we don't observe any strong relationship between layer activation and performance.
+This is compounded by the limited number of classes and could change if we were to use a larger, more diverse, dataset.
 
 \begin{table}\centering
   \ra{1.1}
@@ -211,8 +221,33 @@ What this implies for further development of this system is difficult to say and
 In a scenario where the model only needs to work on sharp data, we see that excluding blurry data could improve overall performance.
 However one can easily imagine a system that could benefit from being able to localize outside the current focus plane, e.g.~in a  search-based system that explores a slide live, the model could localize a blurry grain and refocus the microscope to classify it.
 
-While it seems too follow logically from the presence of more granular and detailed features in sharp data that the sharp model is more precise when classifying than its blurry counterpart, it is less obvious why it seemingly looses all ability to localize blurry grains.
+\begin{figure}[htbp]
+  \centering
+  \begin{subfigure}[t]{0.35\textwidth}
+    \includegraphics[width=\textwidth]{figs/results/sharpness/Snap-242-sharp.png}
+    \subcaption{Sharp labels}\label{fig:results-sharpness-sharp}
+  \end{subfigure}
+  \hspace*{0.4em}
+  \begin{subfigure}[t]{0.35\textwidth}
+    \includegraphics[width=\textwidth]{figs/results/sharpness/Snap-242-blurry.png}
+    \subcaption{Blurry labels}\label{fig:results-sharpness-blurry}
+  \end{subfigure}
+  \caption[Data sample showing split between sharp and blurry data]{%
+Sample from the dataset. Ground truths in the sharp partition are drawn in \textcolor{poaceae}{blue}, while the blurry are drawn in \textcolor{alnus}{green}.
+  }\label{fig:results-sharp-gt}
+\end{figure}
+
+While it seems too follow logically from the presence of more granular and detailed features in sharp data that the sharp model is more precise than its blurry counterpart, it is less obvious why it seemingly looses all ability to localize blurry grains.
 For one possible explanation we must look not at the labeled data, but at everything else we are asking the model to ignore.
-In our dataset, almost every object that appears in focus, is a ground truth.
+
+As a result of the data collection procedure, where at least one pollen grain is completely in focus in every sample, the sharpest object in any given sample is always a pollen grain.
+Figure~\ref{fig:results-sharp-gt} shows an example of the split, and we can see that all in focus objects are labeled ground truths. 
+This trend hold over the entire dataset, where almost every object that appears in focus, is a labeled ground truth.
 The inverse assumption that everything out of focus is not a ground truth does not hold, except in the case of the sharp training split.
-So while the sharp model can rely entirely on the presence of sharp features when learning `what is a pollen grain?', the blurry and baseline models must also learn to differentiate between out of focus pollen grains and out of focus background.
+So while the sharp model can rely almost entirely on the presence of sharp features when learning `what is a pollen grain?', the blurry and baseline models must also learn to differentiate between out of focus pollen grains and out of focus background.
+
+The boundary value set to the median sharpness value over the total training split.
+This was done to give each model the same number of ground truths.
+While this is a valid decision, looking at Figure~\ref{fig:results-sharp-gt}, many pollen grains in the blurry category seem quite sharp to the naked eye.
+With a larger dataset, it would be more preferable to run this experiment with multiple splits.
+The optimal sharpness distribution remains unknown although we have shown evidence to support that excluding blurry data causes the model too fixate on only the sharp features in images.
