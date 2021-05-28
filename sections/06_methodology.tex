@@ -435,9 +435,60 @@ We have employed the following augmentations,
   \item Random crop.
 \end{enumerate}
 %
-All the augmentations except cropping, independently, has a 50\% chance of being applied to each sample.
+All the augmentations except cropping, independently, have a 50\% chance of being applied to each sample.
 Random crop also resizes the sample input into a \(300\by 300\) square so it is needed for every image.
 The cropping algorithm also ensures that each sample contains at least one pollen grain.
 
+\section{Experiments}
+Four experiments are designed, two targeting each research question.
+With the goal of developing a system for automated pollen counting, we aim to explore how the peculiarities of this domain interact with the more established methods that have been developed for object detection.
+For each experiment we will explain its rational and setup.
 
-\subsection{Experiments}
+\subsection{Feature extractor}
+The largest section of the model is the feature extraction block, so with the goal of decreasing computational complexity, shrinking this block would have the largest impact.
+Because this dataset differs so much from the common datasets used to pre-train the feature extractors, it is difficult to predict the impact from using a smaller network.
+On one hand the dataset is more uniform with similar backgrounds for every image, on the other hand all pollen grains look similar to each other so depth might be necessary to differentiate between them.
+In the first experiment we will train the model with three different pre-trained feature extraction networks and compare them.
+The selected networks are given in Table~\ref{tab:ex01}
+
+\begin{table}[h]\centering
+  \ra{1.2}
+\caption[Feature extraction networks]{Chosen feature extraction networks and relative size calculated by number of trainable parameters}%
+\label{tab:ex01}
+\begin{tabular}{@{}lr@{}}\toprule
+  Network & Relative size \\
+  \midrule                                                                     
+     ResNet 34 & 1.00  \\
+     ResNet 18 & 0.34  \\
+  MobileNet V2 & 0.02  \\  
+  \bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Layer activation}
+The auxiliary structure also has opportunities for simplification.
+The main rational for SSD's multiple stacked feature maps is to allow for predictions at multiple scales in the image.
+With pollen grains however, we have very uniform sizes and shapes throughout the dataset.
+We believe that some or most of the feature maps can be removed from the model without any performance degradation.
+To test this the model will be trained in multiple configurations where we remove certain feature maps from the model.
+In practice, we will only deactivate the detection blocks that are fed by the feature maps so that we can deactivate layers arbitrarily without disturbing successive layers of the model.
+
+\subsection{Minimum training sharpness}
+As we have observed, the dataset contains a wide variety of grains spanning many levels of blur.
+It remains unclear what impact blurry data has on the training of fully convolutional object detection systems.
+With this experiment we aim to explore if there is a correlation between the distribution of sharpness in the training data and model predictions.
+We are less interested in the performance of the model, and more interested in how the distribution of sharpness values in the training data changes the distribution of sharpness in both the predictions of the model and in the ground truths it does or does not detect.
+
+For our experiment we will train the model on various versions of the same dataset.
+Each model will be trained on a subset of the ground truth labels using a sharpness filter which prunes any ground truth bellow a certain threshold.
+Raising the threshold limits the model to only those pollen grains sharper than the threshold.
+5 thresholds are used, spanning a range from 0 to 0.08 which covers the lower half of sharpness values contained in the dataset.
+
+We expect to see fewer correct predictions among the ground truths of the testing split which have a lower sharpness score that the threshold. 
+
+\subsection{Cross-sharpness inference}
+In the final experiment we wish to further explore what ability the model has to generalize outside of the sharpness values it is exposed to. 
+We aim to uncover if a trained model can be transferred to different sharpness ranges.
+Similar to the previous experiment we will train model on a subset of ground truths, however we will now also divide the testing set into to partitions.
+With a baseline set containing all ground truths we then have three partitions of both training and testing data.
+Each of the three resulting models will be tested on each of the tree test partitions, creating a kind on sharpness confusion matrix.
