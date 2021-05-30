@@ -31,13 +31,13 @@ A summary of the dataset is given in Table~\ref{tab:dataset}.
   \end{tabular}
 \end{table}
 
-
-Many of the images are taken from the same view point, but with the focus point set to different grains.
-The ground truth labeled are drawn for all present pollen grains, regardless of the how blurred they appear.
-This is done so that the dataset may be modified for the purpose of our analysis of sharpness and model performance in regards to \textit{RQ2}.
+Many of the images are taken from the same view point, but with the focus plane set to different grains.
+The ground truth labels are drawn for all present pollen grains, regardless of the how blurred they appear.
+This is done so that the dataset may be modified for the purpose of analyzing sharpness and model performance in regards to \textit{RQ2}.
 
 As opposed to more general object detection tasks, where there is a large variance in both the apparent size and shape of objects within an image, this dataset is much more regular.
-This is demonstrated in Figure~\ref{fig:aspect}, where we can see that the grains are mostly square in shape and between 100 and 150 pixels wide.
+Looking at Figure~\ref{fig:aspect}, the grains are mostly square in shape and between 100 and 150 pixels wide.
+%TODO more here
 
 \begin{figure}[htb]
   \centering
@@ -45,19 +45,17 @@ This is demonstrated in Figure~\ref{fig:aspect}, where we can see that the grain
   \caption[Aspect ratios in the dataset]{The widths and heights of all ground truth boxes are plotted, longest against shortest.
 The lines denote the three aspect ratios used in the default boxes of the SSD model.
 Grains marked `Edge contact' are those in direct contact with the edge of the image and are most likely partially cropped out of frame.
-We can clearly see that the grains are quite regular in both shape and size}\label{fig:aspect}
+The grains are all quite regular in both shape and size}\label{fig:aspect}
 \end{figure}
-
-%\section{Architecture}\label{sec:architecture}
 
 \section{Sharpness Measure}\label{sec:method-sharpness}
 Analyzing how the sharpness of pollen grains affects detection performance requires an objective sharpness measure.
-In this section we will detail how sharpness will be measured for the purpose of our analysis.
+This section details the chosen method of measuring local sharpness of pollen grains within sample images.
 The measure is based on Fourier analysis and its performance has been tested on the training data.
 
 \subsection{Fourier analysis}
 Fourier analysis describes the general method of utilizing the Fourier transform to analyze the component frequencies present is some signal.
-For the purpose of Fourier analysis we can interpret an image as a collection of signals, each of which describe the change in brightness value when traveling across the image in some direction.
+For the purpose of Fourier analysis, imagine the image as a collection of signals, each of which describe the change in brightness value when traveling across the image in some direction.
 Taking the Fourier transform of an image then produces a 2-dimensional matrix where the intensity of each element represents a the coefficient of a 2-dimensional sinusoid base component of the image.
 Figure~\ref{fig:fourier-sinusoid} visualizes what the base components look like and demonstrates exactly what is encoded in the Fourier spectrum.
 
@@ -131,7 +129,7 @@ The Fourier spectra mapped to grayscale values with a truncated linear amplitude
 Using the Fourier spectrum to measure sharpness follows from the realization that there is a strong relationship between the sharpness of an image in the spacial domain and the distribution of frequency components in the frequency domain.
 Sharp features produce high frequencies while blur smooths out the changes in brightness, lowering the frequencies.
 Figure~\ref{fig:fourier} shows three different pollen grains, captured with progressively more blur.
-If we look at their corresponding Fourier spectra we can see that, as the perceived blur increases, the amount of high frequency components decrease.
+By visual inspection it is clear that as the perceived blur increases the amount of high frequency components also decreases.
 
 
 \begin{figure}[htbp]
@@ -142,7 +140,7 @@ The Fourier spectra are log scaled so that the higher frequencies become visible
 \end{figure}
 
 \subsection{Measuring sharpness}
-We must then decide how to encode this change in frequency distribution as a scalar sharpness measure.
+The problem then is to decide how to encode this change in frequency distribution as a scalar sharpness measure.
 \citeauthor{de2013image} propose a simple method which counts the number of components in the Fourier spectrum having a value above a certain threshold.
 The operation is described in Equation (\ref{eq:sharp}).
 
@@ -156,15 +154,15 @@ The operation is described in Equation (\ref{eq:sharp}).
 \end{equation}
 
 Here \(\mathcal{F}\) is the discrete the Fourier transform operating on a input image \(a\).
-We ignore the phase component of the complex valued output, leaving \(\mathbf{X}\) to contain only the magnitude of the frequency components.
-The scaling factor of the threshold value, \(\mu \), was found to produce good results on our data, without modification. \(S\) is the sharpness measure.
+The phase component of the complex valued output is ignored, leaving \(\mathbf{X}\) to contain only the magnitude of the frequency components.
+The scaling factor of the threshold value, \(\mu \), was found to produce good results on the data, without modification. \(S\) is the sharpness measure.
 
 Validating the sharpness measure is an important task.
 The weight of any argument made based on analysis using this measure is predicated on its soundness.
-There are many different approaches to this, we have chosen to compare the objective measure with subjective measurements of perceived sharpness on a subset of the training data.
+There are many different approaches to this, one of which is to compare the objective measure with subjective measurements of perceived sharpness on a subset of the training data.
 
 \subsection{Evaluating the sharpness measure}
-The basis of our evaluation is a new dataset created from a small random subset of the training examples.
+The basis of the evaluation is a new dataset created from a small random subset of the training examples.
 Each ground truth is then given sharpness scores based on perceived sharpness and the objective measure.
 Determining perceived sharpness of a pollen grain with high fidelity was found to be highly subjective and non-reproducible with repeated independent scoring, so a simple classification was instead performed.
 Images where separated into three classes representing perceived sharpness.
@@ -199,13 +197,13 @@ There is a large overlap between adjacent classes, but the IQRs in (a) are clear
 The correlation between perceived and measured sharpness is also clear.}\label{fig:sharpness}
 \end{figure}
 
-Looking at Figure~\ref{fig:sharpness} we can see a clear correlation between the mean of the distribution, and the perceived sharpness.
+Figure~\ref{fig:sharpness} shows a clear correlation between the mean of the distribution, and the perceived sharpness.
 The overlap is to be expected, given the mapping from a continuous predictor onto a categorical label.
-To further evaluate the performance of the sharpness measure, we construct a very simple statistical model, in the form of a decision tree, and test its ability to differentiate between the classes.
+To further evaluate the performance of the sharpness measure a very simple decision tree model is constructed, and its ability to differentiate between the classes is tested.
 The model achieved a test accuracy of 83.5\%. 
 
-In Figure~\ref{fig:sharpness-all} we have computed the sharpness of every ground truth in the dataset in a density plot showing the distribution.
-As expected, most of the ground truths fall into the sharpest category, but there is a spread, allowing us to analyze the relationship between sharpness and model performance.
+Figure~\ref{fig:sharpness-all} shows the computed the sharpness of every ground truth in the dataset in a density plot, visualizing the approximate distribution.
+As expected, most of the ground truths fall into the sharpest category, but there is a spread, allowing for the analysis of the relationship between sharpness and model performance.
 
 \begin{figure}[htbp]
   \centering
@@ -217,16 +215,17 @@ As expected, most grains fall into the sharpest category.}\label{fig:sharpness-a
 
 \section{Architecture}\label{sec:method-arch}
 
-The model we have chosen to implement is the Single Shot Multibox Detector, a brief explanation of which was given in Section~\ref{sec:ssd}.
+The model that has been implemented is the Single Shot Multibox Detector, a brief explanation of which was given in Section~\ref{sec:ssd}.
 This section gives a more thorough explanation of the model and its implementation, with a focus on the changes that have been made from the original.
 Most of these changes are motivated by more recent research featured in newer models.
 The reasoning behind choosing a now relatively old model framework is mostly based on its architecture, which lends itself to alteration and simplification.
 
 
-Our implementation is based on an implementation by NVIDIA\footnote{Released under the Apache 2.0 License, \href{https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/Detection/SSD}{URL:\\ } \url{https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/Detection/SSD}}, the basic structure is shown in Figure~\ref{fig:model}.
-For the implementation we divide the model into four parts.
-First, we have the feature extraction network, which feeds into an \textit{auxiliary structure} which gradually steps down the dimensions of the feature map.
-Finally we have two detection structures, one for class confidences, and one for bounding box regression.
+The implementation is based on an implementation by NVIDIA\footnote{Released under the Apache 2.0 License, \href{https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/Detection/SSD}{URL:\\ } \url{https://github.com/NVIDIA/DeepLearningExamples/tree/master/PyTorch/Detection/SSD}}, the basic structure is shown in Figure~\ref{fig:model}.
+The implementation can be divided into four parts.
+A feature extraction network first transforms the input image into a set of high level feature maps, which are then fed into an \textit{auxiliary structure} which gradually steps down the dimensions of the feature map and in the process creates a set of source feature maps.
+Two detection structures then consume the source feature maps which produces the final predictions.
+One set of filters produces class confidence scores, and one produces bounding box regressions.
 
 \subsection{Model}
 The model comprises three distinct parts, a feature extraction network transferred from a pre-trained model, an auxiliary structure which creates a set of feature maps, and a detection structure which creates the bounding box regressions and class predictions.
@@ -234,8 +233,8 @@ The model is purely convolutional with no fully connected layers.
 
 The feature extractor can be any classification network that can produce a feature map of the correct dimensions.
 In the original paper the VGG-16 network is used~\parencite{simonyan2015deep} without any particular justification as to why.
-We have chosen ResNet-34~\parencite{he2015deep} for our baseline configuration.
-The main reason for this being its superior performance over VGG, and the ease with which it integrates with the auxiliary structure.
+ResNet-34 is used in the baseline configuration.
+The main reason for this being its superior performance over VGG, and the ease with which it integrates with the auxiliary structure~\parencite{he2015deep}.
 ResNet-34 is the largest of the ResNet family which fits on the GPU used for most of the experimentation.
 PyTorch offers canonical implementations of the most popular pre-trained models as part of their API\@.
 
@@ -243,7 +242,7 @@ PyTorch offers canonical implementations of the most popular pre-trained models 
   \centering
   \includegraphics[width=0.9\textwidth]{figs/method/model.pdf}
   \caption[Model architecture overview]{Overview of the general structure of the model.
-The figure is inspired by the one given in the original paper, but has been modified to reflect our alterations.
+The figure is inspired by the one given in the original paper, but has been modified to reflect the alterations that have been made.
 The horizontal lines denote the detection structure comprised of \(3\by 3\) convolutions for class confidences and bounding box regressions.
 Here \textsf{C} is the number of classes including one for background}\label{fig:model}
 \end{figure}
@@ -275,13 +274,13 @@ Because of the depth of the feature extraction network leading into the feature 
   \caption[Visualizing default boxes]{Visualization of default boxes on a \(5\by 5 \) feature map.}\label{fig:defaults}
 \end{wrapfigure}
 
-As designed, the SSD model is made to handle a wider distribution of sizes than is present in our dataset.
-We have adjusted the sizes of the default boxes in our implementation so that they cover the distribution of sizes present.
-Even with adjustments, the range of sizes is so large that it is questionable if all 6 feature maps are necessary.
+As designed, the SSD model is made to handle a wider distribution of sizes than is present in the pollen dataset.
+The sizes of the default boxes have been adjusted so that they cover the distribution of sizes present.
+Even with adjustments, the range of default box sizes is so large that it is questionable if all 6 feature maps are necessary.
 
 \subsection{Training objective}
-Because of the default boxes, each ground truth box needs to be matched to one or more default boxes so that we have a target for the loss calculation.
-For each training example, we first apply a matching strategy that finds default boxes that overlap with each ground truth.
+Because of the default boxes, each ground truth box needs to be matched to one or more default boxes so that target values for the regression and confidences can be created for the loss function.
+For each training example, a matching strategy is applied which finds default boxes that overlap with each ground truth.
 Calculating the regression from the matched default boxes to their respective ground truth creates the truth vector that the model must approximate.
 
 SSD has a generous matching strategy where ground truths and default boxes are matched if their IoU is above a certain threshold.
@@ -333,7 +332,7 @@ Boxes are considered overlapping if their IoU is larger than some threshold \(N_
 
 NMS performs well in most settings, but has a particular weakness in cases where the target boxes of objects overlap.
 In these situations, NMS will often only return a single bounding box for one of the objects, ignoring the rest.
-Given that the data in this project exhibits this characteristic we have replaced the standard NMS algorithm with a more modern version, Soft-NMS, introduced in~\cite{bodla2017softnms}.
+Given that the data in this project exhibits this characteristic the standard NMS algorithm is replaced with a more modern version, Soft-NMS, introduced in~\cite{bodla2017softnms}.
 The pseudocode for both algorithms is as follows,
 %
 \begin{pseudofunc}{NMS}{\(\mathcal{B}=\{b_1,\ldots,b_N \},~\mathcal{S}=\{s_1,\ldots,s_N \},~N_t\)}
@@ -379,8 +378,8 @@ Rescoring is applied using a Gaussian decay function as follows,
 where \( \sigma \) controls the rate of decay, as demonstrated in Figure~\ref{fig:gauss}.
 
 \section{Experimental setup}\label{sec:method-exp-setup}
-This section will present the experiments we have chosen to implement in order to examine the research questions.
-We will first briefly cover the software and hardware stack used in the implementation the model, as well as the training procedure used for the experiments.
+This section will present the experiments which have been designed in order to examine the research questions.
+Firstly, the software and hardware stack used in the implementation the model is presented, as well as the training procedure used for the experiments.
 A run-down of the experiments that have been performed will then be given.
 
 \subsection{Software}
@@ -409,7 +408,7 @@ The dataset contains tree classes, but these are not equally distributed between
 Corylus and Alnus both release together and are found together in samples.
 Poaceae appears as the only class in the samples where it is present, it is also much more prevalent than the other species meaning the density of pollen grains is much higher on average in these samples.
 This also causes the very uneven distribution of classes in the dataset.
-We have therefore under-sampled the Poaceae class when creating the final dataset.
+The Poaceae class is therefore under-sampled when creating the final dataset.
 467 samples are included in the final dataset, the class distribution is given in Table~\ref{tab:training-dataset}.
 The final dataset is then divided into a training and test split with a 85\% / 15\% ratio. 
  
@@ -425,7 +424,7 @@ The final dataset is then divided into a training and test split with a 85\% / 1
 
 Augmentations are necessary to allow the model to train for many enough iterations without overfitting on the training set.
 Augmentations artificially increase the size of the dataset, by producing thousands of variations of each example.
-We have employed the following augmentations,
+The following augmentations are employed,
 %
 \begin{enumerate}
   \item Horizontal flip.
@@ -439,16 +438,16 @@ All the augmentations except cropping, independently, have a 50\% chance of bein
 Random crop also resizes the sample input into a \(300\by 300\) square so it is needed for every image.
 The cropping algorithm also ensures that each sample contains at least one pollen grain.
 
-\section{Experiments}
+\section{Experiments}\label{sec:method-experiments}
 Four experiments are designed, two targeting each research question.
-With the goal of developing a system for automated pollen counting, we aim to explore how the peculiarities of this domain interact with the more established methods that have been developed for object detection.
-For each experiment we will explain its rational and setup.
+With the goal of developing a system for automated pollen counting, the aim is to explore how the peculiarities of this domain interact with the more established methods that have been developed for object detection.
+For each experiment its rational and setup is given.
 
 \subsection{Feature extractor}
 The largest section of the model is the feature extraction block, so with the goal of decreasing computational complexity, shrinking this block would have the largest impact.
 Because this dataset differs so much from the common datasets used to pre-train the feature extractors, it is difficult to predict the impact from using a smaller network.
 On one hand the dataset is more uniform with similar backgrounds for every image, on the other hand all pollen grains look similar to each other so depth might be necessary to differentiate between them.
-In the first experiment we will train the model with three different pre-trained feature extraction networks and compare them.
+In the first experiment the model is trained with three different pre-trained feature extraction networks and compare them.
 The selected networks are given in Table~\ref{tab:ex01}
 
 \begin{table}[h]\centering
@@ -468,27 +467,25 @@ The selected networks are given in Table~\ref{tab:ex01}
 \subsection{Layer activation}
 The auxiliary structure also has opportunities for simplification.
 The main rational for SSD's multiple stacked feature maps is to allow for predictions at multiple scales in the image.
-With pollen grains however, we have very uniform sizes and shapes throughout the dataset.
-We believe that some or most of the feature maps can be removed from the model without any performance degradation.
-To test this the model will be trained in multiple configurations where we remove certain feature maps from the model.
-In practice, we will only deactivate the detection blocks that are fed by the feature maps so that we can deactivate layers arbitrarily without disturbing successive layers of the model.
+Pollen grains however appear very uniform in size and shape throughout the dataset.
+The hypothesis is that some or most of the source feature maps can be removed from the model without any performance degradation.
+To test this the model will be trained in multiple configurations where certain feature maps from the model are removed for each configuration.
+In practice, only the detection blocks that are fed by the feature maps are deactivated, so that layers can be arbitrarily deactivated without disturbing successive layers of the model.
 
 \subsection{Minimum training sharpness}
-As we have observed, the dataset contains a wide variety of grains spanning many levels of blur.
+As observed, the dataset contains a wide variety of grains spanning many levels of blur.
 It remains unclear what impact blurry data has on the training of fully convolutional object detection systems.
-With this experiment we aim to explore if there is a correlation between the distribution of sharpness in the training data and model predictions.
-We are less interested in the performance of the model, and more interested in how the distribution of sharpness values in the training data changes the distribution of sharpness in both the predictions of the model and in the ground truths it does or does not detect.
+With this experiment the aim is to explore if there is a correlation between the distribution of sharpness in the training data and model predictions.
+The performance of the model not of interest, but rather how the distribution of sharpness values in the training data changes the distribution of sharpness in both the predictions of the model and in the ground truths it does or does not detect.
 
-For our experiment we will train the model on various versions of the same dataset.
+For the experiment the model is trained on various versions of the same dataset.
 Each model will be trained on a subset of the ground truth labels using a sharpness filter which prunes any ground truth bellow a certain threshold.
 Raising the threshold limits the model to only those pollen grains sharper than the threshold.
 5 thresholds are used, spanning a range from 0 to 0.08 which covers the lower half of sharpness values contained in the dataset.
 
-We expect to see fewer correct predictions among the ground truths of the testing split which have a lower sharpness score that the threshold. 
-
 \subsection{Cross-sharpness inference}
-In the final experiment we wish to further explore what ability the model has to generalize outside of the sharpness values it is exposed to. 
-We aim to uncover if a trained model can be transferred to different sharpness ranges.
-Similar to the previous experiment we will train model on a subset of ground truths, however we will now also divide the testing set into to partitions.
-With a baseline set containing all ground truths we then have three partitions of both training and testing data.
-Each of the three resulting models will be tested on each of the tree test partitions, creating a kind on sharpness confusion matrix.
+The final experiment aims to further explore what ability the model has to generalize outside of the sharpness values it is exposed to, and whether or not a trained model can be transferred to different sharpness ranges.
+Similar to the previous experiment the model is trained on a subset of ground truths, one with only the sharp ground truths and one with only the blurry ground truths.
+The same partition is also applied to the testing split.
+Together with a baseline containing all ground truths, three models and three test splits are created.
+Each of the three models will be tested on each of the three test partitions, creating a kind of sharpness confusion matrix.

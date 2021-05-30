@@ -1,11 +1,12 @@
 \chapter{Results}\label{cha:results}
 
-This section will present and discuss the results from our experiments.
+This section will present and discuss the results from the experiments presented in Section~\ref{sec:method-experiments}.
 The modified SSD model presented in Section~\ref{sec:method-arch} is trained according to the training procedure given in Section~\ref{sec:method-exp-setup}.
 Section~\ref{sec:results-baseline} presents the performance of the baseline model. 
-The results from experiments pertaining to RQ1 and RQ2 are presented in Section~\ref{sec:results-simplification} and Section~\ref{sec:results-sharpness} respectively.
+The results and discussion of the experiments pertaining to RQ1 and RQ2 are presented in Section~\ref{sec:results-simplification} and Section~\ref{sec:results-sharpness} respectively.
+Threats to validity are provided in Section~\ref{sec:results-validity}.
 Unless specified otherwise, all performance metrics given in this section are measured on the test split of the dataset.
-For measuring mAP we use an IoU of 0.5 as the acceptance threshold, and follow the interpolation method specified in Equation~\ref{eq:average-precision}
+For measuring mAP the the interpolation method specified in Equation~\ref{eq:average-precision} with an acceptance threshold of 0.5 IoU.
 
 \section{Baseline model}\label{sec:results-baseline}
 \begin{figure}[htbp]
@@ -21,12 +22,10 @@ The mini batch with the lowest total loss is annotated with a green circle and o
     }\label{fig:method-baseline-loss}
   \end{figure}
 
-We start by presenting the results from training the model in its baseline configuration. 
-The training procedure is given in Figure~\ref{fig:method-baseline-loss}.
-The stochastic variation in the loss curve is characteristic for mini-batch training. 
-We can also see that the confidence loss accounts for most of the total loss throughout the training process.
+The training procedure for the model is given in Figure~\ref{fig:method-baseline-loss} and exhibits a stochastic variation that is characteristic for mini-batch training. 
+The confidence loss component accounts for most of the total loss throughout the training process.
 The components of the loss function (Equation~\ref{eq:loss}) are independent, meaning their ratio does not indicate a difference in performance at the two different tasks.
-We do however observe that the model performs better at localization than classification.
+Regardless, the model does performs better at localization than classification.
 Logically this follows from the realization that the pollen grains are all more easily distinguished from the background, than they are to classify.
 The model is therefore able to discriminate between background and pollen with relative ease, but has a harder time classifying species.
 
@@ -79,15 +78,15 @@ A larger dataset could however suffer more from this issue when there are more c
 For the purposes of counting, it might not be preferable to prune these overlapping predictions but rather include and quantify the resulting overestimation as a part of the overall counting system.
 
 \section{Model simplification}\label{sec:results-simplification}
-The first two experiments aim to explore ways in which we can reduce the computational complexity of the model without sacrificing performance.
-In the first experiment we have changed the feature extraction network with light weight alternatives.
-In the second we have reduced the amount of default boxes by deactivating source feature maps.
+The first two experiments aim to explore ways in which the computational complexity of the model can be reduces without sacrificing performance.
+In the first experiment the feature extraction network is substituted with light-weight alternatives.
+In the second, the amount of default boxes is reduced by deactivating source feature maps.
 
 \subsection{Feature extractor}
 Table~\ref{tab:result-base-network} gives the results from training the network with different feature extraction networks.
 As with the baseline, all the networks are pertained on image classification datasets.
 Larger networks, such as the deeper ResNet versions, could not be tested due to the memory limitations of the GPU\@.
-We see a clear decrease in performance when using smaller networks and observe monotonically decreasing values for all performance metrics.
+There is a clear decrease in performance when using smaller networks and observe monotonically decreasing values for all performance metrics.
 
 Interestingly, the recall remains almost unchanged, meaning that the model's ability to localize pollen grains is largely maintained.
 The error is in the form of noise being added on top of the correct predictions.
@@ -116,18 +115,18 @@ For each network, the number of trainable parameters for both the feature extrac
 \end{table}
 
 \subsection{Layer activation}
-In the next experiment we deactivate layers of the extra structure responsible for generating the various source feature maps.
+In the next experiment layers of the extra structure, responsible for generating the various source feature maps, are deactivated.
 The results are given in Table~\ref{tab:result-layer-deactivated} and do not point towards any strong trend.
 The last 3 layers of the model are larger than almost all grains in the dataset, and even with cropping, it is likely that their predictions do not contribute to the loss because the default boxes they encode rarely, if ever, get matched with a ground truth.
 Their inclusion then might result in parameters that do not get trained properly leading to those layers only producing noise instead of actual predictions.
 
-For the first three layers we do observe improved mAP, but the statistical significance is questionable.
-This does however call into question the importance of the larger feature maps and strengthens our initial belief that the SSD model can be simplified without compromises to performance.
+For the models using only the first three layers an improved mAP is observed, but the statistical significance is questionable.
+This does however call into question the importance of the larger feature maps and strengthens the initial belief that the SSD model can be simplified without compromises to performance.
 
 Other object detection tasks may also have certain differences in the distribution of size and shape of objects between classes.
 The multiple layers then allow for specialization where some layers become better at detection certain objects than others.
-With pollen we again have a much more uniform dataset where size differences between classes is negligible, which in turn might also explain why we don't observe any strong relationship between layer activation and performance.
-This is compounded by the limited number of classes and could change if we were to use a larger, more diverse, dataset.
+With pollen there again is a much more uniform dataset where size differences between classes is negligible, which in turn might also explain why there does not seem to exist any strong relationship between layer activation and performance.
+This is compounded by the limited number of classes and could change if a larger, more diverse, dataset was used.
 
 \begin{table}\centering
   \ra{1.1}
@@ -151,20 +150,22 @@ This is compounded by the limited number of classes and could change if we were 
 \end{table}
 
 \section{Sharpness}\label{sec:results-sharpness}
-Next, we look at how sharpness of the ground truth data impacts model performance. In the first experiment we filter out the blurry images to see the effect this has on the inferences made by the model. In the second experiment we split the dataset based on sharpness and measure the models' ability to make inferences across this sharpness boundary.
+The next two experiments look at how sharpness of the ground truth data impacts model performance. 
+In the first experiment the blurry grains are filtered out of the training set to see the effect this has on the inferences made by the model.
+In the second experiment the dataset is split based on sharpness and measure the models' ability to make inferences across this sharpness boundary.
 
 \subsection{Minimum training sharpness}\label{sec:results-minimum}
 Our first experiment aims to explore how the sharpness of the training data effects the predictions that the model is able to make.
 The results indicate that the model struggles with making inferences on grains with lower sharpness when such grains are filtered out of the training data.
-Figure~\ref{fig:results-sharpness-gt} breaks down the ground truth labels into true positives and false negatives and we see that the model is failing to predict pollen grains which have a sharpness below the minimum sharpness of the training data.
+Figure~\ref{fig:results-sharpness-gt} breaks down the ground truth labels into true positives and false negatives, which reveals that the model is failing to predict pollen grains which have a sharpness below the minimum sharpness of the training data.
 
-Looking at the sharpness of the predictions made by the model we see a corollary trend in the false positive predictions.
-In Figure~\ref{fig:results-sharpness-detections} we observe that restricting the training data creates what seems to be a threshold, bellow which the model does not make predictions.
+Looking at the sharpness of the predictions made by the model, there is a corollary trend in the false positive predictions.
+Figure~\ref{fig:results-sharpness-detections} shows that restricting the training data creates what seems to be a threshold, bellow which the model does not make predictions.
 This shows that the model is losing the ability to even localize blurry pollen grains, becoming blind to their existence.
 It seems clear that the features being learned from sharp images do not transfer to less sharp samples.
 
 It is important to note that the sample size, especially in the case of false negatives, is quite low, which weakens arguments made based on their distributions.
-What we are seeing could be described as a type of `overfitting' where the model will not generalize outside of the sharpness bound of the training data, and the implications this has for a hypothetical production system is unclear.
+The observed patters could also be described as a type of `overfitting' where the model will not generalize outside of the sharpness bound of the training data, and the implications this has for a hypothetical production system is unclear.
 
 \begin{figure}[htbp]
   \centering
@@ -182,9 +183,9 @@ What we are seeing could be described as a type of `overfitting' where the model
 \end{figure}
 
 \subsection{Cross-sharpness inference}
-For the final experiment we aim to explore how well the model is able to generalize to a sharpness range which differs completely from that of its training data.
+The final experiment aims to explore how well the model is able to generalize to a sharpness range which differs completely from that of its training data.
 Figure~\ref{fig:results-sharpness-inference} gives a summary of the of the experimental procedure.
-As we might expect, the model performs best in the scenarios where it is trained and tested on grains in the same range of sharpness, and it performs worse when there is no overlap between test sharpness and training sharpness.
+As might be expected, the model performs best in the scenarios where it is trained and tested on grains in the same range of sharpness, and it performs worse when there is no overlap between test sharpness and training sharpness.
 
 \begin{figure}[htbp]
   \centering
@@ -212,13 +213,13 @@ Breakdown of precision and recall values for cross-sharpness training. See Figur
 
 Figure~\ref{fig:results-sharpness-pr-rec} shows the precision and recall values separately and gives more insight into the differences between the two models.
 Looking at recall, the sharp model performs worse than the blurry model, when tested across the sharpness boundary.
-The opposite is true if we look at precision, whoever to a lesser degree.
+Looking at precision the opposite is true, however to a lesser degree.
 This shows that the models are underperforming for different reasons.
 The sharp model maintains its classification performance but fails to localize pollen grains that are too blurry, while the blurry model maintains its ability to localize all pollen grains but struggles with classifying them.
 
 Similar to how simplifying the feature extractor leads to worse classification performance while localization in maintained, the same response is seen when the granular features are smoothed out by blur.
 What this implies for further development of this system is difficult to say and depends on the requirements of the system.
-In a scenario where the model only needs to work on sharp data, we see that excluding blurry data could improve overall performance.
+In a scenario where the model only needs to work on sharp data, excluding blurry data could improve overall performance.
 However one can easily imagine a system that could benefit from being able to localize outside the current focus plane, e.g.~in a  search-based system that explores a slide live, the model could localize a blurry grain and refocus the microscope to classify it.
 
 \begin{figure}[htbp]
@@ -238,16 +239,16 @@ Sample from the dataset. Ground truths in the sharp partition are drawn in \text
 \end{figure}
 
 While it seems too follow logically from the presence of more granular and detailed features in sharp data that the sharp model is more precise than its blurry counterpart, it is less obvious why it seemingly looses all ability to localize blurry grains.
-For one possible explanation we must look not at the labeled data, but at everything else we are asking the model to ignore.
+One possible explanation becomes apparent when looking not at the labeled data, but at everything else the model is asked to ignore.
 
 As a result of the data collection procedure, where at least one pollen grain is completely in focus in every sample, the sharpest object in any given sample is always a pollen grain.
-Figure~\ref{fig:results-sharp-gt} shows an example of the split, and we can see that all in focus objects are labeled ground truths. 
+Figure~\ref{fig:results-sharp-gt} shows an example of the split, and reveals that all in-focus objects are labeled ground truths. 
 This trend hold over the entire dataset, where almost every object that appears in focus, is a labeled ground truth.
 The inverse assumption that everything out of focus is not a ground truth does not hold, except in the case of the sharp training split.
 So while the sharp model can rely almost entirely on the presence of sharp features when learning `what is a pollen grain?', the blurry and baseline models must also learn to differentiate between out of focus pollen grains and out of focus background.
 
-The boundary value set to the median sharpness value over the total training split.
+The boundary value is set to the median sharpness value over the total training split.
 This was done to give each model the same number of ground truths.
 While this is a valid decision, looking at Figure~\ref{fig:results-sharp-gt}, many pollen grains in the blurry category seem quite sharp to the naked eye.
 With a larger dataset, it would be more preferable to run this experiment with multiple splits.
-The optimal sharpness distribution remains unknown although we have shown evidence to support that excluding blurry data causes the model too fixate on only the sharp features in images.
+The optimal sharpness distribution remains unknown although evidence has been presented to support the claim that excluding blurry data causes the model too fixate on only the sharp features in images.

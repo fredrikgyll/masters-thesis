@@ -1,8 +1,9 @@
 \chapter{Related Work}\label{cha:related}
 Object detection using CNNs is a fairly new area of study, and as such, its application in the domain of pollen counting is lacking in literature.
-Examining related work therefore requires us to widen our field of view and explore the ways in which similar methods have been used to solve similar problems.
-We will do this in two parts; Firstly, we will examine the various object detection frameworks and their use within microscopy.
-Secondly, we will detail the various methods that have been employed in relation to our specific domain.
+Examining related work therefore requires a wider field of view and must explore the ways in which similar methods have been used to solve similar problems.
+This chapter is broken into two main sections.
+Section~\ref{sec:rel-cnn} will examine the various object detection frameworks and their use within microscopy.
+Section~\ref{sec:rel-pollen} will detail the various methods that have been employed in relation to the specific domain of automated pollen counting.
 
 \section{Convolutional Neural Networks}\label{sec:rel-cnn}
 Before CNNs, the task of classifying images was usually highly dependent on the problem domain.
@@ -28,9 +29,10 @@ This new second stage also predicts offsets for the proposed boxes, allowing it 
 
 Faster R-CNN replaces the first stage with a Region Proposal Network (RPN), a fully convolutional deep neural network which produces a fixed number of bounding boxes together with an `objectness' score for each box.
 The RPN introduces the concept of anchors, which are points in the image used to regress bounding boxes.
-After a set of convolutional layers, we are left with a \(n\by n\) feature map.
-If we slide a window over this feature map, we can predict the dimensions of one or more bounding boxes anchored at the center of the window.
-Given that a convolution \textit{is} a sliding window operation we only need to choose an appropriately sized window and how many boxes we want to predict and set the kernel size and output channels thereafter.
+After a set of convolutional layers, a \(n\by n\) feature map is outputted.
+Sliding a window over this feature map, predictions can be made for the dimensions of one or more bounding boxes anchored at the center of the window.
+Given that a convolution \textit{is} a sliding window operation, all that is needed is to to choose an appropriately sized window and set the kernel size thereafter.
+If each bounding box require 4 parameters, 4 filters are required. 
 Using a RPN allows of training of both stages of the detector, significantly increasing the performance.
 Following the release of Faster R-CNN, the amount of research attempting to automate various object detection tasks has increased. 
 
@@ -44,12 +46,12 @@ The model also solves an issue present in most of the previous work, namely, how
 Previous work is based on pre-segmented images which are then classified, which requires a human expert.
 This is common for a lot of research where a problem involves localization. 
 
-\section{Single Stage Detectors}\label{sec:ssd}
+\subsection{Single stage detectors}\label{sec:ssd}
 Common to the R-CNN family of methods is the use of two separate stages, one for identifying regions of interest in an image, and one for classifying objects in those regions.
 This adds considerable complexity in that both systems require separate training and tuning.
 These methods have been successfully utilized in many domains, including the only published attempt at pollen grain detection.
 The inference speed does however remain prohibitively slow for many tasks that require real-time performance.
-We can observe an obvious trend in the evolution of the two stage systems where stages are merged or replaced by CNN\@.
+There is an obvious trend in the evolution of the two stage systems where stages are merged or replaced by CNN\@.
 This trend continues to its logical conclusion with the development of the single stage detector.
 
 This class of model features only a single CNN, responsible for both localizing and classifying objects.
@@ -143,7 +145,7 @@ Comparing the different models that have been presented is however very challeng
 Most use self-collected datasets which vary in size, both with respect to the number of classes and examples per class.
 There is also an inherent difference in the difficulty of separating instances within any given dataset because some types of pollen are much more similar than others.
 Meaningful comparisons are therefore difficult to make.
-A performance comparison is however not necessary for this thesis, seeing as they are all classifiers, with no direct link to the requirements of our system.
+A performance comparison is however not strictly relevant to this thesis, seeing as they are all classifiers, which cannot be used to locate pollen grains.
 
 {\cite{daood_pollen_2016}} presented a CNN method that was used on both a LM and SEM dataset and compared the results with many of the classic statistical methods, showing the clear benefit of using a CNN architecture.
 A second network was also implemented which used transfer learning to further improve accuracy.
@@ -155,7 +157,7 @@ The methods also showed that, although a higher accuracy was obtained on the SEM
 All three models used a CNN as the feature extractor and they all performed well, doubling the precision over the state of the art.
 The results also show that there are only insignificant improvements when using a linear discriminant classifier on top of the CNN\@.
 
-Common to all the methods we have mentioned is that the data they rely on is LM images of a single grain.
+Common to all the mentioned methods is that the data they rely on is LM images of a single grain.
 This ignores two important factors, Firstly and most obviously is than none of these models can be used directly to count pollen grains, only to classify pre-segmented images of singular grains.
 This also leads into the second important factor of dealing with images of pollen grains at different focal planes.
 

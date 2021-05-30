@@ -1,10 +1,10 @@
 \chapter{Background}\label{cha:background}
-In this section we will cover the main theoretical concepts underlying the problem domain and proposed solution.
-We will start by looking at the methodology that is used currently for pollen counting and formalize it as a machine learning problem.
-We will then provide a theoretical overview of the main building blocks of modern convolutional neural networks.
+This chapter covers the main theoretical concepts underlying the problem domain and proposed solution.
+Section~\ref{sec:back-pollen} gives a short overview of the current methods that are in use for pollen counting and the data that is available. Based on this, Section~\ref{sec:back-problem} formalizes the task as a machine learning problem.
+A theoretical overview of the main building blocks of modern convolutional neural networks follows in Section~\ref{sec:back-cnn}, together with an overview of the metrics used to measure performance of object detection models in Section~\ref{sec:back-metrics}.
 A basic understanding of the operation and components of a standard feed forward fully connected neural network is assumed for this section.
 
-\section{Pollen Imaging}
+\section{Pollen Imaging}\label{sec:back-pollen}
 There are two main methods of pollen analysis, image-based and non-image-based.
 Non-image-based techniques employ a host of alternative sensing methods and will not be discussed further in this thesis.
 Within the image-based methods there are two main imaging techniques.
@@ -40,7 +40,7 @@ SEM imaging is however a more laborious process and requires more preparation of
 SEM is also not suited for large samples where pollen grains must be observed over the entire slide.
 This is the main reason why LM imaging is the only viable option when the task is to count pollen grains on a slide.
 
-\section{Problem Description}
+\section{Problem Description}\label{sec:back-problem}
 
 %Pollen counting
 %The Norwegian Asthma and Allergy Association has, since 1980, tracked the amount of air born pollen in Norway.
@@ -71,11 +71,11 @@ Figure~\ref{fig:bbox} shows a correct solution to this problem.
 The image contains to species, \textcolor{corylus}{corylus} and \textcolor{alnus}{alnus}.}\label{fig:bbox}
 \end{figure}
 
-\section{Convolutional Neural Networks}
+\section{Convolutional Neural Networks}\label{sec:back-cnn}
 \emph{Convolutional Neural Networks} have been in active development for three decades and the umbrella of what the term encompasses continues to grow.
 The basic concepts and building blocks have however remained quite unchanged since they were first used to predict handwritten digits in~\cite{1989Hdrw}.
-We will first describe the basic operation of a CNN, before expanding on each building block.
-We will also detail some of the newer concepts that have become commonplace additions to the basic model in later years.
+An overview of the basic building blocks of a CNN will first be given, before expanding on each building block.
+This section will also cover some of the newer concepts that have become commonplace additions to the basic model in later years.
 
 A convolutional neural network consists of stacked, layered, operations.
 There are two types of layers, \textit{convolutional}, and \textit{spacial pooling}.
@@ -102,17 +102,17 @@ The resulting output of the convolution is referred to as a \textit{feature map}
   \centering
   \includegraphics[width=0.4\textwidth]{figs/background/conv.pdf}
   \caption[Convolution operation]{Visualization of the convolution operation.
-In red we have a filter containing three \(3\by 3\) kernels.
+In red is a filter containing three \(3\by 3\) kernels.
 The element wise multiplication between the filter and receptive field and subsequent summation produces a single scaler in the feature map.
 The operation is repeated over the index set of the input, producing the complete feature map.}\label{fig:cnn}
 \end{figure}
 
 Usually, the input to a convolutional layer contains multiple channels, e.g.,\ an RGB input image which has three channels representing the separate  red, green, and blue color channels.
-To handle this, we construct as many kernels as there are channels.
-We then convolve each channel with its own kernel and add together the result across the channels, which produces a single feature map.
+To handle this, a stack of kernels is used, one for each input channel.
+Each channel is convolved with its own kernel and the result is added together across the channels, which produces a single feature map.
 An example of such a convolution operation is shown in Figure~\ref{fig:cnn}.
 This stack of kernels is referred to as a \textit{filter}.
-If we want the output of a convolutional layer to produce \(N\) feature maps, \(N\) filters are needed.  It is common to increase the number of filters as the image is continually downsampled through the layers on the neural network.
+For a convolutional layer to produce \(N\) feature maps, \(N\) filters are needed.  It is common to increase the number of filters as the image is continually downsampled through the layers on the neural network.
 
 At the edges of \(x\) the sum is undefined because the receptive field moves beyond the bounds of \(x\), causing a reduction in the size of the output.
 This can be mitigated by \textit{padding} the input.
@@ -122,7 +122,7 @@ Zero is often used as the padding-value.
 
 Dimensionality reduction is also possible using the concept of \textit{stride}, which refers to how the receptive field moves across the input relative to the index of the feature map.
 In the base case, the receptive field moves by one step for every element in the feature map.
-If we increase the stride, the receptive field `jumps over' positions for every step in the feature map, thus shrinking its size. 
+With an increased stride, the receptive field `jumps over' positions for every step in the feature map, thus shrinking its size. 
 
 One of the more important aspects of convolutions arises from the fact that the kernel is applied in the same way over the whole image.
 This parameter sharing means that features are extracted from the input, regardless of their location~\parencite{lecum1989}.
@@ -135,7 +135,7 @@ As such, further explanation of their action falls into the category of assumed 
 Because of the depth of the models’ architectures in use today, the \textit{rectified linear unit} (ReLU), and its variations, are commonly used.
 
 \subsection{Spacial pooling}
-Even though the convolution operation extracts features wherever they exist within an image, this introduces a new problem when we attempt to stack the layers so we can extract higher level features from the combination of features below.
+Even though the convolution operation extracts features wherever they exist within an image, a new problem arises when layers are stacked in order to extract higher level features from the combination of features below.
 Local variations in the relative placement of features will have a big impact on later filters' ability to combine them and this would have to be accounted for by dramatically increasing the number of filters.~\cite{lecun1998gradient} presents a simple solution to this problem with a \textit{sub-sampling} layer, referred to as a \textit{pooling} layer today, which reduces the dimensions of the feature map by applying a local pooling function, similarly to the convolution operation.
 Common pooling functions are maximum and average.
 The pooling operation is applied to each channel separately so only the width and height is downsampled.
@@ -143,35 +143,35 @@ Pooling retains the relative placement of features within the image but allows t
 
 \subsection{Cross channel pooling}
 
-As mentioned, we increase the depth of the feature maps as they get downsampled throughout the network.
+As mentioned, it in customary to increase the depth of the feature maps as they get downsampled throughout the network.
 This is necessary if the model is to learn more complex features that may require many layers to be represented in full.
 Combining information from multiple channels could be helpful in building more rich feature maps.
 This is the proposal in~\cite{lin2014network}.
 To enhance model discriminability, they emulate a fully connected layer working across the channels by using a convolutional layer with a \(1\by 1\) kernel.
-This effectively creates connections between local features across the channels of the feature maps, allowing us to project the feature map into a map with a different depth.
+This effectively creates connections between local features across the channels of the feature maps, allowing the feature map to be projected into a map with a different depth.
 
 The primary motivation for using this technique today is to lower the computational cost of standard convolutions by reducing the depth of the input prior to a larger convolution.
 The technique is now commonplace and featured in all deep CNN architectures.
 
 \subsection{Batch normalization}
-As we train our network, the parameters in each layer change, this causes the distribution of each layer’s output to shift.
+As the network trains, the parameters in each layer change, this causes the distribution of each layer’s output to shift.
 As the distribution from previous layers change, this shift is propagated though to the layers downstream, and so each layer must deal with ever changing input distributions.
 To overcome this, lower learning rates and careful parameter initialization is required. 
 
 A much more effective solution has been proposed by~\cite{ioffe2015batch} called \textit{Batch Normalization} (BN).
 The proposed solution for convolutional networks is to normalize the output of each convolutional layer by first standardizing each feature dimension by the sample mean and sample variance across the current mini batch, then transforming each layer by a linear transformation with trainable parameters.
 The linear transformation allows the network to restore the representative power of the layer after standardization.
-By allowing the filters to only focus on learning features, instead of having to adapt to constantly shifting inputs training is accelerated, allowing us to train with a higher learning rate.
+By allowing the filters to only focus on learning features, instead of having to adapt to constantly shifting inputs, training is accelerated which allows for higher learning rates.
 
-\section{Metrics}
-An important step towards building a model is defining how we measure its performance.
+\section{Metrics}\label{sec:back-metrics}
+An important step towards building a model is defining how to measure its performance.
 Implicitly, this is done through the construction of a \textit{Loss function}.
-The models we will examine in this thesis do not employ novel Loss functions, so delving into their construction is not warranted.
+The models examined in this thesis do not employ novel Loss functions, so delving into their construction is not warranted.
 The metrics used when measuring the performance of object detectors, specifically, are however of interest.
 
 \subsection{Precision and recall}
 The precision and recall of a model refer to its ability to correctly locate and label the objects within an image.
-Before we can define precision and recall we must first introduce the following quantities,
+Before defining precision and recall, the following quantities must be introduced,
 
 \begin{center}
   {\setlength{\fboxsep}{1em}
@@ -207,8 +207,7 @@ The \(F_1\) score measures the balance between precision and recall values and i
 
 \subsection{Intersection over union}
 Precision and recall form the basis for how all object detection models are evaluated, but the definitions are not complete without a definition of what constitutes a \textit{correct} prediction.
-For this we use the \textit{intersection over union} (IoU) between our predictions and ground truths.
-
+Correctness is commonly defined using the \textit{intersection over union} (IoU) between the predictions and ground truths.
 IoU measures the overlap between two boundaries.
 As the name indicates, it is defined as the ratio between the intersection and union of the boundaries,
 
@@ -222,26 +221,19 @@ As the name indicates, it is defined as the ratio between the intersection and u
 The named region is shaded.}\label{fig:iou}
 \end{figure}
 
-Using the IoU we can define what is considered as a correct prediction (TP).
+The definition what is considered as a correct prediction (TP) can then be defined.
 Given prediction \(\hat{X}\) with label \(\hat{X}_l\) and bounding box \(\hat{X}_u\). \(\hat{X}\) is considered a True Positive if there exists a ground truth \(Y\), where \(Y_{l}=\hat{X}_l\) and \(\text{IoU}(\hat{X}_u, Y_{u})\ge \mu \).
 Where \( \mu \) is some threshold value, often 0.5.
-
-
-In this section we have detailed the current method for automated pollen counting, as well as the foundational building blocks of a CNN\@.
-Most research and application of CNN based methods is in regard to classification, which only solves part of the problem of counting pollen.
-To fully automate the task, a subcategory of CNNs capable of predicting both classes and locations is required.
-In the next section we will detail how the problem of \textit{object detection} can be solved using a CNN by detailing how they have been used to solve tasks similar to pollen counting.
-We will also review the available literature relating to other attempts at solving this problem.
 
 \subsection{Mean average precision}
 Mean average precision (mAP) is a popular metric for measuring the performance of object detection models.
 It is computed by taking the mean of the \textit{average precision} values for each class.
 
-From a list of all detections made for a class, ranked in ascending order of confidence, we can plot a precision-recall curve.
-This shows how precision changes as recall rises in the range [0,1] as we include more and more detection from the ranked list. 
-The AP describes the shape of the precision-recall, and can be calculated e few different ways.
-We will use the definition of AP specified in evaluation procedure in the VOC2007 image detection challenge. 
-For convenience, we will restate the definition of AP, as given in~\cite{everingham2010pascal}.
+From a list of all detections made for a class, ranked in ascending order of confidence, a precision-recall curve is drawn.
+This shows how precision changes as recall rises over the range [0,1] as more and more detections from the ranked list are included in the precision/recall calculations. 
+The AP describes the shape of the precision-recall curve, and can be calculated a few different ways.
+This thesis will use the definition of AP specified in the evaluation procedure for the VOC2007 image detection challenge. 
+For convenience, the definition of AP, as given in~\cite{everingham2010pascal} is repeated bellow.
 
 AP is measured by taking the mean of precision values taken at 11 evenly spaced recall values as follows,
 
@@ -255,6 +247,8 @@ Because the precision-recall curve often times is quite erratic, the precision v
   p_{interp}(r)=\max_{\tilde{r}:\tilde{r}\geq r}p(\tilde{r})
 \end{equation*}
 
-This definition of AP and mAP is widely used in the related works and will also be used to 
-
-\textcolor{red}{MAYBE DONE}
+This section has detailed the current methods employed for automated pollen counting, as well as the foundational building blocks of a CNN\@.
+Most research and application of CNN based methods is in regard to classification, which only solves part of the problem of counting pollen.
+To fully automate the task, a subcategory of deep CNNs capable of predicting both classes and locations is required.
+The next chapter will detail how \textit{object detection} can be solved using a CNN by detailing how they have been used to solve tasks similar to pollen counting.
+The available literature relating to other attempts at solving the problem of counting pollen will also be given.
