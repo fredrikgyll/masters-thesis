@@ -1,3 +1,14 @@
 \chapter{Conclusion}\label{cha:conclusion}
 %no lower level detailed stuff here. This chapter is a high level piece with focus on the research questions and what we did to explore them and what we found out
-%also future work goes here, important for students who are interested in taking this further.
+
+% 1. Main conclusions and takeaways
+% 2. Contributions to the field
+% 3. Future work
+
+In regards to the two initial research questions posed is this thesis and based upon the results of the experiments presented in Chapter~\ref{cha:results}, the following is given as the main conclusions.
+
+\begin{enumerate}
+    \item For the task of differentiating pollen grains, reducing the size of the network negatively affects performance. The uniformity of the objects in the dataset does however allow for a reduction in the number of detections made by the model without any apparent performance effects.
+    \item Excluding multifocal data from training causes a fixation on sharp features, inhibiting the model to localize pollen grains, only slightly outside the focal range of the training data.
+    \item Excluding multifocal data creates a more precise model with lower recall than a model trained on multifocal data.
+\end{enumerate}
