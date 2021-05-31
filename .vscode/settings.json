@@ -52,6 +52,7 @@
             ]
         }
     ],
+    "latex-workshop.latex.autoBuild.run": "onSave",
     "latex-workshop.latex.recipe.default": "quick",
     "latex-workshop.view.pdf.viewer": "external",
     "latex-workshop.view.pdf.external.viewer.command": "/Applications/Skim.app/Contents/SharedSupport/displayline",
