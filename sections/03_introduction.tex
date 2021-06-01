@@ -19,6 +19,7 @@ A single slide can take hours to analyze and this directly affects the amount of
 From a machine learning perspective, the above describes an object detection task, which is the general task of locating certain objects within an image and classifying each object.
 State of the art within this problem space uses Convolutional Neural Networks (CNN), which are a type of neural network especially suited for image analysis of unprocessed image data.
 However, research into the use of this technique to solve the problem of counting pollen is sparse, and as of writing only one partial example exists in literature.
+Microscopy is a relatively unexplored domain for machine learning and offers unique challenges in need of research.
 This thesis will therefore explore the varying methods that have been proposed to automatically count pollen grains and other similar palynomorphs, as well as other domains where modern machine learning methods have been used on similar tasks.
 
 \section{Goals and Research Questions}\label{sec:Goals and Research Questions}
@@ -37,13 +38,13 @@ This is formalized as the following research question,
 \item[RQ1] \textit{Can the computational complexity of a Single Stage MultiBox object detection model be reduced without a loss in precision and recall?}
 \end{description}
 
-Computational complexity here refers to the amount of computations needed to produce a prediction.
+Computational complexity here refers to the amount of trainable parameters that a given model is comprised of.
 The Single Stage MultiBox (SSD) model is presented in Section~\ref{sec:ssd}.
-It is designed as a general object detector which can detect a variety of different type of objects at different scales.
+It is designed as a general object detector capable of detection any number of objects in an image.
 \textbf{RQ1} postulates that the task of pollen detection will require a less generalized model and that this can be realized by simplifying or removing parts of the models architecture.
  
-Recent research in pollen classification has indicated that accuracy can be improved by using multifocal data, i.e.\ images from different focus planes, as opposed to single images.
-This project will explore whether this can also be applied to a detection system.
+Recent research in pollen classification has questioned how multifocal data may be used to improve accuracy of models operating i=on microscopic data, i.e.\ images from different focus planes, as opposed to single images.
+This project will explore what impact the sharpness of training data has on an object detection model.
 This is formalized in the second research question,
 
 \begin{description}
