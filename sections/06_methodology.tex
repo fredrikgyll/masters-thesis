@@ -23,7 +23,7 @@ A summary of the dataset is given in Table~\ref{tab:dataset}.
 
 \begin{table}[htb]
   \caption[Class distribution across the dataset]{Distribution of class labels across the 701 sample images of the pollen dataset.}\label{tab:dataset}
-  \centering 
+  \centering
   \begin{tabular}{lrrr} \toprule
                       & Poaceae & Corylus & Alnus \\ \midrule
     Number of labels  & 5600    & 262     & 522 \\
@@ -68,7 +68,7 @@ When unmodified, only a single pixel and its reflection about the origin is acti
 \end{figure}
 
 Figure~\ref{fig:fourier-demo} shows the Fourier transform of various inputs.
-The transforms are shifted, such that an element in the transform encodes a sinusoid component with a frequency proportional to its distance from the center and moving in the same direction as the vector it forms with the center. 
+The transforms are shifted, such that an element in the transform encodes a sinusoid component with a frequency proportional to its distance from the center and moving in the same direction as the vector it forms with the center.
 The directionality of the Fourier transform is demonstrated in the first two examples.
 Squares decompose into a set on sinusoids, all moving is the same two directions.
 The coefficient of each component is encoded in the intensity of the pixel.
@@ -171,10 +171,10 @@ A total of 316 pollen grains where evaluated, the distribution of their classes 
 
 \begin{table}[htbp]
   \caption[Sharpness dataset distribution]{Distribution of classes across the sharpness evaluation dataset.}\label{tab:sharpness}
-  \centering 
+  \centering
   \begin{tabular}{lrrr} \toprule
     & blurry [1] & partly [2] & sharp [3]  \\ \midrule
-    Number of labels & 108 & 93  & 115 \\ 
+    Number of labels & 108 & 93  & 115 \\
     Share            & .34 & .30 & .36 \\ \bottomrule
   \end{tabular}
 \end{table}
@@ -200,7 +200,7 @@ The correlation between perceived and measured sharpness is also clear.}\label{f
 Figure~\ref{fig:sharpness} shows a clear correlation between the mean of the distribution, and the perceived sharpness.
 The overlap is to be expected, given the mapping from a continuous predictor onto a categorical label.
 To further evaluate the performance of the sharpness measure a very simple decision tree model is constructed, and its ability to differentiate between the classes is tested.
-The model achieved a test accuracy of 83.5\%. 
+The model achieved a test accuracy of 83.5\%.
 
 Figure~\ref{fig:sharpness-all} shows the computed the sharpness of every ground truth in the dataset in a density plot, visualizing the approximate distribution.
 As expected, most of the ground truths fall into the sharpest category, but there is a spread, allowing for the analysis of the relationship between sharpness and model performance.
@@ -286,7 +286,7 @@ Calculating the regression from the matched default boxes to their respective gr
 SSD has a generous matching strategy where ground truths and default boxes are matched if their IoU is above a certain threshold.
 Figure~\ref{fig:priors} shows the result of the matching strategy being applied to a training example.
 Every red box in the image is a default box that has been matched with a ground truth, shown in green.
-For the purposes of training, these are the default boxes that the loss function expects the model to have correctly labeled and regressed. 
+For the purposes of training, these are the default boxes that the loss function expects the model to have correctly labeled and regressed.
 This ensures that there are multiple positive examples for each ground truth.
 
 \begin{figure}[htbp]
@@ -320,7 +320,7 @@ Negative examples are counted towards the confidence loss by descending loss unt
   \includegraphics[width=0.35\textwidth]{figs/method/gausian_penelty.pdf}
   \caption{Gaussian decay as a function of IoU for various \( \sigma \)}\label{fig:gauss}
 \end{wrapfigure}
-When the model is working, the raw output it produces is regression values for many thousands of bounding boxes with class confidence predictions. 
+When the model is working, the raw output it produces is regression values for many thousands of bounding boxes with class confidence predictions.
 In the locations where an object is present, the model will most likely produce multiple overlapping bounding boxes.
 Ideally, the output would be a one-to-one mapping between the predicted boxes and objects in the image.
 
@@ -339,7 +339,7 @@ The pseudocode for both algorithms is as follows,
   \item \(\mathcal{D} \leftarrow \{ \} \)
   \item \pwhile~\(\mathcal{B} \neq \emptyset \):
   \begin{pseudoloop}
-    \item \(m \leftarrow \text{argmax}~\mathcal{S}\) 
+    \item \(m \leftarrow \text{argmax}~\mathcal{S}\)
     \item \(\mathcal{M} \leftarrow b_m\)
     \item \(\mathcal{D} \leftarrow \mathcal{D} \cup \mathcal{M};~ \mathcal{B} \leftarrow \mathcal{B} - \mathcal{M}\)
     \item \pfor~\(b_i \in \mathcal{B}\):
@@ -358,7 +358,7 @@ The pseudocode for both algorithms is as follows,
       \endminipage}\vspace{5pt}\\
       \fcolorbox{nicegreen}{white}{\color{nicegreen}%
       \minipage[t]{\dimexpr0.50\linewidth-2\fboxsep-\fboxrule\relax}
-        \item \(s_i \leftarrow s_i\)\pmethod{f}{\pmethod{IoU}{\(\mathcal{M},~b_i\)}}  
+        \item \(s_i \leftarrow s_i\)\pmethod{f}{\pmethod{IoU}{\(\mathcal{M},~b_i\)}}
         \vspace{13pt}
         \begin{textblock}{2} (3,-0.15)
           \textcolor{black}{\texttt{Soft-NMS}}
@@ -410,11 +410,11 @@ Poaceae appears as the only class in the samples where it is present, it is also
 This also causes the very uneven distribution of classes in the dataset.
 The Poaceae class is therefore under-sampled when creating the final dataset.
 467 samples are included in the final dataset, the class distribution is given in Table~\ref{tab:training-dataset}.
-The final dataset is then divided into a training and test split with a 85\% / 15\% ratio. 
- 
+The final dataset is then divided into a training and test split with a 85\% / 15\% ratio.
+
 \begin{table}[htb]
   \caption[Class distribution across the final training dataset containing 467 sample images.]{Distribution of classes across the training dataset}\label{tab:training-dataset}
-  \centering 
+  \centering
   \begin{tabular}{lrrr} \toprule
                       & Poaceae & Corylus & Alnus \\ \midrule
     Number of labels  & 518    & 262     & 522 \\
@@ -456,10 +456,10 @@ The selected networks are given in Table~\ref{tab:ex01}
 \label{tab:ex01}
 \begin{tabular}{@{}lr@{}}\toprule
   Network & Relative size \\
-  \midrule                                                                     
+  \midrule
      ResNet 34 & 1.00  \\
      ResNet 18 & 0.34  \\
-  MobileNet V2 & 0.02  \\  
+  MobileNet V2 & 0.02  \\
   \bottomrule
 \end{tabular}
 \end{table}

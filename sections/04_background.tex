@@ -48,7 +48,7 @@ This is the main reason why LM imaging is the only viable option when the task i
 %Pollen is collected with traps where air is continually sucked though a small slit and over an adhesive strip.
 %The strip is moved across the slit, exposing different sections throughout the day.
 %Pollen grains and other air born particulates adhere to the strip, which is then analyzed under a microscope.
-%This produces an estimate for the density of different pollen types, measured in particles per cubic meter, throughout the season. 
+%This produces an estimate for the density of different pollen types, measured in particles per cubic meter, throughout the season.
 
 
 As mentioned in the introduction one of the primary activities within palynology is counting pollen grains.
@@ -107,12 +107,13 @@ The element wise multiplication between the filter and receptive field and subse
 The operation is repeated over the index set of the input, producing the complete feature map.}\label{fig:cnn}
 \end{figure}
 
-Usually, the input to a convolutional layer contains multiple channels, e.g.,\ an RGB input image which has three channels representing the separate  red, green, and blue color channels.
+Usually, the input to a convolutional layer contains multiple channels, e.g.,\ an RGB input image which has three channels representing the separate red, green, and blue color channels.
 To handle this, a stack of kernels is used, one for each input channel.
 Each channel is convolved with its own kernel and the result is added together across the channels, which produces a single feature map.
 An example of such a convolution operation is shown in Figure~\ref{fig:cnn}.
 This stack of kernels is referred to as a \textit{filter}.
-For a convolutional layer to produce \(N\) feature maps, \(N\) filters are needed.  It is common to increase the number of filters as the image is continually downsampled through the layers on the neural network.
+For a convolutional layer to produce \(N\) feature maps, \(N\) filters are needed.
+It is common to increase the number of filters as the image is continually downsampled through the layers on the neural network.
 
 At the edges of \(x\) the sum is undefined because the receptive field moves beyond the bounds of \(x\), causing a reduction in the size of the output.
 This can be mitigated by \textit{padding} the input.
@@ -122,7 +123,7 @@ Zero is often used as the padding-value.
 
 Dimensionality reduction is also possible using the concept of \textit{stride}, which refers to how the receptive field moves across the input relative to the index of the feature map.
 In the base case, the receptive field moves by one step for every element in the feature map.
-With an increased stride, the receptive field `jumps over' positions for every step in the feature map, thus shrinking its size. 
+With an increased stride, the receptive field `jumps over' positions for every step in the feature map, thus shrinking its size.
 
 One of the more important aspects of convolutions arises from the fact that the kernel is applied in the same way over the whole image.
 This parameter sharing means that features are extracted from the input, regardless of their location\ \parencite{lecum1989}.
@@ -156,7 +157,7 @@ The technique is now commonplace and featured in all deep CNN architectures.
 \subsection{Batch normalization}
 As the network trains, the parameters in each layer change, this causes the distribution of each layer’s output to shift.
 As the distribution from previous layers change, this shift is propagated though to the layers downstream, and so each layer must deal with ever changing input distributions.
-To overcome this, lower learning rates and careful parameter initialization is required. 
+To overcome this, lower learning rates and careful parameter initialization is required.
 
 A much more effective solution has been proposed by\ \textcite{ioffe2015batch} called \textit{Batch Normalization} (BN).
 The proposed solution for convolutional networks is to normalize the output of each convolutional layer by first standardizing each feature dimension by the sample mean and sample variance across the current mini batch, then transforming each layer by a linear transformation with trainable parameters.
@@ -179,8 +180,8 @@ Before defining precision and recall, the following quantities must be introduce
   \begin{minipage}{0.9\textwidth}
   {\bf True Positive (TP):} Number of objects correctly located and labelled.\\[1ex]
   {\bf False Positive (FP):} Number of incorrect predictions.\\[1ex]
-  {\bf True Negative (TN):} Correct non-prediction, not usually relevant.\\[1ex] 
-  {\bf False Negative (FN):} Number of objects missed by model. 
+  {\bf True Negative (TN):} Correct non-prediction, not usually relevant.\\[1ex]
+  {\bf False Negative (FN):} Number of objects missed by model.
   \end{minipage}}}
 \end{center}
 
@@ -230,9 +231,9 @@ Mean average precision (mAP) is a popular metric for measuring the performance o
 It is computed by taking the mean of the \textit{average precision} values for each class.
 
 From a list of all detections made for a class, ranked in ascending order of confidence, a precision-recall curve is drawn.
-This shows how precision changes as recall rises over the range [0,1] as more and more detections from the ranked list are included in the precision/recall calculations. 
+This shows how precision changes as recall rises over the range [0,1] as more and more detections from the ranked list are included in the precision/recall calculations.
 The AP describes the shape of the precision-recall curve, and can be calculated a few different ways.
-This thesis will use the definition of AP specified in the evaluation procedure for the VOC2007 image detection challenge. 
+This thesis will use the definition of AP specified in the evaluation procedure for the VOC2007 image detection challenge.
 For convenience, the definition of AP, as given in\ \textcite{everingham2010pascal} is repeated bellow.
 
 AP is measured by taking the mean of precision values taken at 11 evenly spaced recall values as follows,

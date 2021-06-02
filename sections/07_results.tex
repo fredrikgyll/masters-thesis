@@ -2,7 +2,7 @@
 
 This section will present and discuss the results from the experiments presented in Section~\ref{sec:method-experiments}.
 The modified SSD model presented in Section~\ref{sec:method-arch} is trained according to the training procedure given in Section~\ref{sec:method-exp-setup}.
-Section~\ref{sec:results-baseline} presents the performance of the baseline model. 
+Section~\ref{sec:results-baseline} presents the performance of the baseline model.
 The results and discussion of the experiments pertaining to RQ1 and RQ2 are presented in Section~\ref{sec:results-simplification} and Section~\ref{sec:results-sharpness} respectively.
 Threats to validity are provided in Section~\ref{sec:results-validity}.
 Unless specified otherwise, all performance metrics given in this section are measured on the test split of the dataset.
@@ -22,7 +22,7 @@ The mini batch with the lowest total loss is annotated with a green circle and o
     }\label{fig:method-baseline-loss}
   \end{figure}
 
-The training procedure for the model is given in Figure~\ref{fig:method-baseline-loss} and exhibits a stochastic variation that is characteristic for mini-batch training. 
+The training procedure for the model is given in Figure~\ref{fig:method-baseline-loss} and exhibits a stochastic variation that is characteristic for mini-batch training.
 The confidence loss component accounts for most of the total loss throughout the training process.
 The components of the loss function (Equation~\ref{eq:loss}) are independent, meaning their ratio does not indicate a difference in performance at the two different tasks.
 Regardless, the model does performs better at localization than classification.
@@ -36,7 +36,7 @@ The model is therefore able to discriminate between background and pollen with r
 Breakdown of predictions by class.
 For each label, the first column gives the number of ground truth labels in the test split.
 The second column gives the number or predicted boxes for that class, broken down into true positive matches in green, and false negatives in red.
-The difference between ground truths and true positives in the number of false negatives. 
+The difference between ground truths and true positives in the number of false negatives.
     }\label{fig:results-baseline-detections}
   \end{figure}
 
@@ -106,10 +106,10 @@ For each network, the number of trainable parameters for both the feature extrac
   Network & \phantom{a} & \multicolumn{4}{c}{Performance} & \phantom{ab}&  \multicolumn{2}{c}{Parameters} \\
   \cmidrule{3-6} \cmidrule{8-9}
         &&  mAP &  Precision &  Recall &  Loc. &&  Extractor   & Total \\
-  \midrule                                                                     
+  \midrule
      ResNet 34 && 95.2 &      82.7  &   99.1  & 95.0  &&  \num{8.2e6} & \num{1.2e7} \\
      ResNet 18 && 92.6 &      81.9  &   97.4  & 92.8  &&  \num{2.8e6} & \num{6.7e6} \\
-  MobileNet V2 && 90.4 &      67.9  &   98.3  & 86.3  &&  \num{1.3e5} & \num{9.6e5} \\  
+  MobileNet V2 && 90.4 &      67.9  &   98.3  & 86.3  &&  \num{1.3e5} & \num{9.6e5} \\
   \bottomrule
 \end{tabular}
 \end{table}
@@ -150,7 +150,7 @@ This is compounded by the limited number of classes and could change if a larger
 \end{table}
 
 \section{Sharpness}\label{sec:results-sharpness}
-The next two experiments look at how sharpness of the ground truth data impacts model performance. 
+The next two experiments look at how sharpness of the ground truth data impacts model performance.
 In the first experiment the blurry grains are filtered out of the training set to see the effect this has on the inferences made by the model.
 In the second experiment the dataset is split based on sharpness and measure the models' ability to make inferences across this sharpness boundary.
 
@@ -191,9 +191,9 @@ As might be expected, the model performs best in the scenarios where it is train
   \centering
   \includegraphics[width=0.9\textwidth]{figs/results/sharpness/confustion_balanced_test_map.pdf}
   \caption[mAP across sharpness boundary]{%
-The confusion matrix shows the result from training and testing the model on tree versions of the dataset. 
+The confusion matrix shows the result from training and testing the model on tree versions of the dataset.
 The median sharpness value, \(\tilde{\mu}\), is used as a boundary and the dataset is divided into a sharp (\(>\tilde{\mu}\)) and a blurry (\(<\tilde{\mu}\)) data set.
-The same training/testing split is still used. 
+The same training/testing split is still used.
 The horizontal axis denotes the version of the dataset used when computing mAP, while the vertical axis denotes the dataset used when testing.
 Two quadrants stand out with significantly lowers scores,  these represent the scenarios where the model is trained on either only the sharp or only the blurry data and tested on the opposite.
   }\label{fig:results-sharpness-inference}
@@ -220,7 +220,7 @@ The sharp model maintains its classification performance but fails to localize p
 Similar to how simplifying the feature extractor leads to worse classification performance while localization in maintained, the same response is seen when the granular features are smoothed out by blur.
 What this implies for further development of this system is difficult to say and depends on the requirements of the system.
 In a scenario where the model only needs to work on sharp data, excluding blurry data could improve overall performance.
-However one can easily imagine a system that could benefit from being able to localize outside the current focus plane, e.g.\ in a  search-based system that explores a slide live, the model could localize a blurry grain and refocus the microscope to classify it.
+However one can easily imagine a system that could benefit from being able to localize outside the current focus plane, e.g.\ in a search-based system that explores a slide live, the model could localize a blurry grain and refocus the microscope to classify it.
 
 \begin{figure}[htbp]
   \centering
@@ -242,7 +242,7 @@ While it seems too follow logically from the presence of more granular and detai
 One possible explanation becomes apparent when looking not at the labeled data, but at everything else the model is asked to ignore.
 
 As a result of the data collection procedure, where at least one pollen grain is completely in focus in every sample, the sharpest object in any given sample is always a pollen grain.
-Figure~\ref{fig:results-sharp-gt} shows an example of the split, and reveals that all in-focus objects are labeled ground truths. 
+Figure~\ref{fig:results-sharp-gt} shows an example of the split, and reveals that all in-focus objects are labeled ground truths.
 This trend hold over the entire dataset, where almost every object that appears in focus, is a labeled ground truth.
 The inverse assumption that everything out of focus is not a ground truth does not hold, except in the case of the sharp training split.
 So while the sharp model can rely almost entirely on the presence of sharp features when learning `what is a pollen grain?', the blurry and baseline models must also learn to differentiate between out of focus pollen grains and out of focus background.
