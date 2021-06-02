@@ -73,7 +73,7 @@ The image contains to species, \textcolor{corylus}{corylus} and \textcolor{alnus
 
 \section{Convolutional Neural Networks}\label{sec:back-cnn}
 \emph{Convolutional Neural Networks} have been in active development for three decades and the umbrella of what the term encompasses continues to grow.
-The basic concepts and building blocks have however remained quite unchanged since they were first used to predict handwritten digits in~\cite{1989Hdrw}.
+The basic concepts and building blocks have however remained quite unchanged since they were first used to predict handwritten digits in\ \textcite{1989Hdrw}.
 An overview of the basic building blocks of a CNN will first be given, before expanding on each building block.
 This section will also cover some of the newer concepts that have become commonplace additions to the basic model in later years.
 
@@ -125,7 +125,7 @@ In the base case, the receptive field moves by one step for every element in the
 With an increased stride, the receptive field `jumps over' positions for every step in the feature map, thus shrinking its size. 
 
 One of the more important aspects of convolutions arises from the fact that the kernel is applied in the same way over the whole image.
-This parameter sharing means that features are extracted from the input, regardless of their location~\parencite{lecum1989}.
+This parameter sharing means that features are extracted from the input, regardless of their location\ \parencite{lecum1989}.
 It also reduces the computational complexity involved in training the model.
 
 Because convolution is a linear operation, so non-linearity must be added if the network is to be able to approximate a non-linear function.
@@ -136,7 +136,7 @@ Because of the depth of the models’ architectures in use today, the \textit{re
 
 \subsection{Spacial pooling}
 Even though the convolution operation extracts features wherever they exist within an image, a new problem arises when layers are stacked in order to extract higher level features from the combination of features below.
-Local variations in the relative placement of features will have a big impact on later filters' ability to combine them and this would have to be accounted for by dramatically increasing the number of filters.~\cite{lecun1998gradient} presents a simple solution to this problem with a \textit{sub-sampling} layer, referred to as a \textit{pooling} layer today, which reduces the dimensions of the feature map by applying a local pooling function, similarly to the convolution operation.
+Local variations in the relative placement of features will have a big impact on later filters' ability to combine them and this would have to be accounted for by dramatically increasing the number of filters.\ \textcite{lecun1998gradient} presents a simple solution to this problem with a \textit{sub-sampling} layer, referred to as a \textit{pooling} layer today, which reduces the dimensions of the feature map by applying a local pooling function, similarly to the convolution operation.
 Common pooling functions are maximum and average.
 The pooling operation is applied to each channel separately so only the width and height is downsampled.
 Pooling retains the relative placement of features within the image but allows the network to ignore smaller variations in the relative configuration of features across all the channels of the feature map.
@@ -146,7 +146,7 @@ Pooling retains the relative placement of features within the image but allows t
 As mentioned, it in customary to increase the depth of the feature maps as they get downsampled throughout the network.
 This is necessary if the model is to learn more complex features that may require many layers to be represented in full.
 Combining information from multiple channels could be helpful in building more rich feature maps.
-This is the proposal in~\cite{lin2014network}.
+This is the proposal in\ \textcite{lin2014network}.
 To enhance model discriminability, they emulate a fully connected layer working across the channels by using a convolutional layer with a \(1\by 1\) kernel.
 This effectively creates connections between local features across the channels of the feature maps, allowing the feature map to be projected into a map with a different depth.
 
@@ -158,7 +158,7 @@ As the network trains, the parameters in each layer change, this causes the dist
 As the distribution from previous layers change, this shift is propagated though to the layers downstream, and so each layer must deal with ever changing input distributions.
 To overcome this, lower learning rates and careful parameter initialization is required. 
 
-A much more effective solution has been proposed by~\cite{ioffe2015batch} called \textit{Batch Normalization} (BN).
+A much more effective solution has been proposed by\ \textcite{ioffe2015batch} called \textit{Batch Normalization} (BN).
 The proposed solution for convolutional networks is to normalize the output of each convolutional layer by first standardizing each feature dimension by the sample mean and sample variance across the current mini batch, then transforming each layer by a linear transformation with trainable parameters.
 The linear transformation allows the network to restore the representative power of the layer after standardization.
 By allowing the filters to only focus on learning features, instead of having to adapt to constantly shifting inputs, training is accelerated which allows for higher learning rates.
@@ -193,7 +193,7 @@ They are computed from the above quantities as follows,
   \text{\bf recall}=\frac{TP}{TP+FN}
 \end{align*}
 
-These two metrics are the basis for how all object detection models are evaluated and there is usually a tradeoff between the two, e.g.~a model can have very high recall, meaning if correctly identifies most of the potential objects, but if it also identifies many other non-objects the precision is reduced.
+These two metrics are the basis for how all object detection models are evaluated and there is usually a tradeoff between the two, e.g.\ a model can have very high recall, meaning if correctly identifies most of the potential objects, but if it also identifies many other non-objects the precision is reduced.
 Inversely a model could be very certain that it returns correctly identified objects, at the cost of ignoring objects it is not to sure about.
 
 A popular accuracy measure which derives from the precision and recall values if the \(F_1\) score, it may also be referred to as the dice score.
@@ -233,7 +233,7 @@ From a list of all detections made for a class, ranked in ascending order of con
 This shows how precision changes as recall rises over the range [0,1] as more and more detections from the ranked list are included in the precision/recall calculations. 
 The AP describes the shape of the precision-recall curve, and can be calculated a few different ways.
 This thesis will use the definition of AP specified in the evaluation procedure for the VOC2007 image detection challenge. 
-For convenience, the definition of AP, as given in~\cite{everingham2010pascal} is repeated bellow.
+For convenience, the definition of AP, as given in\ \textcite{everingham2010pascal} is repeated bellow.
 
 AP is measured by taking the mean of precision values taken at 11 evenly spaced recall values as follows,
 

@@ -15,8 +15,7 @@ The trade-off is the near insatiable thirst these models have for labelled train
 
 \subsection{Object detection}
 With the quality of image classifiers rising, focus has been given to the more complex task of object detection, where the model must identify the location of objects within an image, as well as their class.
-The work on this problem was kickstarted by~\cite{girshick_rich_2014}, who proposed R-CNN, an algorithm which operates in two distinct steps.
-First by producing \textit{regions of interest} within the image, and then running those regions through a classifier.
+The work on this problem was kickstarted by\ \textcite{girshick_rich_2014}, who proposed R-CNN, an algorithm which operates in two distinct steps.
 They later proposed Fast R-CNN and Faster R-CNN which improved the learning and inference time, as well as the robustness, of the original model.
 
 R-CNN has three main modules.
@@ -37,8 +36,7 @@ Using a RPN allows of training of both stages of the detector, significantly inc
 Following the release of Faster R-CNN, the amount of research attempting to automate various object detection tasks has increased. 
 
 In many domains there is usually a positive correlation between the cost of data and its quality.
-Often times methods that are proposed therefore become prohibitively expensive because they make use of higher quality data.
-CNN based methods have however shown that high quality models can be created using lower quality data.~\cite{el_melegy_automatic_2019} gives a good example of this.
+CNN based methods have however shown that high quality models can be created using lower quality data.\ \textcite{el_melegy_automatic_2019} gives a good example of this.
 A Faster R-CNN method is proposed for detecting tuberculosis bacilli in LM slides.
 The model they propose is able to outperform all previous traditional models, many of which use higher quality imaging methods.
 The type of images the model uses are very difficult to diagnose manually but are by far the most available in the field.
@@ -69,7 +67,7 @@ The model is trained by combining two separate loss values, one for the class co
 Most default boxes are not matched to any ground truth box.
 To balance out the ratio of negative and positive examples in the training objective, only the negative examples with the highest loss values are included in the final loss value.
 
-As of writing, there are no published attempts of using a single stage detector to count pollen grains, but there are examples in similar domains.~\cite{liu_brain_2018} uses an SSD model to detect brain slices used in an automatic sample preparation system.
+As of writing, there are no published attempts of using a single stage detector to count pollen grains, but there are examples in similar domains.\ \textcite{liu_brain_2018} uses an SSD model to detect brain slices used in an automatic sample preparation system.
 The model was chosen for its speed and accuracy, both important in real-time detection.
 The model was also simplified because the range of scales to be detected was narrower than what the standard SSD model has implemented.
 This simplification could also prove relevant to a pollen detection task where grains are similar in both size and shape.
@@ -83,7 +81,7 @@ Specifically, YOLO divides an input image into a grid and then predicts box offs
 Similarly, YOLO also uses transfer learning to reduce training time and can be configured to use most any model as its feature extractor.
 The later versions of YOLO also feature multiple extraction layers which improves predictions for smaller objects, which was one of the major weaknesses of the initial version.
 
-Recently, multiple papers using YOLO models have been published showing promising results in areas similar to palynology.~\cite{chibuta_real_time_2020} uses a modified version of the third iteration of YOLO to screen blood smears for malaria.
+Recently, multiple papers using YOLO models have been published showing promising results in areas similar to palynology.\ \textcite{chibuta_real_time_2020} uses a modified version of the third iteration of YOLO to screen blood smears for malaria.
 Diagnosing malaria is very costly because it requires manual analysis of blood samples.
 Similar to Tuberculosis, the areas with the highest prevalence of the disease, are those where the primary screening technique uses light field microscopy.
 The presented model uses a smaller feature extractor and fewer extraction layers to optimize for speed on basic hardware.
@@ -91,17 +89,17 @@ The model has \( \simeq 99\% \) fewer parameters than the standard YOLOv3 implem
 
 Another area of study that could be of interest to this thesis is blood cell counting.
 A complete blood count is a test that is often requested when evaluating general health and involves a manual count of blood cells within a sample.
-The current standard process requires human expert analysis and is prone to error.~\cite{islam_machine_2019} proposes a YOLO model which is able to accurately localize and classify blood cells using standard LM images of a blood smear.
+The current standard process requires human expert analysis and is prone to error.\ \textcite{islam_machine_2019} proposes a YOLO model which is able to accurately localize and classify blood cells using standard LM images of a blood smear.
 The YOLO model has not been modified apart from changing the number of classes to 3 (Red, White, and Platelets).
 They do however change the inference routine to optimize the count for each of the three cell types.
-As with the aforementioned RPN, YOLO predicts an objectness score for each bounding box, and normally considers a box to be a positive match if the score exceeds a threshold.~\citeauthor{islam_machine_2019} show that, rather than using only one threshold value for all classes, a higher overall accuracy can be reached by filtering boxes for each class independently with different thresholds.
+As with the aforementioned RPN, YOLO predicts an objectness score for each bounding box, and normally considers a box to be a positive match if the score exceeds a threshold.\ \citeauthor{islam_machine_2019} show that, rather than using only one threshold value for all classes, a higher overall accuracy can be reached by filtering boxes for each class independently with different thresholds.
 This points towards a larger issue of choosing both the algorithms that are used to filter the predictions made by these models and their hyper parameters.
 The difference between how many raw predictions a model makes, and the number of objects an image contains is usually many orders of magnitude.
 The method used to filter the predictions is therefore crucial to the performance of the model, and also highly dependent on the domain.
 
 \section{Automated Pollen Detection}\label{sec:rel-pollen}
 There have been many attempts at automated pollen classification over the last three decades.
-These have been nicely summarized in~\cite{sevillano_improving_2018}.
+These have been nicely summarized by\ \textcite{sevillano_improving_2018}.
 Most are statistical classifiers using selected features from pollen images.
 The earlier attempts can be grouped into three categories.
 The first focuses on morphological features such as shape, size and symmetry.
@@ -112,12 +110,12 @@ Of the earlier methods, the most successful utilize images taken through SEM, wh
 
 \subsection{Classical methods}
 As a precursor for the newer systems, it is pertinent to cover the earlier attempts at solving the problem of automated pollen counting.
-The first attempt, by~\cite{langford_computerized_1990}, used grey scale SEM images of the surface texture on pollen grains.
+The first attempt, by\ \textcite{langford_computerized_1990}, used grey scale SEM images of the surface texture on pollen grains.
 16 feature measures, based on a Grey-tone spatial dependence analysis, were then produced and classified using Linear Discriminant Analysis.
 This technique was successful, but required manual analysis for each class, making it difficult to apply to new datasets or other taxa of pollen.
 
 Other attempts were made over the next decade, some using morphological features instead of surface texture, but they follow the same basic procedure of feature engineering followed by a statistical classifier.
-The next major contribution was made in~\cite{li_pollen_1999}, in which very high accuracy was achieved using LM images.
+The next major contribution was made in\ \textcite{li_pollen_1999}, in which very high accuracy was achieved using LM images.
 The major disadvantage of LM imaging was the shallow depth of field causing only portions of the pollen grains to be in focus.
 This reduction of image quality caused a loss in accuracy of the LDA based methods.
 The new method exchanged the classifier with a Multi-Layer Perceptron and achieved higher scores than previous methods using a simpler set of feature measures.
@@ -133,8 +131,8 @@ These same issues also create problems for modern systems, albeit not to the sam
 
 Convolution has been an important tool in image processing since before CNNs gained traction.
 Using hand crafted filters, many basic features such as edges, can be extracted from an image.
-This technique was employed by\ \cite{DaoodICPR16b} with good results.
-The system used a SVM for the final classification, but again demonstrated the viability of using convolutional filters as feature extractors.
+This technique was employed by\ \textcite{DaoodICPR16b} with good results.
+The system used a SVM for the final classification, but demonstrated the viability of using convolutional filters as feature extractors.
 This system in some ways bridges the gap towards the CNN models, but crucially lacks the ability the learn which features should be extracted.
 This is the fundamental deficiency common to all the classical methods, they rely on human expert knowledge to adapt each method for use in the specific domain.
 
@@ -164,12 +162,12 @@ This also leads into the second important factor of dealing with images of polle
 Grains of pollen on a slide are not distributed across only one focal plane, grains are distributed across all three axis and because of the narrow depth of field of the microscope are only visible clearly when focused on.
 The depth of field is in fact so shallow that only parts of the surface ornamentation appear clear.
 For the models we have covered, this means that they potentially are missing out on features because they only rely on an image of a single focal plane.
-In the case of classification, one possible remedy for this is to use a stack of images taken at different focal planes and process the stack as one unit.\ \cite{DaoodAndRibeiro_2018} uses this approach.
+In the case of classification, one possible remedy for this is to use a stack of images taken at different focal planes and process the stack as one unit.\ \textcite{DaoodAndRibeiro_2018} uses this approach.
 The model they propose takes as input a sequence of 10 images taken of pollen grains spanning the whole grain, and classifies it using a network which combines a \textit{recurrent} neural network and a convolutional neural network.
-A recurrent neural network is a special type of network used to process sequences of information, e.g.,\ signals, text, and in this case, 3D image stacks.
+A recurrent neural network is a special type of network used to process sequences of information, e.g.\ signals, text, and in this case, 3D image stacks.
 The results are promising, but the dataset is small, and with only one example, little can be said as to the potential efficacy of this technique.
 
-The last model we will look at is also the only published work attempting to use a CNN to detect pollen grains in slide images.\ \cite{gallardo_caballero_precise_2019} Uses Faster R-CNN to detect pollen grains of various types within unaltered LM images of pollen grains.
+The last model we will look at is also the only published work attempting to use a CNN to detect pollen grains in slide images.\ \textcite{gallardo_caballero_precise_2019} uses Faster R-CNN to detect pollen grains of various types within unaltered LM images of pollen grains.
 The model does not classify the grains it localizes.
 They report very high values for both precision and recall but use a slightly modified definition of IoU when calculating these values.
 
@@ -192,4 +190,4 @@ Although the results are very promising, they are hard to interpret given the ch
 In this section we have detailed both how CNNs are used to solve object detection problems, and how the field of automated pollen grain analysis has evolved from using highly specialized hand-crafted feature extractors, to being dominated by generalized CNN based frameworks.
 Of most significance to this research are the modifications that have been successfully made to CNN models used in similar fields to pollen grain counting, as well as the different techniques that have been used to make use of multifocal data.
 
-%~\cite{gallardo_caballero_precise_2019} did not observe any real differences in performance between models trained with or without blurred images, but their method of using detections from multiple focal planes in each prediction, masks the effects that blur has on the model
+%\ \textcite{gallardo_caballero_precise_2019} did not observe any real differences in performance between models trained with or without blurred images, but their method of using detections from multiple focal planes in each prediction, masks the effects that blur has on the model
