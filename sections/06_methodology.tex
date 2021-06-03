@@ -315,11 +315,6 @@ Negative examples are counted towards the confidence loss by descending loss unt
 
 \subsection{Inference}
 
-\begin{wrapfigure}[9]{r}{0.35\textwidth}
-  \centering
-  \includegraphics[width=0.35\textwidth]{figs/method/gausian_penelty.pdf}
-  \caption{Gaussian decay as a function of IoU for various \( \sigma \)}\label{fig:gauss}
-\end{wrapfigure}
 When the model is working, the raw output it produces is regression values for many thousands of bounding boxes with class confidence predictions.
 In the locations where an object is present, the model will most likely produce multiple overlapping bounding boxes.
 Ideally, the output would be a one-to-one mapping between the predicted boxes and objects in the image.
@@ -334,7 +329,7 @@ NMS performs well in most settings, but has a particular weakness in cases where
 In these situations, NMS will often only return a single bounding box for one of the objects, ignoring the rest.
 Given that the data in this project exhibits this characteristic the standard NMS algorithm is replaced with a more modern version, Soft-NMS, introduced in\ \textcite{bodla2017softnms}.
 The pseudocode for both algorithms is as follows,
-%
+
 \begin{pseudofunc}{NMS}{\(\mathcal{B}=\{b_1,\ldots,b_N \},~\mathcal{S}=\{s_1,\ldots,s_N \},~N_t\)}
   \item \(\mathcal{D} \leftarrow \{ \} \)
   \item \pwhile~\(\mathcal{B} \neq \emptyset \):
@@ -343,14 +338,12 @@ The pseudocode for both algorithms is as follows,
     \item \(\mathcal{M} \leftarrow b_m\)
     \item \(\mathcal{D} \leftarrow \mathcal{D} \cup \mathcal{M};~ \mathcal{B} \leftarrow \mathcal{B} - \mathcal{M}\)
     \item \pfor~\(b_i \in \mathcal{B}\):
-    \vspace{10pt}
+    \vspace{6pt}
     \begin{pseudoloop}
       \fcolorbox{red}{white}{\color{red} %
       \minipage[t]{\dimexpr0.50\linewidth-2\fboxsep-\fboxrule\relax}
         \item \pif~\pmethod{IoU}{\(\mathcal{M},~b_i\)}\(~\geq N_t\):
-        \begin{pseudoloop}
-        \item \(\mathcal{B} \leftarrow \mathcal{B} - b_i;~ \mathcal{S} \leftarrow \mathcal{S} - s_i\)
-        \end{pseudoloop}
+        \item \(~~\mathcal{B} \leftarrow \mathcal{B} - b_i;~ \mathcal{S} \leftarrow \mathcal{S} - s_i\)
         \vspace{3pt}
         \begin{textblock}{1} (3.7,-0.15)
           \textcolor{black}{\texttt{NMS}}
@@ -359,7 +352,6 @@ The pseudocode for both algorithms is as follows,
       \fcolorbox{nicegreen}{white}{\color{nicegreen}%
       \minipage[t]{\dimexpr0.50\linewidth-2\fboxsep-\fboxrule\relax}
         \item \(s_i \leftarrow s_i\)\pmethod{f}{\pmethod{IoU}{\(\mathcal{M},~b_i\)}}
-        \vspace{13pt}
         \begin{textblock}{2} (3,-0.15)
           \textcolor{black}{\texttt{Soft-NMS}}
         \end{textblock}
@@ -368,12 +360,18 @@ The pseudocode for both algorithms is as follows,
   \end{pseudoloop}\vspace{5pt}
   \item \pret~\(\mathcal{D},~\mathcal{S}\)
 \end{pseudofunc}
-%
+
+\begin{wrapfigure}[13]{r}{0.3\textwidth}
+  \centering
+  \includegraphics[width=0.3\textwidth]{figs/method/gausian_penelty.pdf}
+  \caption{Gaussian decay as a function of IoU for various \( \sigma \)}\label{fig:gauss}
+\end{wrapfigure}
+
 Soft-NMS changes only the colored sections, where it introduces a rescoring function, \texttt{f(IoU)}, which only decays the scores of remaining boxes instead of discarding them altogether. % chktex 36
 This allows boxes which overlap with the selected box to remain in the pool.
 Rescoring is applied using a Gaussian decay function as follows,
 
-\[s_i\leftarrow s_i e^{-\frac{\text{iou}{(\mathcal{M}, b_i)}^2}{\sigma}},\forall b_i \notin \mathcal{D}\]
+\[s_i\leftarrow s_i e^{-\frac{\text{iou}{(\mathcal{M}, b_i)}^2}{\sigma}},~~\forall b_i \notin \mathcal{D}\]
 
 where \( \sigma \) controls the rate of decay, as demonstrated in Figure~\ref{fig:gauss}.
 

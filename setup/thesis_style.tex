@@ -134,18 +134,11 @@
 \newcommand{\by}{\!\times \!}
 \newcommand{\ckm}{\checkmark}
 
+\setlength\OuterFrameSep{10pt}
+\setlength{\FrameSep}{0pt}
+
 % Quick and dirty pseudocode which does not deserve the algorithm environment
-\newenvironment{pseudocode}[0]
-{%
-  \begin{leftbar}
-  \noindent
-  \hspace{-0.6em}
-}
-{%
-  \end{leftbar}
-  \noindent
-  \hspace{-0.8em}
-}
+
 \newenvironment{pseudoloop}[0]
 {%
   \begin{itemize}[nosep,label=,leftmargin=1em]
@@ -155,13 +148,13 @@
 }
 \newenvironment{pseudofunc}[2]
 {%
-  \begin{pseudocode}
-  procedure \textbf{\texttt{#1}}(#2): % chktex 36
+  \leftbar\vspace{-0.5em}
+  def \textbf{\texttt{#1}}(#2): % chktex 36
   \begin{pseudoloop}
 }
 {%
   \end{pseudoloop}
-  \end{pseudocode}
+  \endleftbar\vspace{-1em}
 }
 \newcommand{\pmethod}[2]{\texttt{#1(#2)}}
 \newcommand{\parg}[2]{\(\texttt{#1}=#2\)}
