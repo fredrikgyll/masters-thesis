@@ -21,7 +21,7 @@ In total, three different species have been classified, namely \textit{poaceae},
 A labeled example is given in Figure~\ref{fig:dataset-sample}.
 A summary of the dataset is given in Table~\ref{tab:dataset}.
 
-\begin{table}[htb]
+\begin{table}[htbp]
   \caption[Class distribution across the dataset]{Distribution of class labels across the 701 sample images of the pollen dataset.}\label{tab:dataset}
   \centering
   \begin{tabular}{lrrr} \toprule
@@ -394,9 +394,9 @@ The relevant specifications are as follows,
   \item \textbf{GPU:} \textit{Nvidia GTX 1070}, 8 GB GDDR5 VRAM,\\1920 CUDA cores @ 1506 MHz, 6.463 TFLOPS (32 bit).
   \item \textbf{Memory:} \textit{Corsair Vengeance}, 32 GB DDR4 @ 2166 MHz.
 \end{itemize}
-
-\textcolor{red}{Write about performance, both FPS and training time}
-
+{\it
+\textcolor{red}{Summary of training time and model speed re inference}
+}
 \subsection{Training}
 All the experiments where run using the same training setup.
 The model is trained using Stochastic Gradient Decent (SGD) with a mini batch size of 32, learning rate of \num{e-3}, \num{0.9} momentum, and \num{5e-4} weight decay.
@@ -410,7 +410,7 @@ The Poaceae class is therefore under-sampled when creating the final dataset.
 467 samples are included in the final dataset, the class distribution is given in Table~\ref{tab:training-dataset}.
 The final dataset is then divided into a training and test split with a 85\% / 15\% ratio.
 
-\begin{table}[htb]
+\begin{table}[htbp]
   \caption[Class distribution across the final training dataset containing 467 sample images.]{Distribution of classes across the training dataset}\label{tab:training-dataset}
   \centering
   \begin{tabular}{lrrr} \toprule

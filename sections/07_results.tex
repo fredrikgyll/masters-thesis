@@ -96,7 +96,7 @@ A possible explanation for this is that localization, in terms of feature requir
 This experiment helps reveal the apparent inequality between the two tasks that the model is learning, namely localization and classification.
 Localization seems to be a much easier task to learn, given how invariant the the model is to the changing extractor, while seeing a markedly higher degradation in classification.
 
-\begin{table}\centering
+\begin{table}[htbp]\centering
   \ra{1.3}
 \caption[Performance by feature extraction network]{Summary of experimental results from testing various small feature extraction networks.
 The localization score refers to the share of detection that correctly localize a GT, regardless of class.
@@ -128,7 +128,7 @@ The multiple layers then allow for specialization where some layers become bette
 With pollen there again is a much more uniform dataset where size differences between classes is negligible, which in turn might also explain why there does not seem to exist any strong relationship between layer activation and performance.
 This is compounded by the limited number of classes and could change if a larger, more diverse, dataset was used.
 
-\begin{table}\centering
+\begin{table}[htbp]\centering
   \ra{1.1}
   \caption[Performance when deactivating source layers]{Summary of experimental results when deactivating various source layers.
   The source layers are ordered 1--6 with layer 1 being the most granular \(38\by38\) feature map.}%
