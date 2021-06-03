@@ -51,6 +51,40 @@ This is formalized in the second research question,
     \item[RQ2] \textit{Can the accuracy and recall of the model be improved by using multifocal data?}
 \end{description}
 
+\section{Problem Description}\label{sec:back-problem}
+
+%Pollen counting
+%The Norwegian Asthma and Allergy Association has, since 1980, tracked the amount of air born pollen in Norway.
+%This data is used to create a forecasting service for those who suffer allergic reactions to pollen, around 20 \% of the population.
+%Pollen is collected with traps where air is continually sucked though a small slit and over an adhesive strip.
+%The strip is moved across the slit, exposing different sections throughout the day.
+%Pollen grains and other air born particulates adhere to the strip, which is then analyzed under a microscope.
+%This produces an estimate for the density of different pollen types, measured in particles per cubic meter, throughout the season.
+
+
+As mentioned, one of the primary activities within palynology is counting pollen grains.
+When magnified, only a section of a slide is visible through a microscope.
+A sliding window approach must be used to scan the entire surface area of the sample.
+The data that is collected varies between different applications.
+With airborne pollen, the slide has been prepared such that the location of the pollen represents the time interval at which it was collected.
+In this case, the general location is recorded along with the taxa, such that the changes in density throughout the day are known.
+
+In the context of machine learning this can be described as an \textit{image recognition} task.
+Image recognition is the general task of deciding if an image contains an object of interest, where it is located within the image, and what class the object belong to.
+When the main task is to locate one or multiple objects the task is often referred to as \textit{object detection}, which is a joint regression and classification problem.
+The location and dimensions of a rectangle, referred to an a \textit{bounding box}, which encloses an object of interest is regressed and the object is also classified.
+Figure~\ref{fig:bbox} shows a correct solution to this problem.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.7\textwidth]{figs/background/GT-Snap-080.png}
+  \caption[Bounding boxes]{The image shows an LM image of 2 pollen grains with ground truth bounding boxes.
+The image contains to species, \textcolor{corylus}{corylus} and \textcolor{alnus}{alnus}.}\label{fig:bbox}
+\end{figure}
+
 \section{Thesis Structure}\label{sec:intro-thesis-structure}
 The remainder of this document is structured as follows,
-Section~\ref{cha:background} covers background knowledge relating to pollen imaging techniques, the composition and functioning of Convolutional Neural Networks, and metrics for measuring performance in object detection tasks.
+Chapter~\ref{cha:background} covers background knowledge relating to pollen imaging techniques, the composition and functioning of Convolutional Neural Networks, and metrics for measuring performance in object detection tasks.
+A literature review covering the usage of convolutional networks in object detection, as well as the various methods proposed to classify and detect pollen grains follows in Chapter~\ref{cha:related}.
+Chapter~\ref{cha:method} describes the implementation and development of a CNN based object detection system, a sharpness measurement procedure, and a the experimental design used to analyze the model.
+The results of these experiments are provided and discussed in Chapter~\ref{cha:results}.
