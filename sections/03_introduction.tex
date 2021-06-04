@@ -3,7 +3,7 @@
 
 %In all chapters and sections it is important to write clearly and concisely. Avoid repetitions and if needed, refer back to the original discussion or presentation. Each new section, subsection or paragraph should provide the reader with new information and be written in your own words. Avoid direct quotes. If you use direct quotes, unless the quote itself is very significant, you are conveying to the reader that you are unable to express this discussion or fact yourself. Such direct quotes also break the flow of the language (yours to someone else's).
 
-\textit{Palynology} is the scientific study of palynomorphs, a general term for microscopic organic entities found when studying palynological preparations.
+\textit{Palynology} is the scientific study of palynomorphs, a general term for organic-walled microscopic plant and animal remains\ \parencite{askin_palynology_2003}.
 Because of the resilience of these types of organisms and microfossils, the types of particles studied covers the entire geological timeline, from the earliest organisms of the Proterozoic Era, to the allergy educing grass pollens of today.
 
 Possible applications and use cases are equally as diverse.
@@ -43,7 +43,7 @@ The Single Stage MultiBox (SSD) model is presented in Section~\ref{sec:ssd}.
 It is designed as a general object detector capable of detection any number of objects in an image.
 \textbf{RQ1} postulates that the task of pollen detection will require a less generalized model and that this can be realized by simplifying or removing parts of the models architecture.
 
-Recent research in pollen classification has questioned how multifocal data may be used to improve accuracy of models operating i=on microscopic data, i.e.\ images from different focus planes, as opposed to single images.
+Recent research in pollen classification has questioned how multifocal data may be used to improve accuracy of models operating on microscopic data, i.e.\ images from different focus planes, as opposed to single images.
 This project will explore what impact the sharpness of training data has on an object detection model.
 This is formalized in the second research question,
 
@@ -73,13 +73,13 @@ In this case, the general location is recorded along with the taxa, such that th
   \centering
   \includegraphics[width=0.7\textwidth]{figs/background/GT-Snap-080.png}
   \caption[Bounding boxes]{The image shows an LM image of 2 pollen grains with ground truth bounding boxes.
-The image contains to species, \textcolor{corylus}{corylus} and \textcolor{alnus}{alnus}.}\label{fig:bbox}
+The image contains two species, \textcolor{corylus}{corylus} and \textcolor{alnus}{alnus}.}\label{fig:bbox}
 \end{figure}
 
 In the context of machine learning this can be described as an \textit{image recognition} task.
 Image recognition is the general task of deciding if an image contains an object of interest, where it is located within the image, and what class the object belong to.
 When the main task is to locate one or multiple objects the task is often referred to as \textit{object detection}, which is a joint regression and classification problem.
-The location and dimensions of a rectangle, referred to an a \textit{bounding box}, which encloses an object of interest is regressed and the object is also classified.
+The location and dimensions of a rectangle, referred to a \textit{bounding box}, which encloses an object of interest is regressed and the object is also classified.
 Figure~\ref{fig:bbox} shows a correct solution to this problem.
 
 \section{Thesis Structure}\label{sec:intro-thesis-structure}

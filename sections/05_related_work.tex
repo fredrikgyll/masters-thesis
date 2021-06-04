@@ -15,7 +15,7 @@ The trade-off is the near insatiable thirst these models have for labelled train
 
 \subsection{Object detection}
 With the quality of image classifiers rising, focus has been given to the more complex task of object detection, where the model must identify the location of objects within an image, as well as their class.
-Work on this problem was kickstarted by\ \textcite{girshick_rich_2014} with the proposed R-CNN model, a three stage system which first identifies `regions of interests' within an image, before classifying them using a CNN and statistical classifier.
+Work on this problem was kickstarted by\ \textcite{girshick_rich_2014} with the proposed method: \textit{Regions with CNN features} (R-CNN), a three stage system which first identifies `regions of interests' within an image, before classifying them using a CNN and statistical classifier.
 They later proposed Fast R-CNN and Faster R-CNN which improved the learning and inference time, as well as the robustness, of the original model.
 
 R-CNN has three main modules.
@@ -48,10 +48,10 @@ This is common for a lot of research where a problem involves localization.
 \subsection{Single stage detectors}\label{sec:ssd}
 Common to the R-CNN family of methods is the use of two separate stages, one for identifying regions of interest in an image, and one for classifying objects in those regions.
 This adds considerable complexity in that both systems require separate training and hyper-parameter tuning.
-These methods have been successfully utilized in many domains, including the only published attempt at pollen grain detection.
+These methods have been successfully utilized in many domains, including the only published attempt at pollen grain detection by\ \cite{gallardo_caballero_precise_2019}.
 The inference speed is however prohibitively slow for tasks that require real-time performance.
 Overall, there is an obvious trend in the evolution of the two stage systems where stages are replaced by a CNN\@.
-This trend continues to its logical conclusion with the development of the single stage detector.
+This trend continues to its logical conclusion with the development of the single stage detector (SSD).
 
 \begin{figure}[htbp]
     \centering
@@ -75,10 +75,10 @@ This allows the network to predict objects at different scales in the image.
 The training objective for SSD is created by matching default boxes with overlapping ground truth boxes based on their IoU score.
 This match is then used to produce a target for the regression parameters and class for every positively matched default box.
 The model is trained by a linear combination of two separate loss functions, one for the bounding box regressions, and one for the class confidences.
-Most default boxes are not matched to any ground truth box which causes an unbalance in the loss function.
+Most default boxes are not matched to any ground truth box which causes an imbalance in the loss function.
 To balance out the ratio of negative and positive examples in the training objective, only the negative examples with the highest loss values are included in the final loss calculation.
 
-As of writing, there are no published attempts of using a single stage detector to count pollen grains, but there are examples its use in similar domains.\ \cite{liu_brain_2018} uses an SSD model to detect brain slices used in an automatic sample preparation system.
+As of writing, there are no published attempts of using a single stage detector to count pollen grains, but there are examples of its use in similar domains.\ \cite{liu_brain_2018} uses an SSD model to detect brain slices used in an automatic sample preparation system.
 The model was chosen for its speed and accuracy, both important in real-time detection.
 The model was also simplified because the range of scales to be detected was narrower than what the standard SSD model has implemented.
 This simplification could also prove relevant to a pollen detection task where grains are similar in both size and shape.
@@ -89,8 +89,8 @@ You Only Look Once (YOLO) is a very popular single stage model, its release clos
 As with R-CNN it has been released in many versions with iterative improvements.
 It is similar to SSD in that it also predicts box offsets and class scores for a fixed number of bounding boxes.
 Specifically, YOLO divides an input image into a grid and then predicts box offsets for a fixed number of bounding boxes centered in each grid square (but not regressed from default boxes), and class confidences for each grid square (not each bounding box).
-Both SSD and YOLO also use transfer learning in the form of a initial feature extractor which is transferred from a pertained classification model.
-The later versions of YOLO also feature multiple extraction layers which improves predictions for smaller objects, which was one of the major weaknesses of the initial version.
+Both SSD and YOLO also use transfer learning in the form of an initial feature extractor which is transferred from a pertained classification model.
+The later versions of YOLO also feature multiple extraction layers which improve predictions for smaller objects, which was one of the major weaknesses of the initial version.
 
 Recently, multiple papers using YOLO models have been published showing promising results in areas similar to pollen counting.\ \textcite{chibuta_real_time_2020} used a modified version of the third iteration of YOLO to screen blood smears for malaria.
 Diagnosing malaria is very costly because it requires manual analysis of blood samples.
@@ -98,7 +98,7 @@ Similar to Tuberculosis, the areas with the highest prevalence of the disease, a
 The presented model uses a smaller feature extractor and fewer extraction layers to optimize for speed on basic hardware.
 The model has \( \simeq 99\% \) fewer parameters than the standard YOLOv3 implementation and still performs at the same level as both human experts, and its unoptimized equivalent.
 
-Another area of study that could be of interest to this thesis is blood cell counting.
+Another area of study of relevance to this thesis is blood cell counting.
 A complete blood count is a test that is often requested when evaluating general health and involves a manual count of blood cells within a sample.
 The current standard process requires human expert analysis and is prone to error.\ \textcite{islam_machine_2019} proposed a YOLO model which accurately localizes and classifies blood cells using standard LM images of a blood smear.
 The YOLO model has not been modified apart from changing the number of classes to 3 (Red, White, and Platelets).
@@ -120,7 +120,7 @@ These methods have been able to successfully classify pollen to a degree compara
 Of the earlier methods, the most successful utilize images taken through SEM, which is a much more expensive imaging technique than standard LM imaging.
 
 \subsection{Classical methods}
-As a precursor for the newer systems, it is pertinent to cover the earlier attempts at solving the problem of automated pollen counting.
+As a precursor to the newer systems, it is pertinent to cover the earlier attempts at solving the problem of automated pollen counting.
 The first attempt, by\ \textcite{langford_computerized_1990}, used grey scale SEM images of the surface texture on pollen grains.
 16 feature measures, based on a Grey-tone spatial dependence analysis, were then produced and classified using Linear Discriminant Analysis (LDA).
 This technique was successful, but required manual analysis for each class, making it difficult to apply to new datasets or other taxa of pollen.
@@ -132,7 +132,7 @@ This reduction of image quality caused a loss in accuracy of the LDA based metho
 The new method exchanged the classifier with a Multi-Layer Perceptron and achieved higher scores than previous methods using a simpler set of feature measures.
 The main limitation was the lack of processing power at the time which meant that the method could not scale to larger sets of images.
 
-As computational power rose, there were also attempts made at localizing grains.\ \cite{france_new_2000} presented a hybrid solution featuring a both classical and neural methods.
+As computational power rose, there were also attempts made at localizing grains.\ \cite{france_new_2000} presented a hybrid solution featuring both classical and neural methods.
 The localization is handled by a K-means classifier coupled with a shape and size filter, producing segments of the image likely to contain pollen.
 A trained classifier is then used to classify the grains.
 The results were promising, but the system was also very limited.
@@ -145,7 +145,7 @@ Using hand crafted filters, many basic features such as edges, can be extracted 
 This technique was employed by\ \textcite{DaoodICPR16b} with good results.
 The system used a SVM for the final classification, but demonstrated the viability of using convolutional filters as feature extractors.
 This system in some ways bridges the gap towards the CNN models, but crucially lacks the ability the learn which features should be extracted.
-This is the fundamental deficiency common to all the classical methods, they rely on human expert knowledge to adapt each method for use in the specific domain.
+This is the fundamental deficiency common to all the classical methods: they rely on human expert knowledge to adapt each method for use in the specific domain.
 
 \subsection{CNN methods}
 CNNs have all but taken over as the standard in image classification, and this is also the case in pollen detection.
@@ -162,7 +162,7 @@ Data augmentation was used to combat the small size of the dataset, something th
 The paper showed that, although a higher accuracy was obtained on the SEM data, the models were fully capable of achieving good results using LM images.
 Both transfer learning and data augmentation is featured in most of the subsequently published papers.
 
-{\cite{sevillano_improving_2018}} later gave more evidence for the supremacy of CNN methods by applying three different convolutional models on a publicly available dataset {POLENE23E}, which at this point only had been classified using classic methods.
+{\cite{sevillano_improving_2018}} later gave more evidence for the supremacy of CNN methods by applying three different convolutional models on a publicly available dataset {POLENE23E}, which at that point only had been classified using classic methods.
 All three models used a CNN as the feature extractor and they all performed well, doubling the precision over the state of the art.
 The results also show that there are only insignificant improvements when using a linear discriminant classifier on top of the CNN\@.
 
@@ -170,7 +170,8 @@ Common to all the mentioned methods is that the data they rely on is LM images o
 This ignores two important factors, firstly and most obvious is the fact that none of these models can be used directly to count pollen grains, only to classify pre-segmented images of singular grains.
 This also leads into the second important factor of dealing with LM images of pollen grains at different focal planes.
 
-Grains of pollen on a slide are not distributed across one focal plane and are not oriented in the same direction, grains are scattered across all three axes and because of the narrow depth of field of the microscope are only partially visible when focused on.
+Grains of pollen on a slide are not distributed across one focal plane and are not oriented in the same direction.
+Grains are scattered across all three axes and because of the narrow depth of field of the microscope are only partially visible when focused on.
 The depth of field is in fact so shallow that only parts of the surface ornamentation appear clear.
 For a human operator this is not a problem as the focus can be adjusted to reveal the entire grain in turn, with static images however, dealing with this lack of complete information is an open question.
 
@@ -179,16 +180,16 @@ In the case of classification, one possible remedy for this is to use a stack of
 The model they propose takes as input a sequence of 10 images taken of pollen grains spanning the whole grain, and classifies it using a network which combines a \textit{recurrent} neural network (RNN) and a convolutional neural network.
 A recurrent neural network is a special type of network used to process sequences of information, e.g.\ signals, text, and in this case, 3D image stacks.
 The RNN has a memory unit which `remembers' the past elements of a sequence and uses this to process sequential data.
-The model first uses the CNN to create a feature embedding for each frame independently, the sequence is then classified by a RNN\@.
+The model first uses the CNN to create a feature embedding for each frame independently, the sequence is then classified by an RNN\@.
 The result is a reportedly 100\% accurate model over a dataset with 10 classes.
 
-The main conclusion drawn is that the z-stack benefits form being processed as a sequence, and not as independent samples, but the results show only small improvements from using the RNN over a majority-vote system using classifications from the CNN directly.
-There is also no clear strategy for extending the system for grain detection which limits its utility.
+The main conclusion drawn is that the z-stack benefits from being processed as a sequence, and not as independent samples, but the results show only small improvements from using the RNN over a majority-vote system using classifications from the CNN directly.
+There is also no clear strategy for extending the system for grain detection, which limits its utility.
 
 The last model we will look at is also the only published work attempting to use a CNN to localize pollen grains in slide images.\ \textcite{gallardo_caballero_precise_2019} uses Faster R-CNN to detect pollen grains of various types within unaltered LM images of pollen grains.
 The model does not perform classification of the grains it localizes.
 They report very high values for both precision and recall but use a slightly modified definition of IoU when calculating these values.
-multifocal data is used only when running inference by combining the detections from the entire z-stack as one single prediction.
+Multifocal data is used only when running inference by combining the detections from the entire z-stack as one single prediction.
 
 The dataset they use was created by filming the slide whilst moving the focus plane across the pollen grains.
 Based on an auto-focused keyframe, 10 frames were extracted before and after the keyframe, creating a 21-frame z-stack.
@@ -201,12 +202,12 @@ The reported results are very good, but it is probable that the results are infl
 The definition of IoU is also changed so that comparison to other object detection models is impossible.
 The effect this has on the values for recall and precision is not declared.
 
-Two trials where run to compare the performance obtained from the two datasets, and values for recall and precision were high for both (above .98), with the non-blurred trial having slightly higher precision.
-The authors conclude that there does not seem to be any real differences in performance between models trained with or without blurred images, but their method of using detections from multiple focal planes in each prediction, masks the effects that blur has on the model hard to pin-point.
+Two trials were run to compare the performance obtained from the two datasets, and values for recall and precision were high for both (above .98), with the non-blurred trial having slightly higher precision.
+The authors conclude that there do not seem to be any real differences in performance between models trained with or without blurred images, but their method of using detections from multiple focal planes in each prediction hides the effects that blur has on the model hard to pin-point.
 
 How to utilize the information contained in a z-stack is a very open question.
 Both methods presented above using z-stacks achieved good results, but neither attempts to explain how the models are affected by the different sharpness valued in the data.
-Rather, they aggregate information from all images which hides how the model responds to each static image.
+Rather, they aggregate information from all images, which hides how the model responds to each static image.
 Gathering data on how sharpness affects the model could provide valuable insight into this relationship.
 
 In this section we have detailed both how CNNs are used to solve object detection problems, and how the field of automated pollen grain analysis has evolved from using highly specialized hand-crafted feature extractors, to being dominated by generalized CNN based frameworks.

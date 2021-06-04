@@ -43,8 +43,7 @@ The ground truth labels are drawn for all present pollen grains, regardless of t
 This is done so that the dataset may be modified for the purpose of analyzing sharpness and model performance in regards to \textit{RQ2}.
 
 As opposed to more general object detection tasks, where there is a large variance in both the apparent size and shape of objects within an image, this dataset is much more regular.
-Looking at Figure~\ref{fig:aspect}, the grains are mostly square in shape and between 100 and 150 pixels wide.
-%TODO more here
+Looking at Figure~\ref{fig:aspect}, the grains are mostly circular in shape and between 100 and 150 pixels wide.
 
 \begin{figure}[htb]
   \centering
@@ -133,7 +132,7 @@ The bottom row shows the center-shifted discrete Fourier transform of the corres
 The Fourier spectra mapped to grayscale values with a truncated linear amplitude mapping which is scaled to compensate for the otherwise dominating center component.}\label{fig:fourier-demo}
 \end{figure}
 
-Using the Fourier spectrum to measure sharpness follows from the realization that there is a strong relationship between the sharpness of an image in the spacial domain and the distribution of frequency components in the frequency domain.
+Using the Fourier spectrum to measure sharpness follows from the realization that there is a strong relationship between the sharpness of an image in the spatial domain and the distribution of frequency components in the frequency domain.
 Sharp features produce high frequencies while blur smooths out the changes in brightness, lowering the frequencies.
 Figure~\ref{fig:fourier} shows three different pollen grains, captured with progressively more blur.
 By visual inspection it is clear that as the perceived blur increases the amount of high frequency components also decreases.
@@ -160,7 +159,7 @@ The operation is described in Equation (\ref{eq:sharp}).
   \end{split}
 \end{equation}
 
-Here \(\mathcal{F}\) is the discrete the Fourier transform operating on a input image \(a\).
+Here \(\mathcal{F}\) is the discrete the Fourier transform operating on an input image \(a\), which is a \(M\by N\) matrix of integers.
 The phase component of the complex valued output is ignored, leaving \(\mathbf{X}\) to contain only the magnitude of the frequency components.
 The scaling factor of the threshold value, \(\mu \), was found to produce good results on the data, without modification. \(S\) is the sharpness measure.
 
@@ -241,7 +240,7 @@ The model is purely convolutional with no fully connected layers.
 The feature extractor can be any classification network that can produce a feature map of the correct dimensions.
 In the original paper the VGG-16 network is used\ \parencite{simonyan2015deep} without any particular justification as to why.
 ResNet-34 is used in the baseline configuration.
-The main reason for this being its superior performance over VGG, and the ease with which it integrates with the auxiliary structure\ \parencite{he2015deep}.
+The main reason for this is its superior performance over VGG, and the ease with which it integrates with the auxiliary structure\ \parencite{he2015deep}.
 ResNet-34 is the largest of the ResNet family which fits on the GPU used for most of the experimentation.
 PyTorch offers canonical implementations of the most popular pre-trained models as part of their API\@.
 
@@ -313,7 +312,7 @@ The loss function is calculated as follows,
 where \( x=\{1,0\} \) is a binary mask denoting a match between a default box and ground truth, \( N \) is the number of positive examples, \( c \) is class confidences, \( l \) is predicted boxes, and \( g \) is the regressed ground truth boxes.  \( L_{loc} \) is the summed Smooth L1 loss over all positive matched bounding boxes, while \( L_{conf} \) is the SoftMax loss over multiple class confidences, both are standard loss functions provided by PyTorch.
 
 A problem that this and many similar models face is the gross imbalance between positive and negative training examples.
-Out of the 8732 default boxes only a small subset can be matched to to a ground truth.
+Out of the 8732 default boxes only a small subset can be matched to a ground truth.
 For the localization loss this has no impact as only the matched boxes are counted towards the loss, but for the confidence the overwhelming majority of predictions are negative matches.
 To counteract this imbalance SSD uses \textit{hard negative mining} to balance out the negative and positive examples.
 As the name suggests, this technique aims to focus training of particularly `hard' examples and ignore the others.
@@ -329,12 +328,12 @@ Ideally, the output would be a one-to-one mapping between the predicted boxes an
 A common filtering technique is called \textit{Non-maximum Suppression} (NMS).
 Let \( \mathcal{B} \) be a list of bounding boxes and \( \mathcal{S} \) be their corresponding scores.
 NMS is then a simple iterative filtering algorithm where, for each iteration, the bounding box with the highest score is selected from \(\mathcal{B}\).
-Any bounding boxes that overlaps with the selected box is then pruned from \(\mathcal{B}\) and \(\mathcal{S}\) and the loop is continued until \(\mathcal{B}\) is exhausted.
+Any bounding boxes that overlap with the selected box are then pruned from \(\mathcal{B}\) and \(\mathcal{S}\) and the loop is continued until \(\mathcal{B}\) is exhausted.
 Boxes are considered overlapping if their IoU is larger than some threshold \(N_t\).
 
 NMS performs well in most settings, but has a particular weakness in cases where the target boxes of objects overlap.
 In these situations, NMS will often only return a single bounding box for one of the objects, ignoring the rest.
-Given that the data in this project exhibits this characteristic the standard NMS algorithm is replaced with a more modern version, Soft-NMS, introduced in\ \textcite{bodla2017softnms}.
+Given that the data in this project exhibits this characteristic, the standard NMS algorithm is replaced with a more modern version, Soft-NMS, introduced in\ \textcite{bodla2017softnms}.
 The pseudocode for both algorithms is as follows,
 
 \begin{pseudofunc}{NMS}{\(\mathcal{B}=\{b_1,\ldots,b_N \},~\mathcal{S}=\{s_1,\ldots,s_N \},~N_t\)}
@@ -384,7 +383,7 @@ where \( \sigma \) controls the rate of decay, as demonstrated in Figure~\ref{fi
 
 \section{Experimental setup}\label{sec:method-exp-setup}
 This section will present the experiments which have been designed in order to examine the research questions.
-Firstly, the software and hardware stack used in the implementation the model is presented, as well as the training procedure used for the experiments.
+Firstly, the software and hardware stack used in the implementation of the model is presented, as well as the training procedure used for the experiments.
 A run-down of the experiments that have been performed will then be given.
 
 \subsection{Software}
@@ -481,7 +480,7 @@ In practice, only the detection blocks that are fed by the feature maps are deac
 As observed, the dataset contains a wide variety of grains spanning many levels of blur.
 It remains unclear what impact blurry data has on the training of fully convolutional object detection systems.
 With this experiment the aim is to explore if there is a correlation between the distribution of sharpness in the training data and model predictions.
-The performance of the model not of interest, but rather how the distribution of sharpness values in the training data changes the distribution of sharpness in both the predictions of the model and in the ground truths it does or does not detect.
+The performance of the model is not of interest, but rather how the distribution of sharpness values in the training data changes the distribution of sharpness in both the predictions of the model and in the ground truths it does or does not detect.
 
 For the experiment the model is trained on various versions of the same dataset.
 Each model will be trained on a subset of the ground truth labels using a sharpness filter which prunes any ground truth bellow a certain threshold.

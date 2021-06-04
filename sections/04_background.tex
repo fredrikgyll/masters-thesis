@@ -11,10 +11,10 @@ Within the image-based methods there are two main imaging techniques.
 
 \textit{Light microscopy} (LM) describes the method of observing a prepared sample with an optical microscope using visible light.
 The sample is fixed to a translucent slide and is illuminated with a backlight.
-It can either be observed through an eyepiece or photographed with a CCD\@.
+It can either be observed through an eyepiece or photographed with a image sensor.
 An example of a pollen grain is shown in Figure~\ref{fig:lm_and_sem}.
 Because the grain is semi-translucent, differences in the surface texture can be observed, but only some areas are in focus.
-A consequence of the high magnification is that the plane of focus is so narrow that only parts of the grain is in focus.
+A consequence of the high magnification is that the plane of focus is so narrow that only parts of the grain are in focus.
 
 \begin{figure}[htb]
   \centering
@@ -47,9 +47,9 @@ An overview of the basic building blocks of a CNN will first be given, before ex
 This section will also cover some of the newer concepts that have become commonplace additions to the basic model in later years.
 
 A convolutional neural network consists of stacked, layered, operations.
-There are two types of layers, \textit{convolutional}, and \textit{spacial pooling}.
+There are two types of layers, \textit{convolutional}, and \textit{spatial pooling}.
 The convolutional layers extract \textit{feature maps} by applying several trainable filters to the input, before applying a nonlinear activation function to the result.
-The spacial pooling layers operate in a similar fashion by applying an operation to a receptive field which is moved over the input feature map.
+The spatial pooling layers operate in a similar fashion by applying an operation to a receptive field which is moved over the input feature map.
 The operation is designed to down sample the input, so the resulting feature map has reduced dimensions.
 The two layers are stacked alternatingly, with the idea being that the complexity of the features extracted increases with the depth of the network.
 
@@ -99,13 +99,12 @@ One of the more important aspects of convolutions arises from the fact that the 
 This parameter sharing means that features are extracted from the input, regardless of their location\ \parencite{lecum1989}.
 It also reduces the computational complexity involved in training the model.
 
-Because convolution is a linear operation, so non-linearity must be added if the network is to be able to approximate a non-linear function.
+Because convolution is a linear operation, non-linearity must be added if the network is to be able to approximate a non-linear function.
 As with normal fully connected networks, this is achieved by applying an activation function to the feature map.
 The same activation functions that are commonly used in fully connected networks are also used in CNNs.
-As such, further explanation of their action falls into the category of assumed prior knowledge.
 Because of the depth of the models’ architectures in use today, the \textit{rectified linear unit} (ReLU), and its variations, are commonly used.
 
-\subsection{Spacial pooling}
+\subsection{Spatial pooling}
 Even though the convolution operation extracts features wherever they exist within an image, a new problem arises when layers are stacked in order to extract higher level features from the combination of features below.
 Local variations in the relative placement of features will have a big impact on later filters' ability to combine them and this would have to be accounted for by dramatically increasing the number of filters.\ \textcite{lecun1998gradient} presents a simple solution to this problem with a \textit{sub-sampling} layer, referred to as a \textit{pooling} layer today, which reduces the dimensions of the feature map by applying a local pooling function, similarly to the convolution operation.
 Common pooling functions are maximum and average.
@@ -159,8 +158,8 @@ Before defining precision and recall, the following quantities must be introduce
   \end{minipage}}}
 \end{center}
 
-Precision measures the accuracy of the model, i.e.,~how many of the predictions are correct.
-Recall measures how many of the objects the model correctly labels.
+Precision measures the accuracy of the model, i.e.,~how many of the positive predictions are correct.
+Recall measures how many of the positive instances the model correctly labels.
 They are computed from the above quantities as follows,
 
 \begin{align*}
@@ -171,7 +170,7 @@ They are computed from the above quantities as follows,
 These two metrics are the basis for how all object detection models are evaluated and there is usually a tradeoff between the two, e.g.\ a model can have very high recall, meaning if correctly identifies most of the potential objects, but if it also identifies many other non-objects the precision is reduced.
 Inversely a model could be very certain that it returns correctly identified objects, at the cost of ignoring objects it is not to sure about.
 
-A popular accuracy measure which derives from the precision and recall values if the \(F_1\) score, it may also be referred to as the dice score.
+A popular accuracy measure which derives from the precision and recall values is the \(F_1\) score, it may also be referred to as the dice score.
 It is defined as follows,
 %
 \begin{align*}
