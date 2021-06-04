@@ -1,3 +1,12 @@
 %% spellcheck-off
 
 \chapter*{Sammendrag}
+Denne oppgaven utforsker hvodan CNN baserte objektdeteksjonsmodeler kan bruker til å lokalisere of klassifisere pollenkorn ved hjelp av mikroskopisk bilde data.
+Telling av pollen er en sentral metode innen mange forskellige felt, f.eks.\ krimimalogi, arkeologi, og geologi.
+Dette er en møysommelig og veldig tidkrevende oppgave som per nå krever ekspertkunnskap.
+Fra litteraturen finnes det åpne spørsmål med hensyn til kompleksiteten som trengs for å løse dette problemet i forhold til mer vanlige objektdeteksjonsoppgaver.
+Effekten skarpheten til treningsekemplene her på modellen er også uklar.
+Eksperimenter med en `Single Shot Multibox' deteksjonsmodell viser at problemet er løselig med en fullt konvolusjonell modell.
+Den regulære formen til pollenkorn tillater visse forenklinger av modellen, men likhetene på tvers av klassene fører til tap av nøyaktighet i mindre modellkonfigurasjoner.
+Ekskludering av uskarpe data fra modellopplæringen får modellen til å fiksere på skarphet, noe som reduserer modellens evne til å identifisere korn som er mindre skarpe en trenings eksemplene.
+Trening med uskarpe eksempeler ser ut til å tillate en mer robust generalisering over de ukile attributtene i multifokale data.

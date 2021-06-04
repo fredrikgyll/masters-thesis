@@ -2,9 +2,11 @@
 This thesis explores how a CNN based object detection model may be used to localize and classify pollen grains using microscopic imaging data.
 Pollen counting is a central method in many diverse fields, e.g.\ criminology, archaeology, and geology.
 This is a laborious and very time-consuming task which currently requires expert knowledge.
-An automated system would drastically increase the rate of data collection.
-At the time of writing, no system has been developed which uses images from a standard bright field microscope.
-This thesis analyses the existing literature with the intention of developing a system which can both locate and classify pollen grains.
-Multiple areas in need of further research with regards to both the model complexity required to solve the problem, and how to best to deal with multifocal data are found.
+From literature, open questions remain with regards to the complexity needed to solve this problem versus more common object detection tasks
+The effects of sharpness within training examples is also unclear.
+Experiments using a Single Shot Multibox Detection model reveal that the problem is solvable with a fully convolutional model. 
+The regular shape of pollen grains allows for certain simplifications to the model, but the similarities across classes cause a loss in accuracy in smaller model configurations.
+Excluding un-sharp data from the model training causes the model to fixate on sharpness which reduces the models ability to identify grains that appear less sharp.
+Training with un-sharp example seems to allow for a more robust generalization over the features encoded in multifocal data.
 
 \input{sections/01b_sammendrag.tex}
