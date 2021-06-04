@@ -1,15 +1,12 @@
 \chapter{Methodology}\label{cha:method}
 
-{\it\color{red}
-Missing intro
-}
+The goals of this research requires the development of several components, chiefly among them a pollen dataset and object detection model.
+Section~\ref{sec:method-dataset} covers the data collection and Section~\ref{sec:method-arch} details the model architecture.
+As a prerequisite for being able to analyze sharpness, an objective sharpness measure is needed.
+A theoretical background for this is given in Section~\ref{sec:method-sharpness}.
+Finally, the experimental setup as well as the experiments themselves are explained in Sections~\ref{sec:method-exp-setup} \&~\ref{sec:method-experiments}, respectively.
 
-\section{Data}\label{sec:dataset}
-The results presented in Chapter~\ref{cha:results} are trained on data sourced from the Norwegian Asthma and Allergy Association, who have, since 1980, tracked the amount of air born pollen in Norway.
-Pollen is collected with traps where air is continually sucked though a small slit and is redirected over an adhesive strip.
-The strip is moved across the slit, exposing different sections throughout the day.
-Pollen grains and other air born particulates adhere to the strip, which is then analyzed under a microscope.
-Only pollen grains from a subset of species are actively tracked.
+\section{Data}\label{sec:method-dataset}
 
 \begin{figure}[htbp]
   \centering
@@ -17,6 +14,12 @@ Only pollen grains from a subset of species are actively tracked.
   \caption[Dataset example]{Example from the dataset with ground truth bounding boxes drawn.
 The image contains two classes: \textcolor{corylus}{corylus}, and \textcolor{alnus}{alnus}.}\label{fig:dataset-sample}
 \end{figure}
+
+The results presented in Chapter~\ref{cha:results} are trained on data sourced from the Norwegian Asthma and Allergy Association, who have, since 1980, tracked the amount of air born pollen in Norway.
+Pollen is collected with traps where air is continually sucked though a small slit and is redirected over an adhesive strip.
+The strip is moved across the slit, exposing different sections throughout the day.
+Pollen grains and other air born particulates adhere to the strip, which is then analyzed under a microscope.
+Only pollen grains from a subset of species are actively tracked.
 
 Three microscope slides have been imaged using a digital optical microscope producing a set of 701 raster images with a size of \(1080\by 1920\) pixels and three channels; red, green, and blue.
 The resolution of each image is \(\SI{0.183}{\micro\metre\per\pixel}\).

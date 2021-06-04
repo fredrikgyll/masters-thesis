@@ -69,18 +69,18 @@ The data that is collected varies between different applications.
 With airborne pollen, the slide has been prepared such that the location of the pollen represents the time interval at which it was collected.
 In this case, the general location is recorded along with the taxa, such that the changes in density throughout the day are known.
 
-In the context of machine learning this can be described as an \textit{image recognition} task.
-Image recognition is the general task of deciding if an image contains an object of interest, where it is located within the image, and what class the object belong to.
-When the main task is to locate one or multiple objects the task is often referred to as \textit{object detection}, which is a joint regression and classification problem.
-The location and dimensions of a rectangle, referred to an a \textit{bounding box}, which encloses an object of interest is regressed and the object is also classified.
-Figure~\ref{fig:bbox} shows a correct solution to this problem.
-
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.7\textwidth]{figs/background/GT-Snap-080.png}
   \caption[Bounding boxes]{The image shows an LM image of 2 pollen grains with ground truth bounding boxes.
 The image contains to species, \textcolor{corylus}{corylus} and \textcolor{alnus}{alnus}.}\label{fig:bbox}
 \end{figure}
+
+In the context of machine learning this can be described as an \textit{image recognition} task.
+Image recognition is the general task of deciding if an image contains an object of interest, where it is located within the image, and what class the object belong to.
+When the main task is to locate one or multiple objects the task is often referred to as \textit{object detection}, which is a joint regression and classification problem.
+The location and dimensions of a rectangle, referred to an a \textit{bounding box}, which encloses an object of interest is regressed and the object is also classified.
+Figure~\ref{fig:bbox} shows a correct solution to this problem.
 
 \section{Thesis Structure}\label{sec:intro-thesis-structure}
 The remainder of this document is structured as follows,
