@@ -158,6 +158,7 @@ In the second experiment the dataset is split based on sharpness and measure the
 Our first experiment aims to explore how the sharpness of the training data affects the predictions that the model is able to make.
 The results indicate that the model struggles with making inferences on grains with lower sharpness when such grains are filtered out of the training data.
 Figure~\ref{fig:results-sharpness-gt} breaks down the ground truth labels into true positives and false negatives, which reveals that the model is failing to predict pollen grains which have a sharpness below the minimum sharpness of the training data.
+\info{explain how this differs from cross sharpness}
 
 Looking at the sharpness of the predictions made by the model, there is a corollary trend in the false positive predictions.
 Figure~\ref{fig:results-sharpness-detections} shows that restricting the training data creates what seems to be a threshold, below which the model does not make predictions.
@@ -252,8 +253,10 @@ This was done to give each model the same number of ground truths.
 While this is a valid decision, looking at Figure~\ref{fig:results-sharp-gt}, many pollen grains in the blurry category seem quite sharp to the naked eye.
 With a larger dataset, it would be more preferable to run this experiment with multiple splits.
 The optimal sharpness distribution remains unknown although evidence has been presented to support the claim that excluding blurry data causes the model to fixate on only the sharp features in images.
+\info[inline]{Summarize results. 1--2 par.}
 
 \section{Threats to Validity}\label{sec:results-validity}
+\info[inline]{Move to future work such that each threat has an accompanying suggestion for an improvement}
 Throughout the preceding Sections the results and weaknesses of the experiments have been discussed.
 This section highlights more general threats to the validity of the project as a whole.
 

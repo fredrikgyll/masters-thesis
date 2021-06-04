@@ -25,6 +25,7 @@ A major computational bottleneck was having to process each region proposal inde
 
 Fast R-CNN removes the second and third stages and replaces them with a new CNN which takes as input the whole image and the region proposals and generated predictions for all regions in one go.
 This new second stage also predicts offsets for the proposed boxes, allowing it to refine the proposals from the first stage.
+\info{Confusing paragraph}
 
 Faster R-CNN replaces the first stage with a Region Proposal Network (RPN), a fully convolutional deep neural network which produces a fixed number of bounding boxes together with an `objectness' score for each box.
 The RPN introduces the concept of anchors, which are points in the image used to regress bounding boxes.
@@ -177,11 +178,13 @@ For a human operator this is not a problem as the focus can be adjusted to revea
 
 For the models we have covered, this means that they potentially are missing out on features because they only rely on an image of a single focal plane.
 In the case of classification, one possible remedy for this is to use a stack of images, named a \textit{z-stack}, taken at different focal planes and process the stack as one unit.\ \textcite{DaoodAndRibeiro_2018} uses this approach.
+\info{Picture of z-stack}
 The model they propose takes as input a sequence of 10 images taken of pollen grains spanning the whole grain, and classifies it using a network which combines a \textit{recurrent} neural network (RNN) and a convolutional neural network.
 A recurrent neural network is a special type of network used to process sequences of information, e.g.\ signals, text, and in this case, 3D image stacks.
 The RNN has a memory unit which `remembers' the past elements of a sequence and uses this to process sequential data.
 The model first uses the CNN to create a feature embedding for each frame independently, the sequence is then classified by an RNN\@.
 The result is a reportedly 100\% accurate model over a dataset with 10 classes.
+\info{remove/ref back to background}
 
 The main conclusion drawn is that the z-stack benefits from being processed as a sequence, and not as independent samples, but the results show only small improvements from using the RNN over a majority-vote system using classifications from the CNN directly.
 There is also no clear strategy for extending the system for grain detection, which limits its utility.

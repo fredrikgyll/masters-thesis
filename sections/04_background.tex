@@ -1,4 +1,5 @@
 \chapter{Background}\label{cha:background}
+\info{se written comments}
 This chapter covers the main theoretical concepts underlying the problem domain and proposed solution.
 Section~\ref{sec:back-pollen} gives a short overview of the current methods that are in use for pollen counting and the data that is available. Based on this, Section~\ref{sec:back-problem} formalizes the task as a machine learning problem.
 A theoretical overview of the main building blocks of modern convolutional neural networks follows in Section~\ref{sec:back-cnn}, together with an overview of the metrics used to measure performance of object detection models in Section~\ref{sec:back-metrics}.
@@ -52,6 +53,7 @@ The convolutional layers extract \textit{feature maps} by applying several train
 The spatial pooling layers operate in a similar fashion by applying an operation to a receptive field which is moved over the input feature map.
 The operation is designed to down sample the input, so the resulting feature map has reduced dimensions.
 The two layers are stacked alternatingly, with the idea being that the complexity of the features extracted increases with the depth of the network.
+\info{Include a picture of this}
 
 \subsection{Convolution}
 
@@ -117,6 +119,7 @@ As mentioned, it in customary to increase the depth of the feature maps as they 
 This is necessary if the model is to learn more complex features that may require many layers to be represented in full.
 Combining information from multiple channels could be helpful in building more rich feature maps.
 This is the proposal in\ \textcite{lin2014network}.
+\info{Picture?}
 To enhance model discriminability, they emulate a fully connected layer working across the channels by using a convolutional layer with a \(1\by 1\) kernel.
 This effectively creates connections between local features across the channels of the feature maps, allowing the feature map to be projected into a map with a different depth.
 
@@ -129,13 +132,10 @@ As the distribution from previous layers change, this shift is propagated though
 To overcome this, lower learning rates and careful parameter initialization is required.
 
 A much more effective solution has been proposed by\ \textcite{ioffe2015batch} called \textit{Batch Normalization} (BN).
+\info{More detail.\newline Give main equations}
 The proposed solution for convolutional networks is to normalize the output of each convolutional layer by first standardizing each feature dimension by the sample mean and sample variance across the current mini batch, then transforming each layer by a linear transformation with trainable parameters.
 The linear transformation allows the network to restore the representative power of the layer after standardization.
 By allowing the filters to only focus on learning features, instead of having to adapt to constantly shifting inputs, training is accelerated which allows for higher learning rates.
-
-{\it\color{red}
-Perchance i could interest thee in some transfer learning
-}
 
 \section{Metrics}\label{sec:back-metrics}
 An important step towards building a model is defining how to measure its performance.
@@ -181,6 +181,7 @@ The \(F_1\) score measures the balance between precision and recall values and i
 
 \subsection{Intersection over union}
 Precision and recall form the basis for how all object detection models are evaluated, but the definitions are not complete without a definition of what constitutes a \textit{correct} prediction.
+\info{clearly differentiate between\newline loc and class}
 Correctness is commonly defined using the \textit{intersection over union} (IoU) between the predictions and ground truths.
 IoU measures the overlap between two boundaries.
 As the name indicates, it is defined as the ratio between the intersection and union of the boundaries,
@@ -226,3 +227,5 @@ Most research and application of CNN based methods is in regard to classificatio
 To fully automate the task, a subcategory of deep CNNs capable of predicting both classes and locations is required.
 The next chapter will detail how \textit{object detection} can be solved using a CNN by detailing how they have been used to solve tasks similar to pollen counting.
 The available literature relating to other attempts at solving the problem of counting pollen will also be given.
+
+\todo[inline]{Add augmentations\newline Add transfer learning\newline Short about RNN\newline In pollen section define normal search based system for pollen counting (p.43)}

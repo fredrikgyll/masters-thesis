@@ -24,7 +24,7 @@
 % No indent on new paragraphs
 \usepackage{parskip}
 % Colored text etc.
-\usepackage{xcolor}
+\usepackage[pdftex,dvipsnames]{xcolor}
 % To include graphics
 \usepackage{graphicx}
 % Draw graphics
@@ -68,6 +68,13 @@
 \setlist[itemize,1]{label=\(\bullet \)}
 \setlist[itemize,2]{label=\(\circ \)}
 \setlist[itemize,3]{label=\(-\)}
+
+% TEMP TODO NOTES
+\usepackage{xargs}
+\usepackage[colorinlistoftodos,prependcaption,textsize=tiny,textwidth=1.4in]{todonotes}
+\newcommandx{\info}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
+\newcommandx{\done}[2][1=]{\todo[linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{#2}}
+%END TEMP
 
 % Graphics path
 \graphicspath{{./figs/}}

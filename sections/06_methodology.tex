@@ -60,6 +60,8 @@ This section details the chosen method of measuring local sharpness of pollen gr
 The measure is based on Fourier analysis and its performance has been tested on the training data.
 
 \subsection{Fourier analysis}
+\info{Add axes to images\newline explain frequencies better}
+% f_max from https://homepages.inf.ed.ac.uk/rbf/HIPR2/fourier.htm is good, add that bit
 Fourier analysis describes the general method of utilizing the Fourier transform to analyze the component frequencies present is some signal.
 For the purpose of Fourier analysis, imagine the image as a collection of signals, each of which describe the change in brightness value when traveling across the image in some direction.
 Taking the Fourier transform of an image then produces a 2-dimensional matrix where the intensity of each element represents a the coefficient of a 2-dimensional sinusoid base component of the image.
@@ -252,7 +254,7 @@ The figure is inspired by the one given in the original paper, but has been modi
 The horizontal lines denote the detection structure comprised of \(3\by 3\) convolutions for class confidences and bounding box regressions.
 Here \textsf{C} is the number of classes including one for background}\label{fig:model}
 \end{figure}
-
+\info{Show seperation of loc vs class parts in Figure}
 The auxiliary structure is implemented as a sequence of blocks where the output of each block is a feature map which is consumed by the detection structure.
 Each block contains two convolutional layers, as specified in Figure~\ref{fig:model}.
 Batch normalization is used after each convolution and ReLU is used as the activation function.
@@ -301,15 +303,16 @@ This ensures that there are multiple positive examples for each ground truth.
   \caption[Default box matching]{Visualization of the result of the matching procedure.
 In \textcolor{red}{red} are all the default boxes that are matched to the ground truths, i.e\ those that have an IoU \( \geq 0.4 \) with a ground truth box, in \textcolor{nicegreen}{green}.}\label{fig:priors}
 \end{figure}
-
-
+\info{explain lpha level\newline Not pink, only overlapping}
 The loss function is calculated as follows,
 
 \begin{equation}\label{eq:loss}
   L(x,c,l,g)=\frac{1}{N}\left( L_{conf}(x,c) + \alpha L_{loc}(x,l,g)\right)
 \end{equation}
 
-where \( x=\{1,0\} \) is a binary mask denoting a match between a default box and ground truth, \( N \) is the number of positive examples, \( c \) is class confidences, \( l \) is predicted boxes, and \( g \) is the regressed ground truth boxes.  \( L_{loc} \) is the summed Smooth L1 loss over all positive matched bounding boxes, while \( L_{conf} \) is the SoftMax loss over multiple class confidences, both are standard loss functions provided by PyTorch.
+where \( x=\{1,0\} \) is a binary mask denoting a match between a default box and ground truth, \( N \) is the number of positive examples, \( c \) is class confidences, \( l \) is predicted boxes, and \( g \) is the regressed ground truth boxes.
+\info{add explenation of \(g\) and regression}
+\( L_{loc} \) is the summed Smooth L1 loss over all positive matched bounding boxes, while \( L_{conf} \) is the SoftMax loss over multiple class confidences, both are standard loss functions provided by PyTorch.
 
 A problem that this and many similar models face is the gross imbalance between positive and negative training examples.
 Out of the 8732 default boxes only a small subset can be matched to a ground truth.
@@ -380,6 +383,7 @@ Rescoring is applied using a Gaussian decay function as follows,
 \[s_i\leftarrow s_i e^{-\frac{\text{iou}{(\mathcal{M}, b_i)}^2}{\sigma}},~~\forall b_i \notin \mathcal{D}\]
 
 where \( \sigma \) controls the rate of decay, as demonstrated in Figure~\ref{fig:gauss}.
+\info{define all terms}
 
 \section{Experimental setup}\label{sec:method-exp-setup}
 This section will present the experiments which have been designed in order to examine the research questions.
@@ -481,6 +485,7 @@ As observed, the dataset contains a wide variety of grains spanning many levels 
 It remains unclear what impact blurry data has on the training of fully convolutional object detection systems.
 With this experiment the aim is to explore if there is a correlation between the distribution of sharpness in the training data and model predictions.
 The performance of the model is not of interest, but rather how the distribution of sharpness values in the training data changes the distribution of sharpness in both the predictions of the model and in the ground truths it does or does not detect.
+\info{Confusing. Split sentence in two}
 
 For the experiment the model is trained on various versions of the same dataset.
 Each model will be trained on a subset of the ground truth labels using a sharpness filter which prunes any ground truth bellow a certain threshold.
