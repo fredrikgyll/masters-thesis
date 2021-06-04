@@ -12,6 +12,7 @@ figs/unused/
 *.fls
 *.out
 *.toc
+*.xwm
 *.fmt
 *.fot
 *.cb

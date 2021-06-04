@@ -5,7 +5,7 @@
         "*.bst": true,
         "tags": true,
         "main.tex": false,
-        "main.{lof,log,lot,run.xml,toc}": true,
+        "main.{lof,log,lot,run.xml,toc,xwm}": true,
     },
     "latex-workshop.latex.search.rootFiles.include": [
         "main.tex"
