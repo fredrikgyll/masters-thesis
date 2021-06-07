@@ -113,7 +113,6 @@ The pooling operation is applied to each channel separately so only the width an
 Pooling retains the relative placement of features within the image but allows the network to ignore smaller variations in the relative configuration of features across all the channels of the feature map.
 
 \subsection{Cross channel pooling}
-
 As mentioned, it in customary to increase the depth of the feature maps as they get downsampled throughout the network.
 This is necessary if the model is to learn more complex features that may require many layers to be represented in full.
 Combining information from multiple channels could be helpful in building more rich feature maps.
@@ -160,6 +159,16 @@ It is argued by\ \citeauthor{Hern_ndez_Garc_a_2018} that data augmentation alone
 There are many different transformations that can be applied to image data. Lighter augmentations include flipping an image either horizontally or vertically or translating the image by some vector. Heavier augmentations include more affine transformations, such as rotating, sheering, and scaling the image, or adjusting the contrast, brightness and hue of the image.
 
 Augmentations are limited only by the fact that they must preserve the necessary information that the model needs to make a prediction, and by the computational cost they impose on the training procedure. In object detection, augmentations must also transform the ground truth labels, which also incurs additional costs.
+
+\subsection{Transfer learning}
+A different approach to solving for small datasets is the concept of \textit{transfer learning}.
+There is a generally accepted assumption in machine learning that the training and testing data must be sampled from the same distribution and share the same feature space, transfer learning challenges this assumption \parencite{pan_yang_2010}.
+By training a model for one task in a domain with an abundance of data, a successful knowledge transfer can lead to a better generalization in a new domain with less data.
+
+Transfer learning is widely used in the models presented in Chapter~\ref{cha:related}, both those used in pollen classification and general object detection.
+The source is usually an image classification model trained on a large dataset, such as the previously mentioned ResNet and AlexNet architectures.
+With object detection systems, the pre-trained model functions as a feature extractor for the detection architecture.
+In the domain of pollen classification, transfer learning has been shown to improve accuracy in CNN based classifiers, even though the source and target domain are vastly different.
 
 \section{Metrics}\label{sec:back-metrics}
 An important step towards building a model is defining how to measure its performance.
@@ -262,5 +271,5 @@ To fully automate the task, a subcategory of deep CNNs capable of predicting bot
 The next chapter will detail how \textit{object detection} can be solved using a CNN by detailing how they have been used to solve tasks similar to pollen counting.
 The available literature relating to other attempts at solving the problem of counting pollen will also be given.
 
-\info[inline]{Add transfer learning\newline Short about RNN\newline In pollen section define normal search based system for pollen counting (p.43)}
-\done[inline]{Add augmentations}
+\info[inline]{Short about RNN\newline In pollen section define normal search based system for pollen counting (p.43)}
+\done[inline]{Add transfer learning\newline Add augmentations}
