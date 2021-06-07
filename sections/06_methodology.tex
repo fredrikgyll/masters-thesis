@@ -278,13 +278,28 @@ The loss function, as given by\ \cite{liu_ssd_2016}, is calculated as follows,
   L(x,c,l,g)=\frac{1}{N}\left( L_{conf}(x,c) + \alpha L_{loc}(x,l,g)\right)
 \end{equation}
 
-where \( x=\{1,0\} \) is a binary mask denoting a match between a default box and ground truth, \( N \) is the number of positive examples, \( c \) is class confidences, \( l \) is predicted boxes, and \( g \) is the regressed ground truth boxes.
-\info{add explenation of \(g\) and regression}
-\( L_{loc} \) is the summed Smooth L1 loss over all positive matched bounding boxes, while \( L_{conf} \) is the SoftMax loss over multiple class confidences, both are standard loss functions provided by PyTorch.
+where \( x=\{1,0\} \) is a binary mask denoting a match between a default box \((d)\) and ground truth \((g)\), \( N \) is the number of positive examples, in the case of \(N=0\) the loss is set to 0.
+Here, \textit{positive example} refers to default boxes which are matched to a ground truth, Figure~\ref{fig:priors} shows an example with \(N=19\).
+\done{add explenation of \(g\) and regression}
+\( L_{loc} \) is the summed Smooth L1 loss between predicted boxes \((l)\) and ground truth parameters \((g)\), while \( L_{conf} \) is the SoftMax loss over multiple class confidences \((c)\), both are standard loss functions provided by PyTorch.
+
+As the target for the Smooth L1 loss, \(\hat{g}\) defines the regression from the center \((cx,cy)\) of the default box \((d)\) and its height \((h)\) and width \((w)\) to a matched ground truth.
+
+\begin{equation*}
+  \begin{aligned}[c]
+\hat{g}^{cx}=(g^{cx}-d^{cx})/d^{w}\\
+\hat{g}^{w}=\log\left(\frac{g^{w}}{d^{w}}\right)\\
+  \end{aligned}
+  \qquad
+  \begin{aligned}[c]
+    \hat{g}^{cy}=(g^{cy}-d^{cy})/d^{h}\\
+    \hat{g}^{h}=\log\left(\frac{g^{h}}{d^{h}}\right)\\
+  \end{aligned}
+  \end{equation*}
 
 A problem that this and many similar models face is the gross imbalance between positive and negative training examples.
-Out of the 8732 default boxes only a small subset can be matched to a ground truth.
-For the localization loss this has no impact as only the matched boxes are counted towards the loss, but for the confidence the overwhelming majority of predictions are negative matches.
+Out of the 8732 default boxes only a small subset can be matched to any given ground truth.
+For the localization loss this has no impact as only the matched boxes are counted towards the loss, but for the confidence loss the overwhelming majority of predictions are negative matches (matched to background).
 To counteract this imbalance SSD uses \textit{hard negative mining} to balance out the negative and positive examples.
 As the name suggests, this technique aims to focus training of particularly `hard' examples and ignore the others.
 All negative training examples are sorted by the confidence loss which ranks them in the order of how badly the model miss-classified them.
