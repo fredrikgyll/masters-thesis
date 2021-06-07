@@ -23,9 +23,10 @@ First, bounding boxes are proposed using selective search, an algorithm where di
 Each region is then resized and fed into a CNN, the second stage, which produces a feature embedding which is finally classified using an SVM, the third stage.
 A major computational bottleneck was having to process each region proposal independently through the second and third stage.
 
-Fast R-CNN removes the second and third stages and replaces them with a new CNN which takes as input the whole image and the region proposals and generated predictions for all regions in one go.
+Fast R-CNN removes the second and third stages and replaces them with a new CNN which takes as input the whole image and the region proposals for the selective search.
+The CNN generates classifications for all region proposals with one forward pass, which greatly reduces the computational cost of the this stage compared to R-CNN where each region is classified in turn.
 This new second stage also predicts offsets for the proposed boxes, allowing it to refine the proposals from the first stage.
-\info{Confusing paragraph}
+\done{Confusing paragraph}
 
 Faster R-CNN replaces the first stage with a Region Proposal Network (RPN), a fully convolutional deep neural network which produces a fixed number of bounding boxes together with an `objectness' score for each box.
 The RPN introduces the concept of anchors, which are points in the image used to regress bounding boxes.
