@@ -484,8 +484,9 @@ In practice, only the detection blocks that are fed by the feature maps are deac
 As observed, the dataset contains a wide variety of grains spanning many levels of blur.
 It remains unclear what impact blurry data has on the training of fully convolutional object detection systems.
 With this experiment the aim is to explore if there is a correlation between the distribution of sharpness in the training data and model predictions.
-The performance of the model is not of interest, but rather how the distribution of sharpness values in the training data changes the distribution of sharpness in both the predictions of the model and in the ground truths it does or does not detect.
-\info{Confusing. Split sentence in two}
+The performance of the model is not of interest, but rather how the distribution of sharpness values in the training data changes the distribution of sharpness in the predictions.
+Sharpness can be measured both on the predictions of the model and on the ground truths it does or does not detect.
+\done{Confusing. Split sentence in two}
 
 For the experiment the model is trained on various versions of the same dataset.
 Each model will be trained on a subset of the ground truth labels using a sharpness filter which prunes any ground truth bellow a certain threshold.
