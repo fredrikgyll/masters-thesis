@@ -250,11 +250,11 @@ PyTorch offers canonical implementations of the most popular pre-trained models 
   \centering
   \includegraphics[width=0.9\textwidth]{figs/method/model.pdf}
   \caption[Model architecture overview]{Overview of the general structure of the model.
-The figure is inspired by the one given in the original paper, but has been modified to reflect the alterations that have been made.
+The figure is inspired by the one given in the original paper, but has been modified to reflect the alterations that have been made, and to highlight exactly how bounding box and class predictions are calculated with convolution.
 The horizontal lines denote the detection structure comprised of \(3\by 3\) convolutions for class confidences and bounding box regressions.
 Here \textsf{C} is the number of classes including one for background}\label{fig:model}
 \end{figure}
-\info{Show seperation of loc vs class parts in Figure}
+\done{Show seperation of loc vs class parts in Figure}
 The auxiliary structure is implemented as a sequence of blocks where the output of each block is a feature map which is consumed by the detection structure.
 Each block contains two convolutional layers, as specified in Figure~\ref{fig:model}.
 Batch normalization is used after each convolution and ReLU is used as the activation function.
