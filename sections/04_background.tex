@@ -132,10 +132,26 @@ As the distribution from previous layers change, this shift is propagated though
 To overcome this, lower learning rates and careful parameter initialization is required.
 
 A much more effective solution has been proposed by\ \textcite{ioffe2015batch} called \textit{Batch Normalization} (BN).
-\info{More detail.\newline Give main equations}
-The proposed solution for convolutional networks is to normalize the output of each convolutional layer by first standardizing each feature dimension by the sample mean and sample variance across the current mini batch, then transforming each layer by a linear transformation with trainable parameters.
-The linear transformation allows the network to restore the representative power of the layer after standardization.
-By allowing the filters to only focus on learning features, instead of having to adapt to constantly shifting inputs, training is accelerated which allows for higher learning rates.
+\done{More detail.\newline Give main equations}
+The proposed solution for convolutional networks is to normalize the layers from each convolution independently. Given a layer activation with \(d\) feature maps \(\mathbf{a}=\left(a^{(1)},\dots,a^{(d)}\right)\), each feature map \((k)\) is normalized (pre activation) as follows,
+
+\begin{equation*}
+  \widehat{a}^{(k)}=\frac{a^{(k)}-\mean{a^{(k)}}}{\sqrt{\var{a^{(k)}}}}
+\end{equation*}
+
+where \(\var{\cdot}\) and \(\mean{\cdot}\) are respectively the batch variance and batch mean over both the mini-batch and spacial locations of the feature map, thus maintaining the convolutional property of spatial invariance within feature maps.
+This normalization could however be undesirable in certain circumstances.
+For instance if the inputs of a ReLU activation are normalized, roughly half of the features will be truncated at 0.
+To account for this, the normalized values are scaled and shifted before activation.
+Two parameters, \(\gamma^{(k)}\) and \(\beta^{(k)}\) are introduced for each feature map and the normalized values are scaled and shifted as follows,
+
+\begin{equation*}
+  y^{(k)}=\gamma^{(k)}\,\widehat{a}^{(k)}+\beta^{(k)}
+\end{equation*}
+
+The parameters are learned together with the original filters and restore the representative power of the layers.
+By allowing the filters to only focus on learning features, instead of having to adapt to constantly shifting input distributions, training is accelerated which allows for higher learning rates.
+
 
 \section{Metrics}\label{sec:back-metrics}
 An important step towards building a model is defining how to measure its performance.
