@@ -41,6 +41,11 @@ SEM imaging is however a more laborious process and requires more preparation of
 SEM is also not suited for large samples where pollen grains must be observed over the entire slide.
 This is the main reason why LM imaging is the only viable option when the task is to count pollen grains on a slide.
 
+The current standard method for pollen counting is a \textit{sliding window search}.
+A human expert views a prepared slide through a microscope and systematically searches for pollen grains within the slide.
+The slide is often in some way partitioned such that the size of searched area is known, this is then  used to estimate the concentration of pollen.
+A machine learning system should integrate easily into this existing search-based workflow, but it cannot be assumed to be the most effective way to perform the overall goal.
+
 \section{Convolutional Neural Networks}\label{sec:back-cnn}
 \emph{Convolutional Neural Networks} have been in active development for three decades and the umbrella of what the term encompasses continues to grow.
 The basic concepts and building blocks have however remained quite unchanged since they were first used to predict handwritten digits in\ \textcite{1989Hdrw}.
@@ -271,5 +276,5 @@ To fully automate the task, a subcategory of deep CNNs capable of predicting bot
 The next chapter will detail how \textit{object detection} can be solved using a CNN by detailing how they have been used to solve tasks similar to pollen counting.
 The available literature relating to other attempts at solving the problem of counting pollen will also be given.
 
-\info[inline]{Short about RNN\newline In pollen section define normal search based system for pollen counting (p.43)}
-\done[inline]{Add transfer learning\newline Add augmentations}
+\info[inline]{Short about RNN}
+\done[inline]{Add transfer learning\newline Add augmentations\newline In pollen section define normal search based system for pollen counting (p.43)}
