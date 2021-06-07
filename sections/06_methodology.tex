@@ -60,23 +60,33 @@ This section details the chosen method of measuring local sharpness of pollen gr
 The measure is based on Fourier analysis and its performance has been tested on the training data.
 
 \subsection{Fourier analysis}
-\info{Add axes to images\newline explain frequencies better}
-% f_max from https://homepages.inf.ed.ac.uk/rbf/HIPR2/fourier.htm is good, add that bit
+\done{Add axes to images\newline explain frequencies better}
 Fourier analysis describes the general method of utilizing the Fourier transform to analyze the component frequencies present is some signal.
 For the purpose of Fourier analysis, imagine the image as a collection of signals, each of which describe the change in brightness value when traveling across the image in some direction.
-Taking the Fourier transform of an image then produces a 2-dimensional matrix where the intensity of each element represents a the coefficient of a 2-dimensional sinusoid base component of the image.
-Figure~\ref{fig:fourier-sinusoid} visualizes what the base components look like and demonstrates exactly what is encoded in the Fourier spectrum.
+For an \(M\by N\) image, the two-dimensional Discrete Fourier Transform is defined as follows,
+
+\begin{equation}
+  F(u,v) = \sum_{m=0}^{M}\sum_{n=0}^{N}f(m,n)\,e^{-i2\pi\left(u\frac{m}{M}+v\frac{n}{N}\right)}
+\end{equation}%
+\begin{equation*}
+  e^{-i2\pi\left(ux+vy\right)} = \cos 2\pi\left(ux+vy\right) + i\sin 2\pi\left(ux+vy\right) 
+\end{equation*}
+where \(f(m,n)\) is the spatial domain of the image, and the exponential term is the basis function at each point of \(F(u,v)\) in the Fourier domain.
+Taking the Fourier transform of an image then produces a 2-dimensional matrix where the intensity of each element represents a the coefficient of a 2-dimensional sinusoid basis function of the image.
+Figure~\ref{fig:fourier-sinusoid} visualizes what the basis functions can look like and demonstrates exactly what is encoded in the Fourier spectrum.
 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.8\textwidth]{figs/method/fourier/fourier-sinusoid.pdf}
-  \caption[Fourier transform of sinusoid]{The figure shows two 2D sinusoid wave forms and their Fourier transform.
+  \caption[Fourier transform of sinusoid]{The figure shows two 2D sinusoid basis functions and their Fourier transform.
 The active components in the transform have been enlarged so as to make them visible in print.
 When unmodified, only a single pixel and its reflection about the origin is active.}\label{fig:fourier-sinusoid}
 \end{figure}
 
 Figure~\ref{fig:fourier-demo} shows the Fourier transform of various inputs.
-The transforms are shifted, such that an element in the transform encodes a sinusoid component with a frequency proportional to its distance from the center and moving in the same direction as the vector it forms with the center.
+The transforms are shifted, such that \(F(0,0)\) is in the center of the transform.
+The maximum frequency that can be represented in the spacial domain is a 2 pixel wide stripe pattern going from minimum to maximum brightness.
+\(u\) and \(v\) represent the number of oscillations in each direction of the basis function so the maximum frequency gives \(M/ 2\) and \(N/ 2\) oscillations, respectively.
 The directionality of the Fourier transform is demonstrated in the first two examples.
 Squares decompose into a set on sinusoids, all moving is the same two directions.
 The coefficient of each component is encoded in the intensity of the pixel.
@@ -85,49 +95,7 @@ The last two examples demonstrate how blurring an image eliminates the higher fr
 
 \begin{figure}[htbp]
   \centering
-  \begin{subfigure}[b]{0.2\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figs/method/fourier/square_original.png}
-    \vspace*{0.02\textwidth}
-  \end{subfigure}%
-  \hspace*{0.02\textwidth}
-  \begin{subfigure}[b]{0.2\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figs/method/fourier/square_45deg_original.png}
-    \vspace*{0.02\textwidth}
-  \end{subfigure}%
-  \hspace*{0.02\textwidth}
-  \begin{subfigure}[b]{0.2\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figs/method/fourier/peppers_original.png}
-    \vspace*{0.02\textwidth}
-  \end{subfigure}%
-  \hspace*{0.02\textwidth}
-  \begin{subfigure}[b]{0.2\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figs/method/fourier/peppers_blur_original.png}
-    \vspace*{0.02\textwidth}
-  \end{subfigure}
-
-  \begin{subfigure}[t]{0.2\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figs/method/fourier/square_fourier.png}
-  \end{subfigure}%
-  \hspace*{0.02\textwidth}
-  \begin{subfigure}[t]{0.2\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figs/method/fourier/square_45deg_fourier.png}
-  \end{subfigure}%
-  \hspace*{0.02\textwidth}
-  \begin{subfigure}[t]{0.2\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figs/method/fourier/peppers_fourier.png}
-  \end{subfigure}%
-  \hspace*{0.02\textwidth}
-  \begin{subfigure}[t]{0.2\textwidth}
-    \centering
-    \includegraphics[width=\textwidth]{figs/method/fourier/peppers_blur_fourier.png}
-  \end{subfigure}
+  \includegraphics[width=\textwidth]{figs/method/fourier/fourier-examples.pdf}
   \caption[Demonstration of the Fourier transform]{
     Demonstration of the Fourier transform.
 The bottom row shows the center-shifted discrete Fourier transform of the corresponding image in the top row.
@@ -142,7 +110,7 @@ By visual inspection it is clear that as the perceived blur increases the amount
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.8\textwidth]{figs/method/fourier/fourier.png}
+  \includegraphics[width=\textwidth]{figs/method/fourier/fourier-pollen.pdf}
   \caption[Fourier spectrum]{Pollen grains and their corresponding centered Fourier spectrum.
 The Fourier spectra are log scaled so that the higher frequencies become visible.}\label{fig:fourier}
 \end{figure}
@@ -174,7 +142,7 @@ The basis of the evaluation is a new dataset created from a small random subset 
 Each ground truth is then given sharpness scores based on perceived sharpness and the objective measure.
 Determining perceived sharpness of a pollen grain with high fidelity was found to be highly subjective and non-reproducible with repeated independent scoring, so a simple classification was instead performed.
 Images where separated into three classes representing perceived sharpness.
-Figure~\ref{fig:fourier} gives examples of the classes with image (a) being the sharpest (class 3) and (c) being the blurriest (class 1).
+Figure~\ref{fig:fourier} gives examples of the classes with the top left image being the sharpest (class 3) and the top right image being the blurriest (class 1).
 A total of 316 pollen grains where evaluated, the distribution of their classes is given in Table~\ref{tab:sharpness}
 
 \begin{table}[htbp]
