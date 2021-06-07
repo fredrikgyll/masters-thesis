@@ -1,5 +1,5 @@
 \chapter{Background}\label{cha:background}
-\info{se written comments}
+\done{clearly diff between detection, localization, and classification}
 This chapter covers the main theoretical concepts underlying the problem domain and proposed solution.
 Section~\ref{sec:back-pollen} gives a short overview of the current methods that are in use for pollen counting and the data that is available. Based on this, Section~\ref{sec:back-problem} formalizes the task as a machine learning problem.
 A theoretical overview of the main building blocks of modern convolutional neural networks follows in Section~\ref{sec:back-cnn}, together with an overview of the metrics used to measure performance of object detection models in Section~\ref{sec:back-metrics}.
@@ -143,6 +143,11 @@ Implicitly, this is done through the construction of a \textit{Loss function}.
 The models examined in this thesis do not employ novel Loss functions, so delving into their construction is not warranted.
 The metrics used when measuring the performance of object detectors, specifically, are however of interest.
 
+Object detection is a multi-task problem incorporating both the localization and classification of objects.
+Throughout this thesis, when referring to a \textit{detection} made by an object detection system, this refers to a proposed boundary which the system believes encloses an object of a particular class.
+Every detection encodes both a localization and a class label.
+A correct detection refers to a detection that matches a ground truth, i.e.\ a predicted boundary with a particular class matches that of a ground truth of the same class.
+
 \subsection{Precision and recall}
 The precision and recall of a model refer to its ability to correctly locate and label the objects within an image.
 Before defining precision and recall, the following quantities must be introduced,
@@ -180,11 +185,14 @@ It is defined as follows,
 The \(F_1\) score measures the balance between precision and recall values and is useful in cases where both measures are \textit{equally} important performance indicators.
 
 \subsection{Intersection over union}
-Precision and recall form the basis for how all object detection models are evaluated, but the definitions are not complete without a definition of what constitutes a \textit{correct} prediction.
-\info{clearly differentiate between\newline loc and class}
-Correctness is commonly defined using the \textit{intersection over union} (IoU) between the predictions and ground truths.
-IoU measures the overlap between two boundaries.
-As the name indicates, it is defined as the ratio between the intersection and union of the boundaries,
+The correctness of a detection has been defined as `a detection that matches a ground truth'.
+Classification has a simple binary solution; two classes are either the same or they are different.
+A positive solution to a binary localization problem would require pixel-perfect similarity between the predicted boundary and ground truth which would be an extremely high bar to clear.
+For a more lenient approach one could instead assign a \textit{localization score} to the predicted boundary based on how well it matches the ground truth.
+A positive solution could then be defined as a boundary with a localization score above some threshold.
+
+Most object detection systems use \textit{intersection over union} (IoU) to score the match between boundaries.
+As the name indicates, it is defined as the ratio between the intersection and union of two boundaries,
 
 \begin{figure}[htb]
   \centering
@@ -196,7 +204,7 @@ As the name indicates, it is defined as the ratio between the intersection and u
 The named region is shaded.}\label{fig:iou}
 \end{figure}
 
-The definition what is considered as a correct prediction (TP) can then be defined.
+The definition of what is considered a correct prediction (TP) can then be defined.
 Given prediction \(\hat{X}\) with label \(\hat{X}_l\) and bounding box \(\hat{X}_u\). \(\hat{X}\) is considered a True Positive if there exists a ground truth \(Y\), where \(Y_{l}=\hat{X}_l\) and \(\text{IoU}(\hat{X}_u, Y_{u})\ge \mu \).
 Where \( \mu \) is some threshold value, often 0.5.
 
@@ -204,7 +212,9 @@ Where \( \mu \) is some threshold value, often 0.5.
 Mean average precision (mAP) is a popular metric for measuring the performance of object detection models.
 It is computed by taking the mean of the \textit{average precision} values for each class.
 
-From a list of all detections made for a class, ranked in ascending order of confidence, a precision-recall curve is drawn.
+From a list of all detections made for a class, ranked in ascending order of confidence, each is labeled as a true positive or a false negative.
+In cases where multiple predictions match the same ground truth, only the highest ranking prediction is considered a true positive.
+The cumulative precision and recall is computed from the ordered list of predictions and from these values, a precision-recall curve is drawn.
 This shows how precision changes as recall rises over the range [0,1] as more and more detections from the ranked list are included in the precision/recall calculations.
 The AP describes the shape of the precision-recall curve, and can be calculated a few different ways.
 This thesis will use the definition of AP specified in the evaluation procedure for the VOC2007 image detection challenge.
