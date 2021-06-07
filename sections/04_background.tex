@@ -128,11 +128,18 @@ As mentioned, it in customary to increase the depth of the feature maps as they 
 This is necessary if the model is to learn more complex features that may require many layers to be represented in full.
 Combining information from multiple channels could be helpful in building more rich feature maps.
 This is the proposal in\ \textcite{lin2014network}.
-\info{Picture?}
-To enhance model discriminability, they emulate a fully connected layer working across the channels by using a convolutional layer with a \(1\by 1\) kernel.
-This effectively creates connections between local features across the channels of the feature maps, allowing the feature map to be projected into a map with a different depth.
+\done{Picture?}
+To enhance model discriminability, they propose a `Network in Network', a fully connected layer working across the channels.
+This effectively creates connections between local features across the channels of the feature maps as shown in Figure~\ref{fig:back-cross-channel}.
 
-The primary motivation for using this technique today is to lower the computational cost of standard convolutions by reducing the depth of the input prior to a larger convolution.
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.4\textwidth]{figs/background/cross-channel.pdf}
+  \caption[Cross channel pooling architecture]{Visualization of a cross channel pooling architecture.This simple example models a single fully connected layer using a \(1\by 1\) convolution.}\label{fig:back-cross-channel}
+\end{figure}
+
+The technique is however most commonly used as an optimization which removes computational bottlenecks in deeper networks \parencite{szegedy2014going}.
+By placing a \(1\by 1\) convolution with a reduced output depth in front of a larger \(3\by 3\) or \(5\by 5\) convolution the computational cost is reduced, which allows for much deeper networks. For instance, given an input depth of 500, a \(3\by 3 \by 500\) convolution requires 2,250,000 parameters, but if a \(1\by 1 \by 250\) is used first, the total number of parameters in both layers is only 1,250,000.
 The technique is now commonplace and featured in all deep CNN architectures.
 
 \subsection{Batch normalization}
