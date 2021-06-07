@@ -5,9 +5,9 @@ Silent
     \slshape \scshape \relax
     \vskip \pagebreak \nopagebreak
     \parindent
-    
+
     \printbibliography
-    
+
     \textrm \textem \textbf \textit \textsl \textsf \textsc \texttt
 
     \clearpage \cleardoublepage \ddots \dotfill \flushbottom \fussy \indent \linebreak
@@ -28,7 +28,7 @@ Silent
     \mainmatter \frontmatter \backmatter
 
     \centering
-    
+
     \bigskip \medskip \smallskip
 
     \noindent \expandafter
