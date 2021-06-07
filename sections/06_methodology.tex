@@ -257,7 +257,6 @@ Even with adjustments, the range of default box sizes is so large that it is que
 \subsection{Training objective}
 Because of the default boxes, each ground truth box needs to be matched to one or more default boxes so that target values for the regression and confidences can be created for the loss function.
 For each training example, a matching strategy is applied which finds default boxes that overlap with each ground truth.
-Calculating the regression from the matched default boxes to their respective ground truth creates the truth vector that the model must approximate.
 
 SSD has a generous matching strategy where ground truths and default boxes are matched if their IoU is above a certain threshold.
 Figure~\ref{fig:priors} shows the result of the matching strategy being applied to a training example.
@@ -267,12 +266,13 @@ This ensures that there are multiple positive examples for each ground truth.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.7\textwidth]{figs/method/priors_matching.png}
+  \includegraphics[width=0.7\textwidth]{figs/method/priors_matching.pdf}
   \caption[Default box matching]{Visualization of the result of the matching procedure.
-In \textcolor{red}{red} are all the default boxes that are matched to the ground truths, i.e\ those that have an IoU \( \geq 0.4 \) with a ground truth box, in \textcolor{nicegreen}{green}.}\label{fig:priors}
+  All default boxes which are matched to the \textcolor{nicegreen}{ground truth} are drawn with \textcolor{red}{dashed red} lines. In this example, 19 default boxes are matched to the ground truth. \((\texttt{IoU}\ge 0.5)\). This example has been handcrafted for clarity by setting the bounding box equal to a default box, causing a more symmetrical match.
+}\label{fig:priors}
 \end{figure}
-\info{explain lpha level\newline Not pink, only overlapping}
-The loss function is calculated as follows,
+\done{explain alpha level\newline Not pink, only overlapping}
+The loss function, as given by\ \cite{liu_ssd_2016}, is calculated as follows,
 
 \begin{equation}\label{eq:loss}
   L(x,c,l,g)=\frac{1}{N}\left( L_{conf}(x,c) + \alpha L_{loc}(x,l,g)\right)
