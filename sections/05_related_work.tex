@@ -175,11 +175,21 @@ This also leads into the second important factor of dealing with LM images of po
 Grains of pollen on a slide are not distributed across one focal plane and are not oriented in the same direction.
 Grains are scattered across all three axes and because of the narrow depth of field of the microscope are only partially visible when focused on.
 The depth of field is in fact so shallow that only parts of the surface ornamentation appear clear.
-For a human operator this is not a problem as the focus can be adjusted to reveal the entire grain in turn, with static images however, dealing with this lack of complete information is an open question.
+For a human operator this is not a problem as the focus can be adjusted to reveal the entire grain in turn, with static images however, dealing with this lack of complete information is an open question. Figure~\ref{fig:related-zstack} shows an example of this and shows a grain observed at three different focal planes.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.3\textwidth]{figs/related/zstack/Snap-049.png}
+  \hfill%
+  \includegraphics[width=0.3\textwidth]{figs/related/zstack/Snap-050.png}
+  \hfill%
+  \includegraphics[width=0.3\textwidth]{figs/related/zstack/Snap-051.png}
+  \caption[z-stack of pollen taken at three focal planes]{z-stack of a pollen grain taken at three focal planes. The focal plane moves down from the top (left) to the bottom (right). With finer adjustments, many more images can be produced from a single grain.}\label{fig:related-zstack}
+\end{figure}
 
 For the models we have covered, this means that they potentially are missing out on features because they only rely on an image of a single focal plane.
 In the case of classification, one possible remedy for this is to use a stack of images, named a \textit{z-stack}, taken at different focal planes and process the stack as one unit.\ \textcite{DaoodAndRibeiro_2018} uses this approach.
-\info{Picture of z-stack}
+\done{Picture of z-stack}
 The model they propose takes as input a sequence of 10 images taken of pollen grains spanning the whole grain, and classifies it using a network which combines a \textit{recurrent} neural network (RNN) and a convolutional neural network.
 A recurrent neural network is a special type of network used to process sequences of information, e.g.\ signals, text, and in this case, 3D image stacks.
 The RNN has a memory unit which `remembers' the past elements of a sequence and uses this to process sequential data.
