@@ -152,6 +152,15 @@ Two parameters, \(\gamma^{(k)}\) and \(\beta^{(k)}\) are introduced for each fea
 The parameters are learned together with the original filters and restore the representative power of the layers.
 By allowing the filters to only focus on learning features, instead of having to adapt to constantly shifting input distributions, training is accelerated which allows for higher learning rates.
 
+\subsection{Data augmentation}
+Deep learning in general and deep convolutional networks in particular require a large amount of data in order to properly generalize to a solution.
+Data augmentation is a technique whereby the size of a dataset is artificially increased by applying transformations to the existing data.
+This has been an important regularization technique and a critical component of many established models, such as ResNet\ \parencite{he2015deep} and AlexNet\ \parencite{alexnet}.
+It is argued by\ \citeauthor{Hern_ndez_Garc_a_2018} that data augmentation alone is more beneficial to training than using explicit regularization such as dropout or weight decay \parencite{Hern_ndez_Garc_a_2018}.
+
+There are many different transformations that can be applied to image data. Lighter augmentations include flipping an image either horizontally or vertically or translating the image by some vector. Heavier augmentations include more affine transformations, such as rotating, sheering, and scaling the image, or adjusting the contrast, brightness and hue of the image.
+
+Augmentations are limited only by the fact that they must preserve the necessary information that the model needs to make a prediction, and by the computational cost they impose on the training procedure. In object detection, augmentations must also transform the ground truth labels, which also incurs additional costs.
 
 \section{Metrics}\label{sec:back-metrics}
 An important step towards building a model is defining how to measure its performance.
@@ -254,4 +263,5 @@ To fully automate the task, a subcategory of deep CNNs capable of predicting bot
 The next chapter will detail how \textit{object detection} can be solved using a CNN by detailing how they have been used to solve tasks similar to pollen counting.
 The available literature relating to other attempts at solving the problem of counting pollen will also be given.
 
-\todo[inline]{Add augmentations\newline Add transfer learning\newline Short about RNN\newline In pollen section define normal search based system for pollen counting (p.43)}
+\info[inline]{Add transfer learning\newline Short about RNN\newline In pollen section define normal search based system for pollen counting (p.43)}
+\done[inline]{Add augmentations}
