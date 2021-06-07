@@ -52,13 +52,20 @@ The basic concepts and building blocks have however remained quite unchanged sin
 An overview of the basic building blocks of a CNN will first be given, before expanding on each building block.
 This section will also cover some of the newer concepts that have become commonplace additions to the basic model in later years.
 
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.7\textwidth]{figs/background/cnn-layers.pdf}
+  \caption[Basic structure of a CNN]{The basic architecture of a CNN\@. The convolutions create stacks of feature maps (yellow) which are followed by an non-linear activation (orange), and the pooling layers (red) reduce the size of the feature maps. Here the pooling layer halves the spatial dimensions of the feature maps. Visualization library \parencite{haris_2018}.}\label{fig:back-cnn-example}
+\end{figure}
+
 A convolutional neural network consists of stacked, layered, operations.
 There are two types of layers, \textit{convolutional}, and \textit{spatial pooling}.
 The convolutional layers extract \textit{feature maps} by applying several trainable filters to the input, before applying a nonlinear activation function to the result.
 The spatial pooling layers operate in a similar fashion by applying an operation to a receptive field which is moved over the input feature map.
 The operation is designed to down sample the input, so the resulting feature map has reduced dimensions.
-The two layers are stacked alternatingly, with the idea being that the complexity of the features extracted increases with the depth of the network.
-\info{Include a picture of this}
+Figure~\ref{fig:back-cnn-example} shows an example of a simple CNN model; the convolutional layers control the depth on the activations while the pooling layers control their spatial dimensions.
+The two layers are stacked alternatingly, with the idea being that the complexity of the features extracted increases with the depth of the network.%
+\done{Include a picture of this}
 
 \subsection{Convolution}
 The central concept of the convolutional layer is the \textit{convolution operation}.
@@ -79,8 +86,7 @@ The resulting output of the convolution is referred to as a \textit{feature map}
   \caption[Convolution operation]{Visualization of the convolution operation.
 In red is a filter containing three \(3\by 3\) kernels.
 The element wise multiplication between the filter and receptive field and subsequent summation produces a single scaler in the feature map.
-The operation is repeated over the index set of the input, producing the complete feature map.
-Visualization library \parencite{haris_2018}.}\label{fig:cnn}
+The operation is repeated over the index set of the input, producing the complete feature map.}\label{fig:cnn}
 \end{figure}
 
 Usually, the input to a convolutional layer contains multiple channels, e.g.,\ an RGB input image which has three channels representing the separate red, green, and blue color channels.
