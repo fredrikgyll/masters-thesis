@@ -324,6 +324,7 @@ In these situations, NMS will often only return a single bounding box for one of
 Given that the data in this project exhibits this characteristic, the standard NMS algorithm is replaced with a more modern version, Soft-NMS, introduced in\ \textcite{bodla2017softnms}.
 The pseudocode for both algorithms is as follows,
 
+\begin{samepage}
 \begin{pseudofunc}{NMS}{\(\mathcal{B}=\{b_1,\ldots,b_N \},~\mathcal{S}=\{s_1,\ldots,s_N \},~N_t\)}
   \item \(\mathcal{D} \leftarrow \{ \} \)
   \item \pwhile~\(\mathcal{B} \neq \emptyset \):
@@ -354,6 +355,7 @@ The pseudocode for both algorithms is as follows,
   \end{pseudoloop}\vspace{5pt}
   \item \pret~\(\mathcal{D},~\mathcal{S}\)
 \end{pseudofunc}
+\end{samepage}
 
 \begin{wrapfigure}[13]{r}{0.3\textwidth}
   \centering
@@ -362,13 +364,13 @@ The pseudocode for both algorithms is as follows,
 \end{wrapfigure}
 
 Soft-NMS changes only the colored sections, where it introduces a rescoring function, \texttt{f(IoU)}, which only decays the scores of remaining boxes instead of discarding them altogether. % chktex 36
-This allows boxes which overlap with the selected box to remain in the pool.
-Rescoring is applied using a Gaussian decay function as follows,
+This allows boxes that overlap with the selected box to remain in the pool.
+The rescoring function \texttt{f(IoU)} applies a Gaussian decay as follows, % chktex 36
 
-\[s_i\leftarrow s_i e^{-\frac{\text{iou}{(\mathcal{M}, b_i)}^2}{\sigma}},~~\forall b_i \notin \mathcal{D}\]
+\[f(\gamma) = e^{-\frac{{\gamma}^2}{\sigma}}\]
 
-where \( \sigma \) controls the rate of decay, as demonstrated in Figure~\ref{fig:gauss}.
-\info{define all terms}
+where \(\gamma \) is the IoU as given in the pseudocode and \( \sigma \) controls the rate of decay, as demonstrated in Figure~\ref{fig:gauss}. \(\sigma=0.15\) was found to produce the best results.
+\done{define all terms}
 
 \section{Experimental setup}\label{sec:method-exp-setup}
 This section will present the experiments which have been designed in order to examine the research questions.
