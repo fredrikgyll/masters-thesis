@@ -188,6 +188,13 @@ The source is usually an image classification model trained on a large dataset, 
 With object detection systems, the pre-trained model functions as a feature extractor for the detection architecture.
 In the domain of pollen classification, transfer learning has been shown to improve accuracy in CNN based classifiers, even though the source and target domain are vastly different.
 
+\section{Recurrent Neural Networks}\label{sec:back-rnn}
+Recurrent neural networks are not a major part of this thesis, but are used closely related work, so understanding the basic workings of this class of neural networks is needed.
+
+A recurrent neural network is a special type of network used to process sequences of information, e.g., signals, text, or time-series.
+It adds \textit{working memory} to the layers such that the activation of previous elements in a sequence are `remembered'.
+Given an input sequence \(\mathbf{X}=\{x^1,\dots,x^n\} \), each element is activated in turn, but when processing element \(x^n\), the activation of \(x^{n-1}\) is added.
+
 \section{Metrics}\label{sec:back-metrics}
 An important step towards building a model is defining how to measure its performance.
 Implicitly, this is done through the construction of a \textit{Loss function}.
