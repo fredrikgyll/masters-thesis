@@ -19,9 +19,11 @@ Work on this problem was kickstarted by\ \textcite{girshick_rich_2014} with the 
 They later proposed Fast R-CNN and Faster R-CNN which improved the learning and inference time, as well as the robustness, of the original model.
 
 R-CNN has three main modules.
-First, bounding boxes are proposed using selective search, an algorithm where different similarity measures are first used to segment the image into a myriad of small sections, before these are then selectively grouped together into larger \textit{regions of interest}.
-Each region is then resized and fed into a CNN, the second stage, which produces a feature embedding which is finally classified using an SVM, the third stage.
-A major computational bottleneck was having to process each region proposal independently through the second and third stage.
+First, bounding boxes are proposed using selective search, an algorithm where different similarity measures are first used to segment the image into a myriad of small sections before these are then selectively grouped into larger \textit{regions of interest}.
+Each region is then resized and fed into a CNN, the second stage, which produces a feature embedding which is finally classified using a Support Vector Machine (SVM), the third stage.
+An SVM is a supervised learning model for classification which attempts to maximize the margin between a decision boundary the training data \parencite{bosertraining}.
+\done{Define SVM}
+A major computational bottleneck was having to process each region proposal independently through the second and third stages.
 
 Fast R-CNN removes the second and third stages and replaces them with a new CNN which takes as input the whole image and the region proposals for the selective search.
 The CNN generates classifications for all region proposals with one forward pass, which greatly reduces the computational cost of the this stage compared to R-CNN where each region is classified in turn.
