@@ -238,23 +238,20 @@ The dimensions are \(\left(B,4,D\right) \) and \(\left(B,C,D\right) \) for the l
 Here \(B\) is the batch size and \(D\) is the number of default boxes.
 
 \subsection{Default boxes}
-\begin{wrapfigure}{R}{0.2\textwidth}
+
+\begin{wrapfigure}[13]{R}{0.38\textwidth}
   \centering
-  \includegraphics[width=0.2\textwidth]{figs/method/default_boxes.png}
-  \caption[Visualizing default boxes]{}\label{fig:defaults}
-  %Visualization of 4 default boxes on a \(5\by 5 \) feature map.
+  \includegraphics[width=0.31\textwidth]{figs/method/default_boxes.png}
+  \caption[Visualizing default boxes]{four default boxes drawn on a \(5\by 5 \) feature map.}\label{fig:defaults}
 \end{wrapfigure}
-The fundamental objective of the model is evaluating a predefined set of default boxes.
+
+The fundamental objective of the model is to evaluate a predefined set of default boxes.
 Each location of a feature map forms the basis for a small number of default boxes of fixes size and aspect ratio.
-In Figure~\ref{fig:defaults} the center element of the \(5\by 5\) feature map is responsible for evaluating the 4 drawn default boxes; 2 scaled squares in orange, and 2 boxes with a 1:2 aspect ratio, in blue.
-\info{Change this to something clearer, the center element is not responsible for anything}
-The default boxes are scaled independently from the size of the elements of the feature map, but there is a correlation.
-Because of the depth of the feature extraction network leading into the feature layers, the receptive field of all elements in every feature map is the entire input.%
-
-
-As designed, the SSD model is made to handle a wider distribution of sizes than is present in the pollen dataset.
+In Figure~\ref{fig:defaults} the four default boxes shown are evaluated when the receptive field is centered on the marked square.
+The default boxes are scaled independently from the size of the feature map, but there is a correlation.
+Because of the depth of the feature extraction network leading into the feature layers, the receptive field of all elements in every feature map is the entire input. As designed, the SSD model is made to handle a wider distribution of sizes than is present in the pollen dataset.
 The sizes of the default boxes have been adjusted so that they cover the distribution of sizes present.
-Even with adjustments, the range of default box sizes is so large that it is questionable if all 6 feature maps are necessary.
+Even with adjustments, the range of default box sizes is so large that it is questionable if all six feature maps are necessary.
 
 \subsection{Training objective}
 Because of the default boxes, each ground truth box needs to be matched to one or more default boxes so that target values for the regression and confidences can be created for the loss function.
