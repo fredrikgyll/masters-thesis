@@ -45,6 +45,7 @@
 % SI unit support
 \usepackage{siunitx}
 % Controlling margins and paper size
+% for print: [a4paper,top=1.5in,bottom=1.5in,right=1.2in,left=1.8in]
 \usepackage[a4paper,margin=1.5in]{geometry}
 % Nice tables
 \usepackage{booktabs}
@@ -68,6 +69,24 @@
 \setlist[itemize,1]{label=\(\bullet \)}
 \setlist[itemize,2]{label=\(\circ \)}
 \setlist[itemize,3]{label=\(-\)}
+
+\setlength{\headheight}{14pt}
+
+%Chapter headings
+\fancypagestyle{plain}{%
+ \fancyhf{}
+ \fancyhead[LE]{\thepage}
+ \fancyhead[RO]{\thepage}
+ \fancyfoot[C]{}
+ \renewcommand{\headrulewidth}{0.5pt}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[RE]{\rightmark}
+\fancyhead[LO]{\leftmark}
+\renewcommand{\sectionmark}[1]{\markright{\thesection~#1}}
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter~#1}{}}
 
 % TEMP TODO NOTES
 \usepackage{xargs}
