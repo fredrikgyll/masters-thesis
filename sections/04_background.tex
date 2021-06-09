@@ -1,5 +1,4 @@
 \chapter{Background}\label{cha:background}
-\done{clearly diff between detection, localization, and classification}
 This chapter covers the main theoretical concepts underlying the problem domain and proposed solution.
 Section~\ref{sec:back-pollen} gives a short overview of the current methods that are in use for pollen counting and the data that is available. Based on this, Section~\ref{sec:back-problem} formalizes the task as a machine learning problem.
 A theoretical overview of the main building blocks of modern convolutional neural networks follows in Section~\ref{sec:back-cnn}, together with an overview of the metrics used to measure the performance of object detection models in Section~\ref{sec:back-metrics}.
@@ -64,8 +63,7 @@ The convolutional layers extract \textit{feature maps} by applying several train
 The spatial pooling layers operate similarly by applying an operation to a receptive field moved over the input feature map.
 The operation is designed to downsample the input, so the resulting feature map has reduced dimensions.
 Figure~\ref{fig:back-cnn-example} shows an example of a simple CNN model; the convolutional layers control the depth of the activations while the pooling layers control their spatial dimensions.
-The two layers are stacked alternatingly, with the idea that the complexity of the features extracted increases with the depth of the network.%
-\done{Include a picture of this}
+The two layers are stacked alternatingly, with the idea that the complexity of the features extracted increases with the depth of the network.
 
 \subsection{Convolution}
 The central concept of the convolutional layer is the \textit{convolution operation}.
@@ -128,7 +126,6 @@ As mentioned, it is customary to increase the depth of the feature maps as they 
 This is necessary if the model is to learn more complex features that may require many layers to be represented in full.
 Combining information from multiple channels could help build more rich feature maps.
 This is the proposal in\ \textcite{lin2014network}.
-\done{Picture?}
 To enhance model discriminability, they propose a `Network in Network', a fully connected layer working across the channels.
 This effectively creates connections between local features across the channels of the feature maps, as shown in Figure~\ref{fig:back-cross-channel}.
 
@@ -148,7 +145,6 @@ As the distribution from previous layers changes, this shift is propagated throu
 To overcome this, lower learning rates and careful parameter initialization is required.
 
 A much more effective solution has been proposed by\ \textcite{ioffe2015batch} called \textit{Batch Normalization} (BN).
-\done{More detail.\newline Give main equations}
 The proposed solution for convolutional networks is to normalize the layers from each convolution independently. Given a layer activation with \(d\) feature maps \(\mathbf{a}=\left(a^{(1)},\dots,a^{(d)}\right)\), each feature map \((k)\) is normalized (pre activation) as follows,
 
 \begin{equation*}
@@ -296,5 +292,3 @@ Most research and application of CNN based methods is regarding classification, 
 A subcategory of deep CNNs capable of predicting both classes and locations is required to automate the task fully.
 The next chapter will detail how \textit{object detection} can be solved using a CNN by detailing how they have been used to solve tasks similar to pollen counting.
 The available literature relating to other attempts at solving the problem of counting pollen will also be given.
-
-\done[inline]{Add transfer learning\newline Add augmentations\newline In pollen section define normal search based system for pollen counting (p.43)\newline Short about RNN}

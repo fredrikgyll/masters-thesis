@@ -60,7 +60,6 @@ This section details the chosen method of measuring the local sharpness of polle
 The measure is based on Fourier analysis, and its performance has been tested on the training data.
 
 \subsection{Fourier analysis}
-\done{Add axes to images\newline explain frequencies better}
 Fourier analysis describes the general method of utilizing the Fourier transform to analyze the component frequencies present in some signal.
 For the purpose of Fourier analysis, imagine the image as a collection of signals, each of which describes the change in brightness value when traveling across the image in some direction.
 For an \(M\by N\) image, the two-dimensional Discrete Fourier Transform is defined as follows,
@@ -220,7 +219,7 @@ PyTorch offers canonical implementations of the most popular pre-trained models 
   \caption[Model architecture overview]{Overview of the model, inspired by the figure given in the original paper. However, it has been modified to reflect the alterations made and highlight how bounding box and class predictions are calculated with convolution.
 The horizontal lines denote the detection structure comprised of \(3\by 3\) convolutions for class confidences and bounding box regressions. \(C\) is the number of classes.}\label{fig:model}
 \end{figure}
-\done{Show separation of loc vs.\ class parts in figure}
+
 The auxiliary structure is implemented as a sequence of blocks where the output of each block is a feature map consumed by the detection structure.
 Each block contains two convolutional layers, as specified in Figure~\ref{fig:model}.
 Batch normalization is used after each convolution, and ReLU is used as the activation function.
@@ -266,7 +265,7 @@ This ensures that there are multiple positive examples for each ground truth.
   All default boxes which are matched to the \textcolor{nicegreen}{ground truth} are drawn with \textcolor{red}{dashed red} lines. In this example, 19 default boxes are matched to the ground truth. \((\texttt{IoU}\ge 0.5)\). This example has been handcrafted for clarity by setting the bounding box equal to a default box, causing a more symmetrical match.
 }\label{fig:priors}
 \end{figure}
-\done{explain alpha level\newline Not pink, only overlapping}
+
 The loss function, as given by\ \cite{liu_ssd_2016}, is calculated as follows,
 
 \begin{equation}\label{eq:loss}
@@ -275,7 +274,6 @@ The loss function, as given by\ \cite{liu_ssd_2016}, is calculated as follows,
 
 where \( x=\{1,0\} \) is a binary mask denoting a match between a default box \((d)\) and ground truth \((g)\), \( N \) is the number of positive examples, in the case of \(N=0\) the loss is set to 0.
 Here, \textit{positive example} refers to default boxes which are matched to a ground truth, Figure~\ref{fig:priors} shows an example with \(N=19\).
-\done{add explenation of \(g\) and regression}
 \( L_{loc} \) is the summed Smooth L1 loss between predicted boxes \((l)\) and ground truth parameters \((g)\), while \( L_{conf} \) is the SoftMax loss over multiple class confidences \((c)\), both are standard loss functions provided by PyTorch.
 
 As the target for the Smooth L1 loss, \(\hat{g}\) defines the regression from the center \((cx,cy)\) of the default box \((d)\) and its height \((h)\) and width \((w)\) to a matched ground truth.
@@ -363,7 +361,6 @@ The rescoring function \texttt{f(IoU)} applies a Gaussian decay as follows, % ch
 \[f(\gamma) = e^{-\frac{{\gamma}^2}{\sigma}}\]
 
 where \(\gamma \) is the IoU as given in the pseudocode and \( \sigma \) controls the rate of decay, as demonstrated in Figure~\ref{fig:gauss}. \(\sigma=0.15\) was found to produce the best results.
-\done{define all terms}
 
 \section{Experimental setup}\label{sec:method-exp-setup}
 This section will present the experiments which have been designed in order to examine the research questions.
@@ -389,7 +386,6 @@ The relevant specifications are as follows,
 With a batch size of 32, each forward/backward pass requires approximately 410 ms to complete.
 Adding the time to read data from disk and run augmentations, one full iteration takes 812 ms, bringing the total time for one experimental run of 2000 iterations to 27 minutes.
 The final model produces detections at a rate of 182 FPS, measuring only inference time.
-\done{Summary of training time and model speed re inference}
 
 \subsection{Training}
 All the experiments were run using the same training setup.
@@ -470,7 +466,6 @@ It remains unclear what impact blurry data has on the training of fully convolut
 This experiment aims to explore if there is a correlation between the distribution of sharpness in the training data and model predictions.
 The model's performance is not of interest, but rather how the distribution of sharpness values in the training data changes the distribution of sharpness in the predictions.
 Sharpness can be measured both on the model's predictions and on the ground truths it does or does not detect.
-\done{Confusing. Split sentence in two}
 
 For the experiment, the model is trained on various versions of the same dataset.
 Each model will be trained on a subset of the ground truth labels using a sharpness filter that prunes any ground truth below a certain threshold.
