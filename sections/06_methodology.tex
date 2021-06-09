@@ -379,14 +379,18 @@ PyTorch is an extensive machine learning framework and provides APIs covering th
 \subsection{Hardware}
 All experiments have been run on a desktop computer using consumer grade components.
 The relevant specifications are as follows,
+
 \begin{itemize}
   \item \textbf{CPU:} \textit{AMD Ryzen 5 3600X}, 6 cores @ 3.8 GHz.
   \item \textbf{GPU:} \textit{Nvidia GTX 1070}, 8 GB GDDR5 VRAM,\\1920 CUDA cores @ 1506 MHz, 6.463 TFLOPS (32 bit).
   \item \textbf{Memory:} \textit{Corsair Vengeance}, 32 GB DDR4 @ 2166 MHz.
 \end{itemize}
-{\it
-\textcolor{red}{Summary of training time and model speed re inference}
-}
+
+With a batch size of 32, each forward/backward pass requires approximately 410 ms to complete.
+Adding the time to read data from disk and run augmentations, one full iteration takes 812 ms, bringing the total time for one experimental run of 2000 iterations to 27 minutes.
+The final model produces detections at a rate of 182 FPS, measuring only inference time.
+\done{Summary of training time and model speed re inference}
+
 \subsection{Training}
 All the experiments were run using the same training setup.
 The model is trained using Stochastic Gradient Decent (SGD) with a mini batch size of 32, learning rate of \num{e-3}, \num{0.9} momentum, and \num{5e-4} weight decay.
