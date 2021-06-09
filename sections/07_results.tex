@@ -4,9 +4,8 @@ This section will present and discuss the results from the experiments presented
 The modified SSD model presented in Section~\ref{sec:method-arch} is trained according to the training procedure given in Section~\ref{sec:method-exp-setup}.
 Section~\ref{sec:results-baseline} presents the performance of the baseline model.
 The results and discussion of the experiments pertaining to RQ1 and RQ2 are presented in Section~\ref{sec:results-simplification} and Section~\ref{sec:results-sharpness} respectively.
-Threats to validity are provided in Section~\ref{sec:results-validity}.
 Unless specified otherwise, all performance metrics given in this section are measured on the test split of the dataset.
-For measuring mAP, the interpolation method specified in Equation~\ref{eq:average-precision} with an acceptance threshold of 0.5 IoU.
+For measuring mAP, AP is computed according to Equation~\ref{eq:average-precision} with an acceptance threshold of 0.5 IoU.
 
 \section{Baseline model}\label{sec:results-baseline}
 \begin{figure}[htbp]
@@ -26,7 +25,7 @@ The training procedure for the model is given in Figure~\ref{fig:method-baseline
 The confidence loss component accounts for most of the total loss throughout the training process.
 The components of the loss function (Equation~\ref{eq:loss}) are independent, meaning their ratio does not indicate a difference in performance at the two different tasks.
 Regardless, the model does perform better at localization than classification.
-Logically this follows from realizing that the pollen grains are all more easily distinguished from the background than they are to classify.
+Logically this follows from the realization that pollen grains are all more easy to distinguish from the background than they are to classify.
 Therefore, the model can discriminate between background and pollen with relative ease but has a more challenging time classifying species.
 
 \begin{figure}[htbp]
@@ -43,9 +42,9 @@ The difference between ground truths and true positives is the number of false n
 The baseline model achieves a mAP of \textbf{95.2\%} and an \(F_1\) score of \textbf{86.8\%}.
 Looking at predictions overall, the recall is very high at 99.1\%, while precision is quite a bit lower at 77.2\%.
 Figure~\ref{fig:results-baseline-detections} breaks down all the detections made; the main observation is that false-positive predictions are almost the only source of error.
-37\% of false positives are spurious localization, i.e., an unlabeled entity is identified as a pollen grain.
+37\% of false positives are spurious localizations, i.e., an unlabeled entity is identified as a pollen grain.
 These entities are either non-pollen particles or pollen grains from unlabeled species.
-The remaining 63\% of false positives are misclassifications, i.e., the bounding box does correspond to a ground truth, but the class is incorrect.
+The remaining 63\% of false positives are misclassifications, i.e., the bounding box does match a ground truth, but the class is incorrect.
 
 \begin{figure}[htbp]
   \centering
@@ -66,7 +65,7 @@ In the left image, an FP box is predicted with lower confidence than the TP\@.
 In the right image, the FP Corylus prediction has higher confidence than the TP Alnus prediction.}\label{fig:results-overlapping-predictions}
 \end{figure}
 
-Figure~\ref{fig:results-overlapping-predictions} shows two test samples containing overlapping true and false-positive predictions.
+Figure~\ref{fig:results-overlapping-predictions} shows two test samples containing overlapping true and false positive predictions.
 This is due to the NMS filtering algorithm being run for each class independently, which causes double predictions in cases where predictions for multiple classes are produced for the same pollen grain.
 
 A remedy was implemented and tested where NMS was applied to all detections after the initial per-class NMS\@.
@@ -75,7 +74,7 @@ In Figure~\ref{fig:results-overlapping-predictions} (right) for example, the cor
 
 With the small number of classes in the dataset, the problem of double predictions is relatively small.
 However, a larger dataset could suffer more from this issue when there are more classes that all share characteristics.
-For the purposes of counting, it might not be preferable to prune these overlapping predictions but rather include and quantify the resulting overestimation as a part of the overall counting system.
+For the purposes of counting, it might not be preferable to prune these overlapping predictions but rather include and quantify the resulting overestimation as a part of the overall estimate.
 
 \section{Model simplification}\label{sec:results-simplification}
 The first two experiments aim to explore ways in which the computational complexity of the model can be reduced without sacrificing performance.
@@ -91,10 +90,10 @@ There is a clear decrease in performance when using smaller networks, and we obs
 Interestingly, the recall remains almost unchanged, meaning that the model's ability to localize pollen grains is largely maintained.
 The error is in the form of noise being added on top of the correct predictions.
 The performance degradation is therefore primarily due to increased classification error, creating redundant, poor predictions.
-A possible explanation for this is that localization, in terms of feature requirements, only requires the model to learn simple features relating to the general shape and color of a pollen grain, while classification involves more complex features that the smaller networks are not able to capture.
+A possible explanation for this is that localization, in terms of feature requirements, only needs the model to learn simple features relating to the general shape and color of a pollen grain, while classification involves more complex features that the smaller networks are not able to capture.
 
 This experiment helps reveal the apparent inequality between the two tasks that the model is learning, namely localization and classification.
-Localization seems to be a much easier task to learn, given how invariant the model is to the changing extractor while seeing a markedly higher degradation in classification.
+Localization seems to be a much easier task to learn, given how invariant the model is to the changing extractor while suffering a markedly higher degradation in classification performance.
 
 \begin{table}[htbp]\centering
   \ra{1.3}
@@ -115,7 +114,7 @@ For each network, the number of trainable parameters for both the feature extrac
 \end{table}
 
 \subsection{Layer activation}
-In the next experiment, parts of the extra structure (shown as arrows in Figure~\ref{fig:model}), responsible for generating the detections as various scales are deactivated.
+In the next experiment, parts of the extra structure (shown as arrows in Figure~\ref{fig:model}) responsible for generating the detections at various scales are deactivated.
 The results are given in Table~\ref{tab:result-layer-deactivated} and do not point towards any strong trend.
 The last three layers of the model are larger than almost all grains in the dataset, and even with cropping, it is likely that their predictions do not contribute to the loss because the default boxes they encode rarely, if ever, get matched with a ground truth.
 Their inclusion might result in parameters that do not get adequately trained, leading to those layers only producing noise instead of actual predictions.
@@ -158,15 +157,15 @@ In the second experiment, the dataset is split based on sharpness and measure th
 Our first experiment aims to explore how the sharpness of the training data affects the predictions that the model can make.
 The results indicate that the model struggles with making inferences on grains with lower sharpness when such grains are filtered out of the training data.
 Figure~\ref{fig:results-sharpness-gt} breaks down the ground truth labels into true positives and false negatives, which reveals that the model is failing to predict pollen grains that have a sharpness below the minimum sharpness of the training data.
-\info{explain how this differs from cross sharpness}
+\done{explain how this differs from cross sharpness}
 
 Looking at the sharpness of the predictions made by the model, there is a corollary trend in the false positive predictions.
 Figure~\ref{fig:results-sharpness-detections} shows that restricting the training data creates what seems to be a threshold, below which the model does not make predictions.
-This shows that the model loses the ability to localize blurry pollen grains, becoming blind to their existence.
+This indicates that the model loses the ability to localize blurry pollen grains, becoming blind to their existence.
 It seems clear that the features being learned from sharp images do not transfer to less sharp samples.
 
 It is important to note that the sample size, especially in the case of false negatives, is relatively small, which weakens arguments made based on their distributions.
-The observed pattern could also be described as a type of `overfitting' where the model will not generalize outside of the sharpness bound of the training data, and the implications this has for a hypothetical production system are unclear.
+The observed pattern could also be described as a type of `overfitting' where the model will not generalize outside of the sharpness bound of the training data, but the implications this has for a hypothetical production system are unclear.
 
 \begin{figure}[htbp]
   \centering
@@ -184,7 +183,7 @@ The observed pattern could also be described as a type of `overfitting' where th
 \end{figure}
 
 \subsection{Cross-sharpness inference}
-The final experiment aims to explore how well the model can generalize to a sharpness range that differs entirely from that of its training data.
+The final experiment aims to explore how well the model can generalize to a sharpness range that differs entirely from its training data. The method expands upon the previous experiment by filtering both training and test data into sharp and blurry partitions.
 Figure~\ref{fig:results-sharpness-inference} gives a summary of the experimental procedure.
 As might be expected, the model performs best in the scenarios where it is trained and tested on grains in the same range of sharpness, and it performs worse when there is no overlap between test sharpness and training sharpness.
 
@@ -202,7 +201,7 @@ Two quadrants stand out with significantly lower scores; these represent the sce
 
 Interestingly, the model responds differently to being trained on only blurry data (the `blurry' model) than being trained on only sharp data (the `sharp' model).
 Seemingly, the blurry model outperforms the sharp model both when tested on the whole dataset and when tested across the sharpness boundary.
-It seems as though the same kind of overfitting is not taking place, and the blurry model is learning features from the blurry data that it can use to detect sharp pollen grains.
+It seems as though the same kind of overfitting observed in the previous experiment is not taking place for the blurry model, which is learning features from the blurry data that it can use to detect sharp pollen grains.
 
 \begin{figure}[htbp]
   \centering
@@ -221,7 +220,7 @@ The sharp model maintains its classification performance but fails to localize p
 Similar to how simplifying the feature extractor leads to worse classification performance while localization is maintained, the same response is seen when the granular features are smoothed out by blur.
 What this implies for further development of this system is difficult to say and depends on the requirements of the system.
 In a scenario where the model only needs to work on sharp data, excluding blurry data could improve overall performance.
-However, one can easily imagine a system that could benefit from being able to localize outside the current focus plane, e.g., in a search-based system that explores a slide live, the model could localize a blurry grain and refocus the microscope to classify it.
+However, one can easily imagine a system that could benefit from being able to localize outside the current focus plane, e.g., in a search-based system that explores a slide live similar to the current manual method, the model could localize a blurry grain and refocus the microscope to classify it.
 
 \begin{figure}[htbp]
   \centering
