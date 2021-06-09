@@ -253,29 +253,16 @@ This was done to give each model the same number of ground truths.
 While this is a valid decision, looking at Figure~\ref{fig:results-sharp-gt}, many pollen grains in the blurry category seem pretty sharp to the naked eye.
 With a larger dataset, it would be preferable to run this experiment with multiple splits.
 The optimal sharpness distribution remains unknown, although evidence has been presented to support the claim that excluding blurry data causes the model to fixate on only the sharp features in images.
-\info[inline]{Summarize results. 1--2 par.}
+\done[inline]{Summarize results. 1--2 par.}
 
-\section{Threats to Validity}\label{sec:results-validity}
-\info[inline]{Move to future work such that each threat has an accompanying suggestion for an improvement}
-Throughout the preceding Sections, the results and weaknesses of the experiments have been discussed.
-This section highlights more general threats to the validity of the project as a whole.
+\section{Summary}
+The final model performs well at both localizing and classifying pollen grains but tends to return multiple bounding boxes for some pollen grains.
+However, as part of a counting system, this might not be a significant issue.
+The model is able to identify almost every grain in the test set, which is promising for further development.
 
-\subsection{Number of classes}
-The size of the dataset could pose a threat to the external validity of the model's performance.
-The results show that the model performs better at localization than at classification in a dataset containing three distinct classes within a domain where most classes share similar features.
-It is unknown how the model would perform with a dataset containing more classes and if it could maintain its ability to label classes correctly.
-Therefore, it cannot be concluded that the model would perform at a similar level of precision in datasets with more classes.
+The experiments reveal that while identifying pollen grains is quite an easy task, discriminating between species considerably more difficult.
+The model's classification performance depends on the quality of the features produced by the feature extractor.
 
-\subsection{Sharpness measure}
-The results assume a link between perceived sharpness and focal planes in the sample images without a direct correlation being shown.
-This perceived sharpness is used to validate the sharpness measure, which in turn is used to analyze the model in relation to data sharpness.
-To an extent, this assumption does hold; when the focal plane lies above or below a pollen grain, perceived sharpness changes with the focal plane.
-However, on a more granular level, how the sharpness measure corresponds to the location of the focal plane when it lies within a pollen grain is less clear.
-From observation, maximum sharpness does seem to occur at the center of the pollen grain when the diameter of the grain is largest.
-
-\subsection{Training procedure}
-The short training time allows for many experimental runs, but fine-tuning hyperparameters for every configuration was outside time constraints.
-This could mean that certain runs are offered an advantage which would cause systematic errors in the results.
-
-The number of samples overall also contributes to very volatile performance results.
-Due to the limited number of ground truths in the test split, small differences in the models significantly impact measured performance.
+Most interesting is the impact of training data sharpness on the model.
+Excluding un-sharp data from the model's training data causes the model to fixate on sharpness, reducing the model's ability to identify grains that appear less sharp.
+Including blurry samples seemingly forces the model to learn a broader range of features.
