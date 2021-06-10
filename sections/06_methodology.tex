@@ -234,10 +234,10 @@ All the outputs from the localization and classification layers are concatenated
 
 \subsection{Default boxes}
 
-\begin{wrapfigure}[13]{R}{0.38\textwidth}
+\begin{wrapfigure}[13]{R}{0.34\textwidth}
   \centering
-  \includegraphics[width=0.31\textwidth]{figs/method/default_boxes.png}
-  \caption[Visualizing default boxes]{four default boxes drawn on a \(5\by 5 \) feature map.}\label{fig:defaults}
+  \includegraphics[width=0.32\textwidth]{figs/method/default_boxes.png}
+  \caption[Visualizing default boxes]{4 default boxes on a \(5\by 5 \) feature map.}\label{fig:defaults}
 \end{wrapfigure}
 
 The fundamental objective of the model is to evaluate a predefined set of default boxes.
@@ -261,8 +261,8 @@ This ensures that there are multiple positive examples for each ground truth.
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.7\textwidth]{figs/method/priors_matching.pdf}
-  \caption[Default box matching]{Visualization of the result of the matching procedure.
-  All default boxes which are matched to the \textcolor{nicegreen}{ground truth} are drawn with \textcolor{red}{dashed red} lines. In this example, 19 default boxes are matched to the ground truth. \((\texttt{IoU}\ge 0.5)\). This example has been handcrafted for clarity by setting the bounding box equal to a default box, causing a more symmetrical match.
+  \caption[Default box matching]{The result of the matching procedure.
+  All default boxes which are matched to the \textcolor{nicegreen}{ground truth} are drawn with \textcolor{red}{dashed red} lines. Here, 19 default boxes are matched to the ground truth \((\texttt{IoU}\ge 0.5)\). This example has been handcrafted for clarity by setting the bounding box equal to a default box, causing a more symmetrical match.
 }\label{fig:priors}
 \end{figure}
 
@@ -273,6 +273,7 @@ The loss function, as given by\ \cite{liu_ssd_2016}, is calculated as follows,
 \end{equation}
 
 where \( x=\{1,0\} \) is a binary mask denoting a match between a default box \((d)\) and ground truth \((g)\), \( N \) is the number of positive examples, in the case of \(N=0\) the loss is set to 0.
+\(\alpha \) is a weight term set to 1, showing little to no effect on performance.
 Here, \textit{positive example} refers to default boxes which are matched to a ground truth, Figure~\ref{fig:priors} shows an example with \(N=19\).
 \( L_{loc} \) is the summed Smooth L1 loss between predicted boxes \((l)\) and ground truth parameters \((g)\), while \( L_{conf} \) is the SoftMax loss over multiple class confidences \((c)\), both are standard loss functions provided by PyTorch.
 
@@ -413,7 +414,8 @@ The final dataset is then divided into a training and test split with an 85\% / 
 Augmentations are necessary to allow the model to train for many enough iterations without overfitting on the training set.
 Augmentations artificially increase the size of the dataset, by producing thousands of variations of each example.
 The following augmentations are employed,
-%
+
+\begin{samepage}
 \begin{enumerate}
   \item Horizontal flip.
   \item Vertical flip.
@@ -421,7 +423,8 @@ The following augmentations are employed,
   \item Shuffle RBG channels.
   \item Random crop.
 \end{enumerate}
-%
+\end{samepage}
+
 All the augmentations except cropping, independently, have a 50\% chance of being applied to each sample.
 The random crop also resizes the sample input into a \(300\by 300\) square, so it is needed for every image.
 The cropping algorithm also ensures that each sample contains at least one pollen grain.
