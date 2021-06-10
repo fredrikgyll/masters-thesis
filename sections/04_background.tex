@@ -54,26 +54,26 @@ This section will also cover some of the newer concepts that have become commonp
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.7\textwidth]{figs/background/cnn-layers.pdf}
-  \caption[Basic structure of a CNN]{The basic architecture of a CNN\@. The convolutions create stacks of feature maps (yellow) which are followed by an non-linear activation (orange), and the pooling layers (red) reduce the size of the feature maps. Here the pooling layer halves the spatial dimensions of the feature maps. Visualization library \parencite{haris_2018}.}\label{fig:back-cnn-example}
+  \caption[Basic structure of a CNN]{The basic architecture of a CNN\@. Convolutions create feature maps (yellow) which are followed by a non-linear activation (orange). The pooling layers (red) reduce the size of the feature maps. Here, the pooling layers halve the spatial dimensions of the feature maps. Visualization library \parencite{haris_2018}.}\label{fig:back-cnn-example}
 \end{figure}
 
 A convolutional neural network consists of stacked and layered operations.
 There are two types of layers, \textit{convolutional}, and \textit{spatial pooling}.
 The convolutional layers extract \textit{feature maps} by applying several trainable filters to the input before applying a nonlinear activation function to the result.
 The spatial pooling layers operate similarly by applying an operation to a receptive field moved over the input feature map.
-The operation is designed to downsample the input, so the resulting feature map has reduced dimensions.
+The operation downsamples the input, reducing its spatial dimensions.
 Figure~\ref{fig:back-cnn-example} shows an example of a simple CNN model; the convolutional layers control the depth of the activations while the pooling layers control their spatial dimensions.
 The two layers are stacked alternatingly, with the idea that the complexity of the features extracted increases with the depth of the network.
 
 \subsection{Convolution}
 The central concept of the convolutional layer is the \textit{convolution operation}.
-Let the kernel, \(w\), be a \(k\by k\) dimensional matrix.
+Let the kernel \((w)\) be a \(k\by k\) matrix.
 This kernel will operate on the output of the preceding layer, \(x\).
 The output from the convolution can be calculated as follows,
 
 \[w\ast x_{ij}=\sum_{m}\sum_{n}  w_{mn}x_{i-m,j-n}\]
 
-Where \((m,n)\) spans the index set of the kernel, which is center originated, i.e., \(w_{0,0}\) indexes the centroid of the kernel.
+Where \((m,n)\) spans the index set of the kernel, which is center originated, i.e., \(w_{0,0}\) is the centroid of the kernel.
 The patch of \(x\) involved in the sum at each step is referred to as the \textit{receptive field}.
 As the operation is repeated for every index of \(x\), the receptive field slides across the input.
 The resulting output of the convolution is referred to as a \textit{feature map}.
@@ -87,7 +87,7 @@ The element wise multiplication between the filter and receptive field and subse
 The operation is repeated over the index set of the input, producing the complete feature map.}\label{fig:cnn}
 \end{figure}
 
-Usually, the input to a convolutional layer contains multiple channels, e.g.,\ an RGB input image with three channels representing the separate red, green, and blue color channels.
+Usually, the input to a convolutional layer contains multiple channels, e.g.,\ an RGB image with three channels representing the red, green, and blue color channels.
 A stack of kernels is therefore used, one for each input channel.
 Each channel is convolved with its kernel, and the result is added together across the channels, which produces a single feature map.
 An example of such a convolution operation is shown in Figure~\ref{fig:cnn}.
@@ -195,11 +195,11 @@ Given an input sequence \(\mathbf{X}=\{x^1,\dots,x^n\} \), each element is activ
 An essential step towards building a model is defining how to measure its performance.
 Implicitly, this is done through the construction of a \textit{Loss function}.
 The models examined in this thesis do not employ novel Loss functions, so delving into their construction is not warranted.
-The metrics used when measuring the performance of object detectors, specifically, are nonetheless of interest.
+However, the metrics used when measuring the performance of object detectors, specifically, are of interest.
 
 Object detection is a multi-task problem incorporating both the localization and classification of objects.
 Throughout this thesis, when referring to a \textit{detection} made by an object detection system, this refers to a proposed boundary that the system believes encloses an object of a particular class.
-Every detection encodes both localization and a class label.
+Every detection encodes both a localization and a class label.
 A correct detection refers to a detection that matches a ground truth, i.e., a predicted boundary with a particular class matches that of a ground truth of the same class.
 
 \subsection{Precision and recall}

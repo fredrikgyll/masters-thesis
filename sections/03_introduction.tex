@@ -6,7 +6,7 @@ Possible applications and use cases are equally as diverse.
 In criminology, soil samples can place a suspect at a specific location, depending on the composition of pollen and spores found.
 Geologists analyze rock layers and use the presence and disappearance of palynomorphs to place formations in time.
 Glacial Ice core samples are analyzed for organic remains to estimate temperature and rainfall over the past 10,000 years.
-Finally, and most relevant to this thesis, is counting the amount of airborne pollen to forecast conditions for people suffering from allergies.
+Finally, and most relevant to this thesis, is counting the amount of airborne pollen to forecast conditions for people with allergies.
 
 Methods used in palynology vary, but most seek to identify the composition of palynomorphs in samples taken from nature, be it from glacial ice cores, peat sections from bogs, rock samples from stratigraphic drilling, or collected airborne pollen grains.
 Common for all these methods is the need for human experts to count and classify palynomorphs with a microscope manually.
@@ -16,7 +16,7 @@ From a machine learning perspective, the above describes an object detection tas
 State of the art within this problem space uses Convolutional Neural Networks (CNN), a type of neural network especially suited for image analysis of unprocessed image data.
 However, research into using this technique to solve counting pollen is sparse, and as of writing, only one partial example exists in literature.
 Microscopy is a relatively unexplored domain for machine learning and offers unique challenges in need of research.
-This thesis will therefore explore the varying methods that have been proposed to automatically count pollen grains and other similar palynomorphs, as well as other domains where modern machine learning methods have been used on similar tasks.
+This thesis will explore the varying methods that have been proposed to automatically count pollen grains, as well as other domains where modern machine learning methods have been used on similar tasks.
 
 \section{Goals and Research Questions}\label{sec:Goals and Research Questions}
 Many of the major advancements within object detection have happened so recently that many possible use cases, pollen counting being one, have yet to be explored.
@@ -39,7 +39,7 @@ The Single Stage MultiBox (SSD) model is presented in Section~\ref{sec:ssd}.
 It is designed as a general object detector capable of detecting any number of objects in an image.
 \textbf{RQ1} postulates that the task of pollen detection will require a less generalized model and that this can be realized by simplifying or removing parts of the model's architecture.
 
-Recent research in pollen classification has questioned how multifocal data may be used to improve the accuracy of models operating on microscopic data, i.e.,\ images from different focus planes instead of single images.
+Recent research in pollen classification has questioned how multifocal data may be used to improve the accuracy of models operating on microscopic data, i.e.,\ images from different focal planes instead of single images.
 This project will explore what impact the sharpness of training data has on an object detection model.
 This is formalized in the second research question,
 
@@ -58,7 +58,7 @@ In this case, the general location and taxa are recorded, such that the changes 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=0.7\textwidth]{figs/background/GT-Snap-080.png}
-  \caption[Bounding boxes]{The image shows an LM image of 2 pollen grains with ground truth bounding boxes.
+  \caption[Bounding boxes]{An LM image of four pollen grains with ground truth bounding boxes.
 The image contains two species, \textcolor{corylus}{corylus} and \textcolor{alnus}{alnus}.}\label{fig:bbox}
 \end{figure}
 

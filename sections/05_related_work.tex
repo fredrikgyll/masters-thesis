@@ -44,8 +44,7 @@ A Faster R-CNN method is proposed for detecting tuberculosis bacilli in LM slide
 The proposed model can outperform all previous traditional models, many of which use higher quality imaging methods.
 The types of images the model uses are challenging to diagnose manually but are by far the most available in the field.
 The model also solves an issue present in most of the previous work, namely, how to automate diagnosis.
-Previous work is based on pre-segmented images, which are then classified, which requires a human expert.
-This is common for much of research where a problem involves localization.
+Previous work uses pre-segmented images, which are then classified, requiring a human expert.
 
 \subsection{Single stage detectors}\label{sec:ssd}
 Common to the R-CNN family of methods is the use of two separate stages: one for identifying regions of interest in an image and classifying objects in those regions.
@@ -203,7 +202,7 @@ The model does not classify the grains it localizes.
 They report very high values for precision and recall but use a slightly modified definition of IoU when calculating these values.
 Multifocal data is only used when running inference by combining the detections from the entire z-stack as one single prediction.
 
-The dataset they use was created by filming the slide while moving the focus plane across the pollen grains.
+The dataset they use was created by filming the slide while moving the focal plane across the pollen grains.
 Based on an auto-focused keyframe, ten frames were extracted before and after the keyframe, creating a 21-frame z-stack.
 From this, two datasets were created.
 In the first one, the pollen grains were labeled in the frame where they appeared sharpest and ignored in all other images.

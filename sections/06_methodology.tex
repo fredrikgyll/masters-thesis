@@ -38,17 +38,17 @@ A summary of the dataset is given in Table~\ref{tab:dataset}.
   \end{tabular}
 \end{table}
 
-Many images are taken from the same viewpoint but with the focus plane set to different grains.
+Many images are taken from the same viewpoint but with the focal plane set to different grains.
 The ground truth labels are drawn for all present pollen grains, regardless of how blurred they appear.
 This is done so that the dataset may be modified to analyze sharpness and model performance in regards to \textit{RQ2}.
 
 As opposed to more general object detection tasks, where there is a significant variance in both the apparent size and shape of objects within an image, this dataset is much more regular.
 Looking at Figure~\ref{fig:aspect}, the grains are mostly circular and between 100 and 150 pixels wide.
 
-\begin{figure}[htb]
+\begin{figure}[hbt]
   \centering
   \includegraphics[width=0.9\textwidth]{figs/method/aspect_ratio.pdf}
-  \caption[Aspect ratios in the dataset]{The widths and heights of all ground truth boxes are plotted, longest against shortest.
+  \caption[Aspect ratios in the dataset]{The dimensions of all ground truth boxes are plotted, longest against shortest.
 The lines denote the three aspect ratios used in the default boxes of the SSD model.
 Grains marked `Edge contact' are in direct contact with the edge of the image and are most likely partially cropped out of frame.
 The grains are all quite regular in both shape and size}\label{fig:aspect}
@@ -211,7 +211,7 @@ In the original paper, the VGG-16 network is used\ \parencite{simonyan2015deep} 
 ResNet-34 is used in the baseline configuration.
 The main reason for this is its superior performance over VGG and the ease with which it integrates with the auxiliary structure\ \parencite{he2015deep}.
 ResNet-34 is the largest of the ResNet family that fits on the GPU used for most of the experimentation.
-PyTorch offers canonical implementations of the most popular pre-trained models as part of their API\@.
+PyTorch offers implementations of the most popular pre-trained models as part of their API\@.
 
 \begin{figure}[htb]
   \centering
@@ -260,7 +260,7 @@ This ensures that there are multiple positive examples for each ground truth.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.7\textwidth]{figs/method/priors_matching.pdf}
+  \includegraphics[width=0.75\textwidth]{figs/method/priors_matching.pdf}
   \caption[Default box matching]{The result of the matching procedure.
   All default boxes which are matched to the \textcolor{nicegreen}{ground truth} are drawn with \textcolor{red}{dashed red} lines. Here, 19 default boxes are matched to the ground truth \((\texttt{IoU}\ge 0.5)\). This example has been handcrafted for clarity by setting the bounding box equal to a default box, causing a more symmetrical match.
 }\label{fig:priors}
@@ -401,6 +401,20 @@ The Poaceae class is therefore under-sampled when creating the final dataset.
 467 samples are included in the final dataset; the class distribution is given in Table~\ref{tab:training-dataset}.
 The final dataset is then divided into a training and test split with an 85\% / 15\% ratio.
 
+Augmentations are necessary to allow the model to train for many enough iterations without overfitting on the training set.
+Augmentations artificially increase the size of the dataset, by producing thousands of variations of each example.
+The following augmentations are employed,
+
+%\begin{samepage}
+\begin{enumerate}
+  \item Horizontal flip.
+  \item Vertical flip.
+  \item Color adjustment (brightness, hue, saturation, contrast).
+  \item Shuffle RBG channels.
+  \item Random crop.
+\end{enumerate}
+%\end{samepage}
+
 \begin{table}[htbp]
   \caption[Class distribution across the final training dataset containing 467 sample images.]{Distribution of classes across the training dataset}\label{tab:training-dataset}
   \centering
@@ -410,20 +424,6 @@ The final dataset is then divided into a training and test split with an 85\% / 
     Share             & .40  & .20  & .40 \\ \bottomrule
   \end{tabular}
 \end{table}
-
-Augmentations are necessary to allow the model to train for many enough iterations without overfitting on the training set.
-Augmentations artificially increase the size of the dataset, by producing thousands of variations of each example.
-The following augmentations are employed,
-
-\begin{samepage}
-\begin{enumerate}
-  \item Horizontal flip.
-  \item Vertical flip.
-  \item Color adjustment (brightness, hue, saturation, contrast).
-  \item Shuffle RBG channels.
-  \item Random crop.
-\end{enumerate}
-\end{samepage}
 
 All the augmentations except cropping, independently, have a 50\% chance of being applied to each sample.
 The random crop also resizes the sample input into a \(300\by 300\) square, so it is needed for every image.

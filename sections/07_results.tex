@@ -41,10 +41,11 @@ The difference between ground truths and true positives is the number of false n
 
 The baseline model achieves a mAP of \textbf{95.2\%} and an \(F_1\) score of \textbf{86.8\%}.
 Looking at predictions overall, the recall is very high at 99.1\%, while precision is quite a bit lower at 77.2\%.
-Figure~\ref{fig:results-baseline-detections} breaks down all the detections made; the main observation is that false-positive predictions are almost the only source of error.
+Figure~\ref{fig:results-baseline-detections} breaks down all the detections made by the model;
+the main observation is that false-positive predictions are almost the only source of error.
 37\% of false positives are spurious localizations, i.e., an unlabeled entity is identified as a pollen grain.
 These entities are either non-pollen particles or pollen grains from unlabeled species.
-The remaining 63\% of false positives are misclassifications, i.e., the bounding box does match a ground truth, but the class is incorrect.
+The remaining 63\% of false positives are misclassifications, i.e., the bounding box does overlap a ground truth, but the predicted class is incorrect.
 
 \begin{figure}[htbp]
   \centering
@@ -59,8 +60,6 @@ The remaining 63\% of false positives are misclassifications, i.e., the bounding
   \end{subfigure}
   \caption[Predictions showing TP overlapped by FP from different class]{Two predictions with GT in \textcolor{nicegreen}{green}, TP in \textcolor{red}{red}, and FP in \textcolor{nicepink}{pink}.
 The labels give the first letter of the class and the prediction confidence in the range [0,100].
-All TP labels are placed at the NW corner of the bounding box.
-The FP labels are placed at the other three corners according to class.
 In the left image, an FP box is predicted with lower confidence than the TP\@.
 In the right image, the FP Corylus prediction has higher confidence than the TP Alnus prediction.}\label{fig:results-overlapping-predictions}
 \end{figure}
@@ -205,7 +204,7 @@ It seems as though the same kind of overfitting observed in the previous experim
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{figs/results/sharpness/confustion_balanced_test_dual.pdf}
-  \caption[Precision \& Recall across sharpness boundary]{%
+  \caption[Precision and recall across sharpness boundary]{%
 Breakdown of precision and recall values for cross-sharpness training. See Figure~\ref{fig:results-sharpness-inference} for detailed explanation.
   }\label{fig:results-sharpness-pr-rec}
 \end{figure}
@@ -219,7 +218,7 @@ The sharp model maintains its classification performance but fails to localize p
 Similar to how simplifying the feature extractor leads to worse classification performance while localization is maintained, the same response is seen when the granular features are smoothed out by blur.
 What this implies for further development of this system is difficult to say and depends on the requirements of the system.
 In a scenario where the model only needs to work on sharp data, excluding blurry data could improve overall performance.
-However, one can easily imagine a system that could benefit from being able to localize outside the current focus plane, e.g., in a search-based system that explores a slide live similar to the current manual method, the model could localize a blurry grain and refocus the microscope to classify it.
+However, one can easily imagine a system that could benefit from being able to localize outside the current focal plane, e.g., in a search-based system that explores a slide live similar to the current manual method, the model could localize a blurry grain and refocus the microscope to classify it.
 
 \begin{figure}[htbp]
   \centering
@@ -257,9 +256,9 @@ The final model performs well at both localizing and classifying pollen grains b
 However, as part of a counting system, this might not be a significant issue.
 The model is able to identify almost every grain in the test set, which is promising for further development.
 
-The experiments reveal that while identifying pollen grains is quite an easy task, discriminating between species considerably more difficult.
-The model's classification performance depends on the quality of the features produced by the feature extractor.
+The experiments reveal that while identifying pollen grains is quite an easy task, discriminating between species is considerably more difficult.
+The model's classification performance is highly dependent on the quality of the features produced by the feature extractor.
 
-Most interesting is the impact of training data sharpness on the model.
+Most interesting is the impact training data sharpness has on the model.
 Excluding un-sharp data from the model's training data causes the model to fixate on sharpness, reducing the model's ability to identify grains that appear less sharp.
 Including blurry samples seemingly forces the model to learn a broader range of features.
